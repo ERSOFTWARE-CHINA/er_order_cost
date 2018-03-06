@@ -11,6 +11,10 @@ defmodule RestfulApiWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    resources "/users", UserController, except: [:new, :edit]
+    resources "/roles", RoleController, except: [:new, :edit]
+    resources "/organizations", OrganizationController, except: [:new, :edit]
   end
 
   scope "/", RestfulApiWeb do
