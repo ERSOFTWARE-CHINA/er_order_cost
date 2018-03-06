@@ -22,6 +22,13 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:user_id]
 
+config :restful_api, RestfulApiWeb.Guardian,
+  issuer: "restful_api",
+  secret_key: "Nbf/SLGlHPHLrwsuHHdkC3GyTKPacikz6WFRl5yQh4mZPWVEMOFg11oX+ySnTfKO"
+
+config :arc,
+  storage: Arc.Storage.Local # or Arc.Storage.S3
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

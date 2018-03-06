@@ -20,7 +20,7 @@ defmodule RestfulApi.Mixfile do
   def application do
     [
       mod: {RestfulApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto, :corsica, :arc_ecto]
     ]
   end
 
@@ -40,7 +40,14 @@ defmodule RestfulApi.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 1.0"},
+      {:comeonin, "~> 4.0"},
+      {:pbkdf2_elixir, "~> 0.12"},
+      {:scrivener_ecto, "~> 1.2.3"},
+      {:corsica, "~> 1.0"},
+      {:guardian, "~> 1.0"},
+      {:arc, "~> 0.8.0"},
+      {:arc_ecto, "~> 0.7.0"},
     ]
   end
 

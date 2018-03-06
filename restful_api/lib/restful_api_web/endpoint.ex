@@ -21,6 +21,8 @@ defmodule RestfulApiWeb.Endpoint do
 
   plug Plug.Logger
 
+  plug RestfulApiWeb.CORS
+
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],

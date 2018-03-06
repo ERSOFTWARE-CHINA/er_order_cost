@@ -1,5 +1,6 @@
 defmodule RestfulApi.Repo do
   use Ecto.Repo, otp_app: :restful_api
+  use Scrivener, page_size: 15
 
   @doc """
   Dynamically loads the repository url from the
