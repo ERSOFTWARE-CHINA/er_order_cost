@@ -13,7 +13,7 @@ defmodule RestfulApi.Accounts.User do
     field :position, :string
     field :is_admin, :boolean, default: false
     field :actived, :boolean, default: false
-    field :permissions, :integer, default: 0
+    field :perms_number, :integer, default: 0
     field :avatar, RestfulApiWeb.Avatar.Type
 
     many_to_many :roles, RestfulApi.Authentication.Role, join_through: "users_roles", on_replace: :delete
@@ -25,7 +25,7 @@ defmodule RestfulApi.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-      |> cast(attrs, [:name, :email, :password, :realname, :position, :is_admin, :actived])
+      |> cast(attrs, [:name, :email, :password, :real_name, :position, :is_admin, :actived])
       |> cast_attachments(attrs, [:avatar])
       |> validate_required([:name, :email])
       |> validate_format(:email, ~r/@/)

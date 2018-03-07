@@ -11,16 +11,20 @@ defmodule RestfulApiWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-
-    resources "/users", UserController, except: [:new, :edit]
-    resources "/roles", RoleController, except: [:new, :edit]
-    resources "/organizations", OrganizationController, except: [:new, :edit]
   end
 
   scope "/", RestfulApiWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+  end
+
+  scope "/api/v1", RestfulApiWeb do
+    pipe_through :api
+
+    resources "/users", UserController, except: [:new, :edit]
+    resources "/roles", RoleController, except: [:new, :edit]
+    resources "/organizations", OrganizationController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.

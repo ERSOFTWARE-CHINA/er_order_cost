@@ -11,7 +11,18 @@ defmodule RestfulApiWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{id: user.id,
-      name: user.name}
+    %{
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      real_name: user.real_name,
+      position: user.position,
+      is_admin: user.is_admin,
+      actived: user.actived,
+      perms_number: user.perms_number,
+      avatar: user.avatar,
+      roles: user.roles,
+      organization: user.organization
+    }
   end
 end

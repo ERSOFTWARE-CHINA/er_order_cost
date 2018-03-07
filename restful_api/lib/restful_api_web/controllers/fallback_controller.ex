@@ -17,4 +17,10 @@ defmodule RestfulApiWeb.FallbackController do
     |> put_status(:not_found)
     |> render(RestfulApiWeb.ErrorView, :"404")
   end
+
+  # def call(conn, _) do
+  #   conn
+  #   |> put_status(:error)
+  #   |> render(RestfulApiWeb.ErrorView, :"500")
+  # end
 end

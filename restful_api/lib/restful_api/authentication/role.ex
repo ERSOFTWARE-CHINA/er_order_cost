@@ -5,16 +5,16 @@ defmodule RestfulApi.Authentication.Role do
 
   schema "roles" do
     field :name, :string
-    field :perms, :integer, default: 0
+    field :perms_number, :integer, default: 0
     timestamps()
   end
 
   @doc false
   def changeset(role, attrs) do
     role
-    |> cast(attrs, [:name, :perms])
-    |> validate_required([:name, :perms])
-    |> unique_constraint(:rolename)
+    |> cast(attrs, [:name, :perms_number])
+    |> validate_required([:name, :perms_number])
+    |> unique_constraint(:name)
     |> validate_length(:name, min: 2)
   end
 end
