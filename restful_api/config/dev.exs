@@ -56,3 +56,4 @@ config :restful_api, RestfulApi.Repo,
   database: "restful_api_dev",
   hostname: "localhost",
   pool_size: 10
+

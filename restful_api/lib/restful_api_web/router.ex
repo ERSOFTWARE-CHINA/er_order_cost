@@ -13,6 +13,14 @@ defmodule RestfulApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_auth do  
+    plug Guardian.Plug.Pipeline, module: RestfulApiWeb.Guardian,
+      error_handler: RestfulApiWeb.AuthErrorHandler
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource
+  end
+
+
   scope "/", RestfulApiWeb do
     pipe_through :browser # Use the default browser stack
 
@@ -21,7 +29,7 @@ defmodule RestfulApiWeb.Router do
 
   scope "/api/v1", RestfulApiWeb do
     pipe_through :api
-
+    post "/login", LoginController, :login
     resources "/users", UserController, except: [:new, :edit]
     resources "/roles", RoleController, except: [:new, :edit]
     resources "/organizations", OrganizationController, except: [:new, :edit]

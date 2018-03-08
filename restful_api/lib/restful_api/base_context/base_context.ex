@@ -17,6 +17,10 @@ defmodule RestfulApi.BaseContext do
     |> Repo.all
   end
 
+  def get_pagination(query, params) do
+    query_paginate(query, params)
+  end
+
   def get_by_id(struct, id, preload_list \\ []) do
     struct
     |> query_preload(preload_list)
@@ -25,6 +29,11 @@ defmodule RestfulApi.BaseContext do
       nil -> {:error, :not_found}
       entity -> {:ok, entity}
     end
+  end
+
+  def get_by_name(query, field_value) do
+    query
+      |> Repo.get_by(field_value)
   end
 
   def save_create(struct, attrs \\ %{}) do

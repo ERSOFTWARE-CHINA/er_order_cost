@@ -4,9 +4,11 @@ defmodule RestfulApiWeb.UserController do
 
   action_fallback RestfulApiWeb.FallbackController
 
-  def index(conn, _params) do
-    users = list_all(User)
-    render(conn, "index.json", users: users)
+  def index(conn, params) do
+    # users = list_all(User)
+    page = page(params)
+    IO.puts inspect page
+    render(conn, "index.json", page: page)
   end
 
   def create(conn, %{"user" => user_params}) do
