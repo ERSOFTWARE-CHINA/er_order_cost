@@ -5,9 +5,7 @@ defmodule RestfulApiWeb.UserController do
   action_fallback RestfulApiWeb.FallbackController
 
   def index(conn, params) do
-    # users = list_all(User)
     page = page(params)
-    IO.puts inspect page
     render(conn, "index.json", page: page)
   end
 
@@ -27,8 +25,6 @@ defmodule RestfulApiWeb.UserController do
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
-    # user = get_by_id(User, id)
-
     with {:ok, %User{} = user} <- save_update(User, id, user_params) do
       render(conn, "show.json", user: user)
     end

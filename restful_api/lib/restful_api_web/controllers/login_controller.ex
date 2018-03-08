@@ -11,18 +11,13 @@ defmodule RestfulApiWeb.LoginController do
     %{"password" => pw, "username" => un} = params
     case checkPassword(un, pw) do
       {:ok, user} ->
-        new_conn = Guardian.Plug.sign_in(conn, user)
-        jwt = Guardian.Plug.current_token(new_conn)
-        claims = Guardian.Plug.current_claims(new_conn)
-        exp = Map.get(claims, "exp")
-        
-        # perms = Permissions.get_permissions(new_conn)[:default]
-        
-        json new_conn, %{user: get_user_map(user), jwt: jwt, exp: exp}
+        {:ok, token, claims} = RestfulApiWeb.Guardian.encode_and_sign(user, %{pem: %{"default" => user.perms_number}})
+        perms = Permissions.get_permissions(claims)
+        json conn, %{user: get_user_map(user), jwt: token, perms: perms}
       {:error, _} ->
         conn
-          |> put_status(401)
-        json conn, %{error: "invalid login!"}
+        |> put_status(401)
+        |> json %{error: "invalid login!"}
     end
   end
 

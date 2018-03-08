@@ -2,8 +2,14 @@ defmodule RestfulApiWeb.RoleView do
   use RestfulApiWeb, :view
   alias RestfulApiWeb.RoleView
 
-  def render("index.json", %{roles: roles}) do
-    %{data: render_many(roles, RoleView, "role.json")}
+  def render("index.json", %{page: page}) do
+    %{
+      data: render_many(page.entries, RoleView, "role.json"),
+      page_number: page.page_number,
+      page_size: page.page_size,
+      total_entries: page.total_entries,
+      total_pages: page.total_pages
+    }
   end
 
   def render("show.json", %{role: role}) do
