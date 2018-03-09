@@ -11,7 +11,10 @@ defmodule RestfulApiWeb.OrganizationView do
   end
 
   def render("organization.json", %{organization: organization}) do
-    %{id: organization.id,
-      name: organization.name}
+    %{
+      id: organization.id,
+      name: organization.name,
+      children: organization.children
+    }
   end
 end

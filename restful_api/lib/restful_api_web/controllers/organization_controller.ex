@@ -1,42 +1,71 @@
 defmodule RestfulApiWeb.OrganizationController do
   use RestfulApiWeb, :controller
-
-  alias RestfulApi.OrganizationalStructure
-  alias RestfulApi.OrganizationalStructure.Organization
+  use RestfulApi.OrganizationalStructure
 
   action_fallback RestfulApiWeb.FallbackController
 
   def index(conn, _params) do
-    organizations = OrganizationalStructure.list_organizations()
-    render(conn, "index.json", organizations: organizations)
+    json conn, get_tree_list
   end
 
   def create(conn, %{"organization" => organization_params}) do
-    with {:ok, %Organization{} = organization} <- OrganizationalStructure.create_organization(organization_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", organization_path(conn, :show, organization))
-      |> render("show.json", organization: organization)
+    with {:ok, parent_changeset} <- can_create_or_update(organization_params) do
+      organ_changeset = Organization.changeset(%Organization{}, organization_params)
+      organ_changeset = Ecto.Changeset.put_assoc(organ_changeset, :parent, parent_changeset)
+      with {:ok, %Organization{} = organization} <- save_create(organ_changeset) do
+        conn
+        |> put_status(:created)
+        |> put_resp_header("location", organization_path(conn, :show, organization))
+        |> render("show.json", organization: organization)
+      end
     end
   end
 
   def show(conn, %{"id" => id}) do
-    organization = OrganizationalStructure.get_organization!(id)
-    render(conn, "show.json", organization: organization)
-  end
-
-  def update(conn, %{"id" => id, "organization" => organization_params}) do
-    organization = OrganizationalStructure.get_organization!(id)
-
-    with {:ok, %Organization{} = organization} <- OrganizationalStructure.update_organization(organization, organization_params) do
+    with {:ok, organization} <- get_by_id(Organization, id, [:children]) do
       render(conn, "show.json", organization: organization)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    organization = OrganizationalStructure.get_organization!(id)
-    with {:ok, %Organization{}} <- OrganizationalStructure.delete_organization(organization) do
-      send_resp(conn, :no_content, "")
+  def update(conn, %{"id" => id, "organization" => organization_params}) do
+    with {:ok, organization} <- get_by_id(Organization, id, [:parent]),
+         {:ok, parent_changeset} <- can_create_or_update(organization_params, id) do
+      organ_changeset = Organization.changeset(organization, organization_params)
+      organ_changeset = Ecto.Changeset.put_assoc(organ_changeset, :parent, parent_changeset)
+      with {:ok, %Organization{} = organization} <- save_update(organ_changeset) do
+        render(conn, "show.json", organization: organization)
+      end
     end
   end
+
+  def delete(conn, %{"id" => id}) do
+    with {:ok, %Organization{} = organ} <- delete_by_id(Organization, id) do
+      render(conn, "show.json", organization: organ)
+    end
+  end
+
+  # 根据新增节点有无父节点，分别进行判断
+  defp can_create_or_update(params, id \\ nil) do
+    params
+      |> Map.get("parent", %{})
+      |> Map.get("id")
+      |> case do
+        nil -> 
+          case organ_exist() do
+            true ->
+              case id do
+                nil -> { :association_error, "Root node already exists!" }
+                _ -> 
+                  { :association_error, "Parent node not exists!" }
+              end
+            false -> { :ok, nil }
+          end
+        id -> 
+          case get_by_id(Organization, id) do
+            {:error, _} -> { :association_error, "Parent node not exists!" }
+            {:ok, organ} -> { :ok, change(Organization, organ) }
+          end
+      end
+  end
+
 end

@@ -1,6 +1,7 @@
 defmodule RestfulApiWeb.UserController do
   use RestfulApiWeb, :controller
   use RestfulApi.Accounts
+  alias RestfulApi.Authentication.Role
 
   action_fallback RestfulApiWeb.FallbackController
 
@@ -10,7 +11,10 @@ defmodule RestfulApiWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- save_create(User, user_params) do
+    role_changsets = roles_exists(user_params)
+    user_changeset = User.changeset(%User{}, user_params)
+    user_changeset = Ecto.Changeset.put_assoc(user_changeset, :roles, role_changsets)
+    with {:ok, %User{} = user} <- save_create(user_changeset) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", user_path(conn, :show, user))
@@ -25,8 +29,13 @@ defmodule RestfulApiWeb.UserController do
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
-    with {:ok, %User{} = user} <- save_update(User, id, user_params) do
-      render(conn, "show.json", user: user)
+    with {:ok, user} <- get_by_id(User, id, [:organization, :roles]) do
+      role_changsets = roles_exists(user_params)
+      user_changeset = User.changeset(user, user_params)
+      user_changeset = Ecto.Changeset.put_assoc(user_changeset, :roles, role_changsets)
+      with {:ok, %User{} = user} <- save_update(user_changeset) do
+        render(conn, "show.json", user: user)
+      end
     end
   end
 
@@ -35,4 +44,21 @@ defmodule RestfulApiWeb.UserController do
       render(conn, "show.json", user: user)
     end
   end
+
+  # 根据参数中的id获取roles，将自动忽略错误的参数
+  defp roles_exists(params) do
+    roles = params
+    |> Map.get("roles", []) 
+    |> Enum.filter(fn(r)-> match?(%{"id" => id}, r) end)
+    |> Enum.map(fn(r) -> 
+      with %{"id" => id} <- r do
+        case get_by_id(Role, id) do
+          {:error, _} -> nil
+          {:ok, role} -> change(Role, role)
+        end
+      end
+    end)
+    |> Enum.filter(fn(r)-> !is_nil(r) end)
+  end
+
 end

@@ -17,7 +17,7 @@ defmodule RestfulApiWeb.LoginController do
       {:error, _} ->
         conn
         |> put_status(401)
-        |> json %{error: "invalid login!"}
+        |> json(%{error: "Invalid username or password!"})
     end
   end
 

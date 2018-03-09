@@ -1,104 +1,35 @@
 defmodule RestfulApi.OrganizationalStructure do
-  @moduledoc """
-  The OrganizationalStructure context.
-  """
-
   import Ecto.Query, warn: false
-  alias RestfulApi.Repo
-
+  use RestfulApi.BaseContext
   alias RestfulApi.OrganizationalStructure.Organization
+  import RestfulApi.Utils.GetTree, only: [get_tree: 1]
 
-  @doc """
-  Returns the list of organizations.
-
-  ## Examples
-
-      iex> list_organizations()
-      [%Organization{}, ...]
-
-  """
-  def list_organizations do
-    Repo.all(Organization)
+  defmacro __using__(_opts) do
+    quote do
+      import RestfulApi.OrganizationalStructure
+      use RestfulApi.BaseContext
+      alias RestfulApi.OrganizationalStructure.Organization
+    end
   end
 
-  @doc """
-  Gets a single organization.
-
-  Raises `Ecto.NoResultsError` if the Organization does not exist.
-
-  ## Examples
-
-      iex> get_organization!(123)
-      %Organization{}
-
-      iex> get_organization!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_organization!(id), do: Repo.get!(Organization, id)
-
-  @doc """
-  Creates a organization.
-
-  ## Examples
-
-      iex> create_organization(%{field: value})
-      {:ok, %Organization{}}
-
-      iex> create_organization(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_organization(attrs \\ %{}) do
-    %Organization{}
-    |> Organization.changeset(attrs)
-    |> Repo.insert()
+  # 获取所有部门的flat列表，并按id降序排列，用以解析为树形结构
+  def get_tree_list() do
+    Organization
+    |> list_all
+    |> Enum.map(fn(e) -> Map.update!(e, :children, fn(_) -> [] end) end)
+    |> Enum.sort(&(Map.get(&1, :id) >= Map.get(&2, :id)))
+    |> get_tree 
   end
 
-  @doc """
-  Updates a organization.
-
-  ## Examples
-
-      iex> update_organization(organization, %{field: new_value})
-      {:ok, %Organization{}}
-
-      iex> update_organization(organization, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_organization(%Organization{} = organization, attrs) do
-    organization
-    |> Organization.changeset(attrs)
-    |> Repo.update()
+  def organ_exist() do
+    Organization
+    |> list_all
+    |> case do
+      [] -> false
+      _ -> true
+    end
   end
 
-  @doc """
-  Deletes a Organization.
+  
 
-  ## Examples
-
-      iex> delete_organization(organization)
-      {:ok, %Organization{}}
-
-      iex> delete_organization(organization)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_organization(%Organization{} = organization) do
-    Repo.delete(organization)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking organization changes.
-
-  ## Examples
-
-      iex> change_organization(organization)
-      %Ecto.Changeset{source: %Organization{}}
-
-  """
-  def change_organization(%Organization{} = organization) do
-    Organization.changeset(organization, %{})
-  end
 end

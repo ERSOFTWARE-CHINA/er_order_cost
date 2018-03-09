@@ -4,8 +4,8 @@ defmodule RestfulApiWeb.RoleController do
   import RestfulApiWeb.Permissions, only: [need_perms: 1]
   alias Guardian.Permissions.Bitwise
 
-  plug Bitwise,  need_perms([:write_role]) when action in [:update, :delete, :create]
-  plug Bitwise,  need_perms([:read_role]) when action in [:index, :show]
+  # plug Bitwise,  need_perms([:write_role]) when action in [:update, :delete, :create]
+  # plug Bitwise,  need_perms([:read_role]) when action in [:index, :show]
 
   action_fallback RestfulApiWeb.FallbackController
 

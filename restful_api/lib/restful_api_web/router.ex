@@ -31,13 +31,13 @@ defmodule RestfulApiWeb.Router do
     pipe_through :api
     post "/login", LoginController, :login
     resources "/users", UserController, except: [:new, :edit]
-    
+    resources "/roles", RoleController, except: [:new, :edit]
     resources "/organizations", OrganizationController, except: [:new, :edit]
   end
 
   scope "/api/v1", RestfulApiWeb do
     pipe_through [:api, :api_auth]
-    resources "/roles", RoleController, except: [:new, :edit]
+    
   end
 
   # Other scopes may use custom stacks.

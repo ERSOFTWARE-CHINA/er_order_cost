@@ -36,11 +36,15 @@ defmodule RestfulApi.BaseContext do
       |> Repo.get_by(field_value)
   end
 
-  def save_create(struct, attrs \\ %{}) do
+  def save_create(struct, attrs) do
     struct
     |> struct(%{})
     |> struct.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def save_create(changeset) do
+    Repo.insert(changeset)
   end
 
   def save_update(struct, id, attrs) do
@@ -53,6 +57,10 @@ defmodule RestfulApi.BaseContext do
         |> struct.changeset(attrs)
         |> Repo.update()
     end
+  end
+
+  def save_update(changeset) do
+    Repo.update(changeset)
   end
 
   def delete_by_id(struct, id) do

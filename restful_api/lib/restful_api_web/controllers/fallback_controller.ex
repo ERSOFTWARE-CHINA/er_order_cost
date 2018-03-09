@@ -18,6 +18,12 @@ defmodule RestfulApiWeb.FallbackController do
     |> render(RestfulApiWeb.ErrorView, :"404")
   end
 
+  def call(conn, {:association_error, msg}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> render(RestfulApiWeb.ChangesetView, "association_error.json", msg: msg)
+  end
+
   # def call(conn, _) do
   #   conn
   #   |> put_status(:error)
