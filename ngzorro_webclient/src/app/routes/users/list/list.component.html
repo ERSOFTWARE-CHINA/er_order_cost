@@ -1,1 +1,159 @@
-<h1>This is users list!</h1>
+<div nz-row [nzGutter]="24" class="pt-lg">
+<nz-card [nzBordered]="false">
+    <form nz-form (ngSubmit)="getData()" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="8" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="name">用户名称</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="q.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="name"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="8" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="actived">激活状态</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select [(ngModel)]="single" name="actived" nzId="actived" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true" [nzSize]="'large'">
+                            <nz-option *ngFor="let i of actived_status" [nzLabel]="i.text" [nzValue]="i.value"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="real_name">真实姓名</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="q.real_name" name="real_name" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="real_name"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="email">邮箱地址</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="q.email" name="email" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="email"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="position">岗位名称</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="q.position" name="position" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="position"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label><label for="organization">部门名称</label></div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="q.organization" name="organization" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="organization"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="expandForm ? 24 : 8" class="mb-md" [class.text-right]="expandForm">
+                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
+                <button nz-button type="reset" (click)="getData()" [nzSize]="'large'" class="mx-sm">重置</button>
+                <a (click)="expandForm=!expandForm">
+                    {{expandForm ? '收起' : '展开'}}
+                    <i class="anticon" [class.anticon-down]="!expandForm" [class.anticon-up]="expandForm"></i>
+                </a>
+            </div>
+        </div>
+    </form>
+    <div class="mb-md">
+        <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">
+            <i class="anticon anticon-plus"></i><span>新建</span>
+        </button>
+        <!-- <ng-container *ngIf="selectedRows.length > 0">
+            <button nz-button [nzSize]="'large'" class="ml-sm">批量操作</button>
+            <nz-dropdown [nzPlacement]="'bottomLeft'">
+                <button nz-button nz-dropdown [nzSize]="'large'" class="ml-sm">
+                    更多操作 <i class="anticon anticon-down"></i>
+                </button>
+                <ul nz-menu>
+                    <li nz-menu-item (click)="remove()">删除</li>
+                    <li nz-menu-item (click)="approval()">批量审批</li>
+                </ul>
+            </nz-dropdown>
+        </ng-container> -->
+    </div>
+    <!-- <div class="mb-md">
+        <nz-alert [nzType]="'info'" [nzShowIcon]="true">
+            <span alert-body>
+                已选择 <strong class="text-primary">{{selectedRows.length}}</strong> 项&nbsp;&nbsp;
+                服务调用总计 <strong>{{totalCallNo}}</strong> 万
+                <a *ngIf="totalCallNo > 0" (click)="clear()" class="ml-lg">清空</a>
+            </span>
+        </nz-alert>
+    </div> -->
+    <nz-table #nzTable [nzAjaxData]="data" [nzTotal]="total" [nzPageSize]="q.ps" [nzLoading]="loading"
+                (nzDataChange)="dataChange($event)"
+                (nzPageIndexChange)="pageChange($event)">
+        <thead nz-thead>
+            <tr>
+                <!-- <th nz-th [nzCheckbox]="true">
+                    <label nz-checkbox [(ngModel)]="allChecked" [nzIndeterminate]="indeterminate"
+                        (ngModelChange)="checkAll($event)"></label>
+                </th> -->
+                <th nz-th><span>用户名称</span></th>
+                <th nz-th><span>电子邮箱</span></th>
+                <th nz-th>
+                    <span>真实姓名</span>
+                    <!-- <nz-table-sort [(nzValue)]="sortMap.callNo" (nzValueChange)="sort('callNo',$event)"></nz-table-sort> -->
+                </th>
+                <th nz-th>
+                    <span>状态</span>
+                    <nz-dropdown [nzTrigger]="'click'">
+                        <i class="anticon anticon-filter" nz-dropdown></i>
+                        <ul nz-menu>
+                            <li nz-menu-item *ngFor="let i of status">
+                                <label nz-checkbox [(ngModel)]="i.value"><span>{{i.text}}</span></label>
+                            </li>
+                        </ul>
+                        <div nz-table-filter>
+                            <span nz-table-filter-confirm (click)="getData()">确定</span>
+                            <span nz-table-filter-clear (click)="reset(status)">重置</span>
+                        </div>
+                    </nz-dropdown>
+                </th>
+                <th nz-th>
+                    <span>角色</span>
+                </th>
+                <th nz-th><span>操作</span></th>
+            </tr>
+        </thead>
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let i of nzTable.data">
+                <!-- <td nz-td [nzCheckbox]="true">
+                    <label nz-checkbox [nzDisabled]="i.disabled" [(ngModel)]="i.checked" (ngModelChange)="refreshStatus($event)">
+                    </label>
+                </td> -->
+                <td nz-td>{{i.name}}</td>
+                <td nz-td>{{i.email}}</td>
+                <td nz-td>{{i.real_name}}</td>
+                <td nz-td><nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge></td>
+                <td nz-td>{{i.roles}}</td>
+                <td nz-td>
+                    <a (click)="msg.success('配置' + i.no)">激活</a>
+                    <span nz-table-divider></span>
+                    <a (click)="msg.success('订阅警报' + i.no)">删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
+<nz-modal [nzVisible]="modalVisible" [nzTitle]="'新建规则'" [nzConfirmLoading]="loading" [nzContent]="modalContent"
+    (nzOnCancel)="modalVisible=false" (nzOnOk)="save()">
+    <ng-template #modalContent>
+        <div nz-form-item class="d-flex">
+            <div nz-form-label><label for="no">描述</label></div>
+            <div nz-form-control class="flex-1">
+                <nz-input [(ngModel)]="description" name="description" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="no"></nz-input>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>
+</div>

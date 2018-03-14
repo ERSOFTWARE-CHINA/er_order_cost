@@ -2,6 +2,7 @@ import { NgModule, LOCALE_ID, APP_INITIALIZER, Injector } from '@angular/core';
 import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpModule }    from '@angular/http';
 
 import { DelonModule } from './delon.module';
 import { CoreModule } from './core/core.module';
@@ -38,6 +39,7 @@ export function StartupServiceFactory(startupService: StartupService): Function 
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        HttpModule,
         HttpClientModule,
         DelonModule.forRoot(),
         CoreModule,
