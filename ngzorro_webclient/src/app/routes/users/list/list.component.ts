@@ -17,13 +17,15 @@ export class UsersListComponent implements OnInit {
         ps: 10,
         sf: "name",
         sd: "desc",
-        actived: null,
-        sorter: '',
-        status: null,
-        statusList: [],
         name: "",
+        actived: null,
+        real_name: "",
+        email: "",
         position: "",
-
+        organization: ""
+        // sorter: '',
+        // status: null,
+        // statusList: []
     };
     // 记录总数
     total: number;
@@ -34,12 +36,12 @@ export class UsersListComponent implements OnInit {
     totalCallNo = 0;
     allChecked = false;
     indeterminate = false;
-    status = [
-        { text: '关闭', value: false, type: 'default' },
-        { text: '运行中', value: false, type: 'processing' },
-        { text: '已上线', value: false, type: 'success' },
-        { text: '异常', value: false, type: 'error' }
-    ];
+    // status = [
+    //     { text: '关闭', value: false, type: 'default' },
+    //     { text: '运行中', value: false, type: 'processing' },
+    //     { text: '已上线', value: false, type: 'success' },
+    //     { text: '异常', value: false, type: 'error' }
+    // ];
     actived_status = [
         { text: '不限定', value: null },
         { text: '已激活', value: true },
@@ -57,13 +59,10 @@ export class UsersListComponent implements OnInit {
         ) {}
 
     ngOnInit() {
-        this.q.actived = "不限定"
         this.getData();
     }
 
     getData() {
-        console.log("in getData");
-        console.log(this.q);
         this.loading = true;
         this.usersService.listOnePage(this.q)
                          .then(resp =>  {this.data = resp.data;this.total = resp.total_entries; this.loading = false;})
@@ -120,7 +119,7 @@ export class UsersListComponent implements OnInit {
     sort(field: string, value: any) {
         this.sortMap = {};
         this.sortMap[field] = value;
-        this.q.sorter = value ? `${field}_${value}` : '';
+        // this.q.sorter = value ? `${field}_${value}` : '';
         this.getData();
     }
 
@@ -141,7 +140,16 @@ export class UsersListComponent implements OnInit {
     }
 
     reset(ls: any[]) {
-        for (const item of ls) item.value = false;
+        this.q.name = '';
+        this.q.actived = null;
+        this.q.real_name = "";
+        this.q.email = "";
+        this.q.position = "";
+        this.q.organization = null;
         this.getData();
     }
+
+    // submit() {
+    //     console.log(this.q)
+    // }
 }
