@@ -10,7 +10,7 @@ defmodule RestfulApiWeb.Permissions do
 							:read_user,
 							:write_user,
 							:read_role,
-              :write_role, 
+              				:write_role, 
               
               # :order,
               # :purchase,
