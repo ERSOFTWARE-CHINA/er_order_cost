@@ -58,6 +58,7 @@ export class UsersListComponent implements OnInit {
 
     ngOnInit() {
         this.q.actived = "不限定"
+        console.log("in ngOnInit!!")
         this.getData();
     }
 
