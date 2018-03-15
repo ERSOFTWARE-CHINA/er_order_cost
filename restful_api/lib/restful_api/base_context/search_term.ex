@@ -26,7 +26,7 @@ defmodule RestfulApi.SearchTerm do
 
   def query_paginate(query, params) do
     query
-    |> Repo.paginate(page: Map.get(params, "page", "1"), page_size: Map.get(params, "page_size", "20"))
+    |> Repo.paginate(page: Map.get(params, "page_index", "1"), page_size: Map.get(params, "page_size", "20"))
   end
 
   def query_preload(query, field_name_atom_list) do

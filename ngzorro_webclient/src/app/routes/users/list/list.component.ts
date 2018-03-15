@@ -3,6 +3,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { tap } from 'rxjs/operators';
 
+
 import { UsersService } from '../service/users.service';
 import { OrganizationsService } from '../../organizations/service/organizations.service';
 import { UserStatusPipe } from '../../../pipes/pipes'; 
@@ -14,19 +15,16 @@ import { UserStatusPipe } from '../../../pipes/pipes';
 export class UsersListComponent implements OnInit {
 
     q: any = {
-        pi: 1,
-        ps: 10,
-        sf: "name",
-        sd: "desc",
+        page_index: 1,
+        page_size: 15,
+        sort_field: "name",
+        sort_direction: "desc",
         name: null,
         actived: null,
         real_name: null,
         email: null,
         position: null,
         organization_id: null
-        // sorter: '',
-        // status: null,
-        // statusList: []
     };
     // 记录总数
     total: number;
@@ -34,30 +32,17 @@ export class UsersListComponent implements OnInit {
     data: any[] = [];
     // 机构树
     tree: any[] = [];
-
-
+    // 删除对象
+    delObj = null;
 
     loading = false;
-    selectedRows: any[] = [];
-    curRows: any[] = [];
-    totalCallNo = 0;
-    allChecked = false;
-    indeterminate = false;
-    // status = [
-    //     { text: '关闭', value: false, type: 'default' },
-    //     { text: '运行中', value: false, type: 'processing' },
-    //     { text: '已上线', value: false, type: 'success' },
-    //     { text: '异常', value: false, type: 'error' }
-    // ];
+
     actived_status = [
         { text: '不限定', value: null },
         { text: '已激活', value: true },
         { text: '未激活', value: false }
     ]
     sortMap: any = {};
-    expandForm = false;
-    modalVisible = false;
-    description = '';
 
     constructor(
         private http: _HttpClient, 
@@ -74,9 +59,7 @@ export class UsersListComponent implements OnInit {
     getData() {
         this.formatForm()
         this.loading = true;
-        // console.log(this.q + "改变前");
         this.q.organization = this.q.organization instanceof Array ? this.q.organization.pop() : null
-        console.log(this.q);
         this.usersService.listOnePage(this.q)
                          .then(resp =>  {this.data = resp.data;this.total = resp.total_entries; this.loading = false;})
                          .catch((error) => {this.msg.error(error); this.loading = false;})
@@ -85,83 +68,47 @@ export class UsersListComponent implements OnInit {
     getTree() {
         this.organsService.listTree()
                           .then(resp => this.tree = [resp])
-                          .catch((error) => {this.msg.error(error); this.loading = false;})
+                          .catch((error) => {this.msg.error(error);})
     }
 
-    // 获取机构id
-    _console(value) {
-        // console.log(value.pop())
-        console.log(this.q)
-    }
-
-    add() {
+    remove(obj) {
+        this.confirmContent = "确定要删除用户: " + obj.name + " ?";
         this.modalVisible = true;
-        this.description = '';
+        this.delObj = obj;
     }
 
-    save() {
-        this.loading = true;
-        this.http.post('/rule', { description: this.description }).subscribe(() => {
-            this.getData();
-            setTimeout(() => this.modalVisible = false, 500);
-        });
+    delete() {
+        this.usersService.delete(this.delObj.id)
+                         .then(resp => this.msg.success("用户:" + resp.data.name + "已删除！")).then(resp => this.getData() )
+                         .catch((error) => {this.msg.error(error); this.loading = false;})
     }
 
-    remove() {
-        this.http.delete('/rule', { nos: this.selectedRows.map(i => i.no).join(',') }).subscribe(() => {
-            this.getData();
-            this.clear();
-        });
+    update(id) {
+
     }
 
-    approval() {
-        // this.msg.success(`审批了 ${this.selectedRows.length} 笔`);
+    activate(id) {
+        this.usersService.activate(id)
+            .then(resp => this.msg.success("用户:" + resp.data.name + "已激活！")).then(resp => this.getData() )
+            .catch((error) => {this.msg.error(error); this.loading = false;})
     }
 
-    clear() {
-        this.selectedRows = [];
-        this.totalCallNo = 0;
-        this.data.forEach(i => i.checked = false);
-        this.refreshStatus();
-    }
-
-    checkAll(value: boolean) {
-        this.curRows.forEach(i => {
-            if (!i.disabled) i.checked = value;
-        });
-        this.refreshStatus();
-    }
-
-    refreshStatus() {
-        const allChecked = this.curRows.every(value => value.disabled || value.checked);
-        const allUnChecked = this.curRows.every(value => value.disabled || !value.checked);
-        this.allChecked = allChecked;
-        this.indeterminate = (!allChecked) && (!allUnChecked);
-        this.selectedRows = this.data.filter(value => value.checked);
-        this.totalCallNo = this.selectedRows.reduce((total, cv) => total + cv.callNo, 0);
+    disable(id) {
+        this.usersService.disable(id)
+            .then(resp => this.msg.success("用户:" + resp.data.name + "已禁用！")).then(resp => this.getData() )
+            .catch((error) => {this.msg.error(error); this.loading = false;})
     }
 
     sort(field: string, value: any) {
-        this.sortMap = {};
-        this.sortMap[field] = value;
-        // this.q.sorter = value ? `${field}_${value}` : '';
+        this.q.sort_field = field;
+        if (value=="ascend") {this.q.sort_direction = "asc"}
+        if (value=="descend") {this.q.sort_direction = "desc"}
         this.getData();
     }
 
-    dataChange(res: any) {
-        this.curRows = res;
-        this.refreshStatus();
-    }
-
-    pageChange(pi: number): Promise<any> {
-        this.q.pi = pi;
-        this.loading = true;
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                this.loading = false;
-                resolve();
-            }, 500);
-        });
+    pageChange(pi: number) {
+        this.q.page_index = pi;
+        this.getData();
     }
 
     formatForm() {
@@ -173,18 +120,20 @@ export class UsersListComponent implements OnInit {
         if (this.q.organization_id == null){delete this.q.organization_id}
     }
 
-    // reset(ls: any[]) {
-    //     console.log("in get data!")
-    //     this.q.name = '';
-    //     this.q.actived = null;
-    //     this.q.real_name = "";
-    //     this.q.email = "";
-    //     this.q.position = "";
-    //     this.q.organization = null;
-    //     this.getData();
-    // }
+    // 删除确认框相关
+    confirmContent = ""
+    modalVisible = false;
 
-    // submit() {
-    //     console.log(this.q)
-    // }
+    showModal = () => {
+        this.modalVisible = true;
+    }
+
+    handleOk = (e) => {
+        this.modalVisible = false;
+        this.delete();
+    }
+
+    handleCancel = (e) => {
+        this.modalVisible = false;
+    }
 }

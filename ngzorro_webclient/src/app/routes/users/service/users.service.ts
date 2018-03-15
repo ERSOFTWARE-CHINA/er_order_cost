@@ -31,10 +31,11 @@ export class UsersService {
                .map(response => response.json()).toPromise();
   }
 
-  delete(id: any) {
-    return this.http.delete(this.url + `/${id}`)
-               .map(response => response.json())               .toPromise();
-  }
+    delete(id: any) {
+        return this.http.delete(this.url + `/${id}`)
+                   .map(response => response.json())
+                   .toPromise();
+    }
 
   isUpdate = false;
   isAudit = false;
@@ -49,11 +50,19 @@ export class UsersService {
                .map(response => response.json()).toPromise();
   }
 
-  activate(id){
-    return this.http.post(this.url + `/${id}`+"/activate", "")
-    .map(response => response.json())
-    .toPromise();
-  }
+    activate(id){
+        let obj = { user: { actived: true } } 
+        return this.http.put(this.url + `/${id}`, obj)
+            .map(response => response.json())
+            .toPromise();
+    }
+
+    disable(id){
+        let obj = { user: {actived: false} }; 
+        return this.http.put(this.url + `/${id}`, obj)
+            .map(response => response.json())
+            .toPromise();
+    }
 
   update(cid, v): Promise<any>{
     console.log("this is update")
