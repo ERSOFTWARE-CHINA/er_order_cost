@@ -10,4 +10,34 @@ export class DictListComponent implements OnInit {
     ngOnInit() {
         
     }
+
+    expandForm = false;
+    loading = false;
+    q: any = {
+        pi: 1,
+        ps: 10,
+        sf: "name",
+        sd: "desc",
+        name: null,
+        actived: null,
+        real_name: null,
+        email: null,
+        position: null,
+        organization_id: null
+        // sorter: '',
+        // status: null,
+        // statusList: []
+    };
+    // 记录总数
+    total: number;
+    // 用户列表
+    data: any[] = [];
+
+    add() {
+    }
+
+    getData(){
+
+    }
+
 }
