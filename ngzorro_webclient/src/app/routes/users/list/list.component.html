@@ -15,7 +15,7 @@
                 <div nz-form-item class="d-flex">
                     <div nz-form-label><label for="actived">激活状态</label></div>
                     <div nz-form-control class="flex-1">
-                        <nz-select [(ngModel)]="single" name="actived" nzId="actived" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true" [nzSize]="'large'">
+                        <nz-select [(ngModel)]="q.actived" name="actived" nzId="actived" [nzPlaceHolder]="'请选择'" [nzShowSearch]="true" [nzSize]="'large'">
                             <nz-option *ngFor="let i of actived_status" [nzLabel]="i.text" [nzValue]="i.value"></nz-option>
                         </nz-select>
                     </div>
@@ -47,14 +47,24 @@
             </div>
             <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
                 <div nz-form-item class="d-flex">
-                    <div nz-form-label><label for="organization">部门名称</label></div>
+                    <div nz-form-label><label for="organization_id">部门名称</label></div>
                     <div nz-form-control class="flex-1">
-                        <nz-input [(ngModel)]="q.organization" name="organization" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="organization"></nz-input>
+                        <nz-cascader
+                            name="organization"
+                            nzChangeOnSelect
+                            [nzSize]="'large'"
+                            [nzPlaceHolder]="'请选择'"
+                            [nzOptions]="tree"
+                            [nzValueProperty]="'id'"
+                            [nzLabelProperty]="'name'"
+                            [(ngModel)]="q.organization_id"
+                            (nzChange)="_console($event)">
+                        </nz-cascader>
                     </div>
                 </div>
             </div>
             <div nz-col [nzSpan]="expandForm ? 24 : 8" class="mb-md" [class.text-right]="expandForm">
-                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
+                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'" >查询</button>
                 <button nz-button type="reset" (click)="getData()" [nzSize]="'large'" class="mx-sm">重置</button>
                 <a (click)="expandForm=!expandForm">
                     {{expandForm ? '收起' : '展开'}}
@@ -104,7 +114,8 @@
                     <span>真实姓名</span>
                     <!-- <nz-table-sort [(nzValue)]="sortMap.callNo" (nzValueChange)="sort('callNo',$event)"></nz-table-sort> -->
                 </th>
-                <th nz-th>
+                <th nz-th><span>岗位</span></th>
+                <!-- <th nz-th>
                     <span>状态</span>
                     <nz-dropdown [nzTrigger]="'click'">
                         <i class="anticon anticon-filter" nz-dropdown></i>
@@ -118,10 +129,8 @@
                             <span nz-table-filter-clear (click)="reset(status)">重置</span>
                         </div>
                     </nz-dropdown>
-                </th>
-                <th nz-th>
-                    <span>角色</span>
-                </th>
+                </th> -->
+                <th nz-th><span>状态</span></th>
                 <th nz-th><span>操作</span></th>
             </tr>
         </thead>
@@ -134,8 +143,8 @@
                 <td nz-td>{{i.name}}</td>
                 <td nz-td>{{i.email}}</td>
                 <td nz-td>{{i.real_name}}</td>
-                <td nz-td><nz-badge [nzStatus]="i.statusType" [nzText]="i.statusText"></nz-badge></td>
-                <td nz-td>{{i.roles}}</td>
+                <td nz-td>{{i.position}}</td>
+                <td nz-td>{{i.actived | userStatusPipe}}</td>
                 <td nz-td>
                     <a (click)="msg.success('配置' + i.no)">激活</a>
                     <span nz-table-divider></span>

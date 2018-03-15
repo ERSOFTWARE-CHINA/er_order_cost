@@ -18,7 +18,9 @@ export class UsersService {
   url = baseUrl+"users"
 
   listOnePage(q) {
-    return this.http.get(this.url + `?page=${q.pi}&page_size=${q.ps}&sort_field=${q.sf}&sort_direction=${q.sd}&username=${q.name}`)
+    let options = new RequestOptions({ params: q });
+    // `?page=${q.pi}&page_size=${q.ps}&sort_field=${q.sf}&sort_direction=${q.sd}&username=${q.name}`
+    return this.http.get(this.url, options)
                .toPromise().then(res => {return res.json()})           
   }
 
@@ -31,8 +33,7 @@ export class UsersService {
 
   delete(id: any) {
     return this.http.delete(this.url + `/${id}`)
-               .map(response => response.json())
-               .toPromise();
+               .map(response => response.json())               .toPromise();
   }
 
   isUpdate = false;

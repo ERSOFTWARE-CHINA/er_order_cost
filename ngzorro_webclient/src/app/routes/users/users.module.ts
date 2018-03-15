@@ -8,9 +8,11 @@ import { UsersComponent } from './users.component';
 import { UsersListComponent } from './list/list.component';
 import { UsersFormComponent } from './form/form.component';
 import { UsersService } from './service/users.service';
+import { OrganizationsService } from '../organizations/service/organizations.service';
+import { MainPipe } from '../../pipes/pipes.module';
 
 @NgModule({
-  imports: [ SharedModule, UsersRoutingModule ],
+  imports: [ SharedModule, UsersRoutingModule, MainPipe ],
   declarations: [
     UsersComponent,
     UsersListComponent,
@@ -18,6 +20,7 @@ import { UsersService } from './service/users.service';
   ],
   providers: [
     UsersService,
+    OrganizationsService
     // ConfirmationService
   ]
 })

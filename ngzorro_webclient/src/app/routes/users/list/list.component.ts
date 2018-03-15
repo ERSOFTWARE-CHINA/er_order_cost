@@ -4,7 +4,8 @@ import { _HttpClient } from '@delon/theme';
 import { tap } from 'rxjs/operators';
 
 import { UsersService } from '../service/users.service';
-
+import { OrganizationsService } from '../../organizations/service/organizations.service';
+import { UserStatusPipe } from '../../../pipes/pipes'; 
 
 @Component({
     selector: 'user-list',
@@ -17,29 +18,37 @@ export class UsersListComponent implements OnInit {
         ps: 10,
         sf: "name",
         sd: "desc",
+        name: null,
         actived: null,
-        sorter: '',
-        status: null,
-        statusList: [],
-        name: "",
-        position: "",
-
+        real_name: null,
+        email: null,
+        position: null,
+        organization_id: null
+        // sorter: '',
+        // status: null,
+        // statusList: []
     };
     // 记录总数
     total: number;
+    // 用户列表
     data: any[] = [];
+    // 机构树
+    tree: any[] = [];
+
+
+
     loading = false;
     selectedRows: any[] = [];
     curRows: any[] = [];
     totalCallNo = 0;
     allChecked = false;
     indeterminate = false;
-    status = [
-        { text: '关闭', value: false, type: 'default' },
-        { text: '运行中', value: false, type: 'processing' },
-        { text: '已上线', value: false, type: 'success' },
-        { text: '异常', value: false, type: 'error' }
-    ];
+    // status = [
+    //     { text: '关闭', value: false, type: 'default' },
+    //     { text: '运行中', value: false, type: 'processing' },
+    //     { text: '已上线', value: false, type: 'success' },
+    //     { text: '异常', value: false, type: 'error' }
+    // ];
     actived_status = [
         { text: '不限定', value: null },
         { text: '已激活', value: true },
@@ -53,22 +62,36 @@ export class UsersListComponent implements OnInit {
     constructor(
         private http: _HttpClient, 
         public msg: NzMessageService,
-        private usersService: UsersService
+        private usersService: UsersService,
+        private organsService: OrganizationsService
         ) {}
 
     ngOnInit() {
-        this.q.actived = "不限定"
-        console.log("in ngOnInit!!")
         this.getData();
+        this.getTree();
     }
 
     getData() {
-        console.log("in getData");
-        console.log(this.q);
+        this.formatForm()
         this.loading = true;
+        // console.log(this.q + "改变前");
+        this.q.organization = this.q.organization instanceof Array ? this.q.organization.pop() : null
+        console.log(this.q);
         this.usersService.listOnePage(this.q)
                          .then(resp =>  {this.data = resp.data;this.total = resp.total_entries; this.loading = false;})
                          .catch((error) => {this.msg.error(error); this.loading = false;})
+    }
+
+    getTree() {
+        this.organsService.listTree()
+                          .then(resp => this.tree = [resp])
+                          .catch((error) => {this.msg.error(error); this.loading = false;})
+    }
+
+    // 获取机构id
+    _console(value) {
+        // console.log(value.pop())
+        console.log(this.q)
     }
 
     add() {
@@ -121,7 +144,7 @@ export class UsersListComponent implements OnInit {
     sort(field: string, value: any) {
         this.sortMap = {};
         this.sortMap[field] = value;
-        this.q.sorter = value ? `${field}_${value}` : '';
+        // this.q.sorter = value ? `${field}_${value}` : '';
         this.getData();
     }
 
@@ -141,8 +164,27 @@ export class UsersListComponent implements OnInit {
         });
     }
 
-    reset(ls: any[]) {
-        for (const item of ls) item.value = false;
-        this.getData();
+    formatForm() {
+        if ((this.q.name == null)||(this.q.name == "")){delete this.q.name}
+        if (this.q.actived == null){delete this.q.actived}
+        if ((this.q.real_name == null)||(this.q.real_name == "")){delete this.q.real_name}
+        if ((this.q.email == null)||(this.q.email == "")){delete this.q.email}
+        if ((this.q.position == null)||(this.q.position == "")){delete this.q.position}
+        if (this.q.organization_id == null){delete this.q.organization_id}
     }
+
+    // reset(ls: any[]) {
+    //     console.log("in get data!")
+    //     this.q.name = '';
+    //     this.q.actived = null;
+    //     this.q.real_name = "";
+    //     this.q.email = "";
+    //     this.q.position = "";
+    //     this.q.organization = null;
+    //     this.getData();
+    // }
+
+    // submit() {
+    //     console.log(this.q)
+    // }
 }
