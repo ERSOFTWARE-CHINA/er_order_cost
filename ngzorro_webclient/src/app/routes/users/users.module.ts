@@ -9,6 +9,7 @@ import { UsersListComponent } from './list/list.component';
 import { UsersFormComponent } from './form/form.component';
 import { UsersService } from './service/users.service';
 import { OrganizationsService } from '../organizations/service/organizations.service';
+import { RolesService } from '../roles/service/roles.service';
 import { MainPipe } from '../../pipes/pipes.module';
 
 @NgModule({
@@ -20,7 +21,8 @@ import { MainPipe } from '../../pipes/pipes.module';
   ],
   providers: [
     UsersService,
-    OrganizationsService
+    OrganizationsService,
+    RolesService
     // ConfirmationService
   ]
 })

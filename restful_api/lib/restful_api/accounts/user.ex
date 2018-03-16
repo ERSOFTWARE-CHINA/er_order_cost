@@ -37,11 +37,12 @@ defmodule RestfulApi.Accounts.User do
   end
 
   defp put_password_hash(changeset) do
+    IO.puts inspect changeset
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
         put_change(changeset, :password_hash, Comeonin.Pbkdf2.hashpwsalt(password))
       _ ->
-        changeset
+        put_change(changeset, :password_hash, Comeonin.Pbkdf2.hashpwsalt("p@ssw0rd"))
     end
   end
 end

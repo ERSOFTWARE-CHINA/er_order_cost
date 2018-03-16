@@ -45,6 +45,20 @@ defmodule RestfulApiWeb.UserController do
     end
   end
 
+  def check_name(conn, %{"name" => name}) do
+    case get_by_name(User, name: name) do
+      nil -> json conn, %{ok: "name ok"}
+      _ -> json conn, %{error: "name error"}
+    end
+  end
+
+  def check_email(conn, %{"email" => email}) do
+    case get_by_name(User, email: email) do
+      nil -> json conn, %{ok: "email ok"}
+      _ -> json conn, %{error: "email error"}
+    end
+  end
+
   # 根据参数中的id获取roles，将自动忽略错误的参数
   defp roles_exists(params) do
     roles = params

@@ -6,8 +6,9 @@ export class User {
     position: string;
     is_admin: boolean;
     actived: boolean;
-    roles: string;
+    roles: any[];
     avatar :string;
+    organization: any;
     // 设置默认值
     constructor() { 
     }

@@ -1,17 +1,28 @@
 defimpl Poison.Encoder, for: Ecto.Association.NotLoaded do
   def encode(_, _) do
-    "not loaded"
+    "null"
   end
 end
 
 defimpl Poison.Encoder, for: Any do
   
-    def encode(%{__struct__: _} = struct, options) do
-      struct
-        |> Map.from_struct
-        |> sanitize_map
-        |> drop_ecto_not_loaded_fields
-        |> Poison.Encoder.Map.encode(options)
+    def encode(struct, options) do
+      IO.puts("####in encode####")
+      case is_map(struct) do
+        true ->
+          IO.puts("####is map####")
+          struct
+          |> Map.from_struct
+          |> sanitize_map
+          |> drop_ecto_not_loaded_fields
+          |> Poison.Encoder.Map.encode(options)
+        false -> 
+          IO.puts("####is not map####")
+          struct
+          |> Poison.Encoder.Map.encode(options)
+
+      end
+      
     end
       
     defp sanitize_map(map) do
