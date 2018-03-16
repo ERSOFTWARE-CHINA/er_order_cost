@@ -172,19 +172,4 @@ export class UsersListComponent implements OnInit {
         if ((this.q.position == null)||(this.q.position == "")){delete this.q.position}
         if (this.q.organization_id == null){delete this.q.organization_id}
     }
-
-    // reset(ls: any[]) {
-    //     console.log("in get data!")
-    //     this.q.name = '';
-    //     this.q.actived = null;
-    //     this.q.real_name = "";
-    //     this.q.email = "";
-    //     this.q.position = "";
-    //     this.q.organization = null;
-    //     this.getData();
-    // }
-
-    // submit() {
-    //     console.log(this.q)
-    // }
 }
