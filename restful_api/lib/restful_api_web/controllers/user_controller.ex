@@ -2,6 +2,13 @@ defmodule RestfulApiWeb.UserController do
   use RestfulApiWeb, :controller
   use RestfulApi.Accounts
   alias RestfulApi.Authentication.Role
+  alias RestfulApi.Authentication.Role
+
+  import RestfulApiWeb.Plugs.Auth, only: [auth_root: 2, auth_belongs_to: 2]
+  
+  plug :auth_root
+  plug :auth_belongs_to, %{query: User, func: "get_by_id"}  when action in [:update, :delete, :show]
+  
 
   action_fallback RestfulApiWeb.FallbackController
 
@@ -67,6 +74,22 @@ defmodule RestfulApiWeb.UserController do
     |> Enum.map(fn(r) -> 
       with %{"id" => id} <- r do
         case get_by_id(Role, id) do
+          {:error, _} -> nil
+          {:ok, role} -> change(Role, role)
+        end
+      end
+    end)
+    |> Enum.filter(fn(r)-> !is_nil(r) end)
+  end
+
+  # 根据参数中的id获取organization，将自动忽略错误的参数
+  defp organ_exists(params) do
+    organ = params
+    |> Map.get("organization", nil) 
+    |> Enum.filter(fn(r)-> match?(%{"id" => id}, r) end)
+    |> Enum.map(fn(r) -> 
+      with %{"id" => id} <- r do
+        case get_by_id(Organization, id) do
           {:error, _} -> nil
           {:ok, role} -> change(Role, role)
         end

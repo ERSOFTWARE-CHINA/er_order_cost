@@ -29,7 +29,14 @@ defmodule RestfulApiWeb.Router do
 
   scope "/api/v1", RestfulApiWeb do
     pipe_through :api
+
     post "/login", LoginController, :login
+  end
+
+  scope "/api/v1", RestfulApiWeb do
+    pipe_through [:api, :api_auth]
+    
+    resources "/projects", ProjectController, except: [:new, :edit]
     resources "/users", UserController, except: [:new, :edit]
     resources "/roles", RoleController, except: [:new, :edit]
     resources "/organizations", OrganizationController, except: [:new, :edit]
@@ -38,13 +45,4 @@ defmodule RestfulApiWeb.Router do
     get "/users/email/:email", UserController, :check_email
   end
 
-  scope "/api/v1", RestfulApiWeb do
-    pipe_through [:api, :api_auth]
-    
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", RestfulApiWeb do
-  #   pipe_through :api
-  # end
 end
