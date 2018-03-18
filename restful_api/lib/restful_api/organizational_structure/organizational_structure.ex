@@ -13,17 +13,17 @@ defmodule RestfulApi.OrganizationalStructure do
   end
 
   # 获取所有部门的flat列表，并按id降序排列，用以解析为树形结构
-  def get_tree_list() do
+  def get_tree_list(conn) do
     Organization
-    |> list_all
+    |> list_all(conn)
     |> Enum.map(fn(e) -> Map.update!(e, :children, fn(_) -> [] end) end)
     |> Enum.sort(&(Map.get(&1, :id) >= Map.get(&2, :id)))
     |> get_tree 
   end
 
-  def organ_exist() do
+  def organ_exist(conn) do
     Organization
-    |> list_all
+    |> list_all(conn)
     |> case do
       [] -> false
       _ -> true

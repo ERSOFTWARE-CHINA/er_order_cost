@@ -1,8 +1,6 @@
 defmodule RestfulApiWeb.ProjectController do
   use RestfulApiWeb, :controller
-
-  alias RestfulApi.Tenant
-  alias RestfulApi.Tenant.Project
+  use RestfulApi.Tenant
 
   import RestfulApiWeb.Plugs.Auth, only: [auth_root: 2]
 
@@ -10,13 +8,13 @@ defmodule RestfulApiWeb.ProjectController do
 
   action_fallback RestfulApiWeb.FallbackController
 
-  def index(conn, _params) do
-    projects = Tenant.list_projects()
-    render(conn, "index.json", projects: projects)
+  def index(conn, params) do
+    page = page(params, conn)
+    render(conn, "index.json", page: page)
   end
 
   def create(conn, %{"project" => project_params}) do
-    with {:ok, %Project{} = project} <- Tenant.create_project(project_params) do
+    with {:ok, %Project{} = project} <- save_create(Project, project_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", project_path(conn, :show, project))
@@ -25,22 +23,20 @@ defmodule RestfulApiWeb.ProjectController do
   end
 
   def show(conn, %{"id" => id}) do
-    project = Tenant.get_project!(id)
-    render(conn, "show.json", project: project)
+    with {:ok, project} <- get_by_id(Project, id, conn) do
+      render(conn, "show.json", project: project)
+    end
   end
 
   def update(conn, %{"id" => id, "project" => project_params}) do
-    project = Tenant.get_project!(id)
-
-    with {:ok, %Project{} = project} <- Tenant.update_project(project, project_params) do
+    with {:ok, %Project{} = project} <- save_project(Project, id, project_params, conn) do
       render(conn, "show.json", project: project)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    project = Tenant.get_project!(id)
-    with {:ok, %Project{}} <- Tenant.delete_project(project) do
-      send_resp(conn, :no_content, "")
+    with {:ok, %Project{} = project} <- delete_by_id(Project, id, conn) do
+      render(conn, "show.json", project: project)
     end
   end
 end

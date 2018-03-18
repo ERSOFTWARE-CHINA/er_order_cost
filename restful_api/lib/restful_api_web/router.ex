@@ -35,7 +35,7 @@ defmodule RestfulApiWeb.Router do
 
   scope "/api/v1", RestfulApiWeb do
     pipe_through [:api, :api_auth]
-    
+
     resources "/projects", ProjectController, except: [:new, :edit]
     resources "/users", UserController, except: [:new, :edit]
     resources "/roles", RoleController, except: [:new, :edit]
@@ -43,6 +43,8 @@ defmodule RestfulApiWeb.Router do
     resources "/conts", ContsController, except: [:new, :edit]
     get "/users/name/:name", UserController, :check_name
     get "/users/email/:email", UserController, :check_email
+    
+    
   end
 
 end
