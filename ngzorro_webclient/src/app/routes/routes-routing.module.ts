@@ -47,15 +47,10 @@ const routes: Routes = [
             { path: 'pages', loadChildren: './pages/pages.module#PagesModule' },
             { path: 'users', loadChildren: './users/users.module#UsersModule' },
             { path: 'organs', loadChildren: './organizations/organizations.module#OrganizationsModule' },
-<<<<<<< HEAD
             { path: 'roles', loadChildren: './roles/roles.module#RoleModule' },
             { path: 'orders', loadChildren: './order/order.module#OrderModule' }
-        ]
-=======
-            { path: 'roles', loadChildren: './roles/roles.module#RoleModule' }
         ],
         canActivate: [AuthGuard]
->>>>>>> c0fadfe366aa3c1697b5330b7164e6b681fb7a9f
     },
     // 全屏布局
     // {
