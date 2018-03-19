@@ -55,12 +55,10 @@ export class UsersListComponent implements OnInit {
 
     ngOnInit() {
         this.getData();
-        this.getTree();
     }
 
     _onReuseInit() {
         this.getData();
-        this.getTree();
     }
 
     getData() {
@@ -68,14 +66,16 @@ export class UsersListComponent implements OnInit {
         this.loading = true;
         this.q.organization = this.q.organization instanceof Array ? this.q.organization.pop() : null
         this.usersService.listOnePage(this.q)
-                         .then(resp =>  {this.data = resp.data;this.total = resp.total_entries; this.loading = false;})
+                         .then(resp => {
+                             if (resp.error) {
+                                this.msg.error(resp.error);
+                                this.loading = false;
+                             } else {
+                                this.data = resp.data;this.total = resp.total_entries; 
+                                this.loading = false;
+                             }
+                         })
                          .catch((error) => {this.msg.error(error); this.loading = false;})
-    }
-
-    getTree() {
-        this.organsService.listTree()
-                          .then(resp => this.tree = [resp])
-                          .catch((error) => {this.msg.error(error);})
     }
 
     remove(obj) {

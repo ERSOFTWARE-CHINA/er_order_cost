@@ -13,12 +13,14 @@ defmodule RestfulApiWeb.LoginController do
   def login(conn, %{"password" => pw, "username" => un, "project" => proj} = params) do
     case checkPassword(un, pw, proj) do
       {:ok, user} ->
+        IO.puts("@@@@@login ok@@@@@")
         {:ok, token, claims} = RestfulApiWeb.Guardian.encode_and_sign(user, %{pem: %{"default" => user.perms_number}, project: proj})
         perms = Permissions.get_permissions(claims)
         json conn, %{user: get_user_map(user), jwt: token, perms: perms}
       {:error, _} ->
+        IO.puts("@@@@@login error@@@@@")
         conn
-        |> put_status(401)
+        |> put_status(200)
         |> json(%{error: "Invalid username or password!"})
     end
   end
@@ -30,12 +32,19 @@ defmodule RestfulApiWeb.LoginController do
       nil -> {:error, nil}
       project -> 
         user = Repo.get_by(User, %{ name: username, project_id: project.id })
-
         cond do
+          # 用户存在，且不为root，但用户未激活
+          !is_nil(user) && !user.is_root && !user.actived ->
+            IO.puts("error in first condition")
+            {:error, nil}
+          # 用户存在，且不为root，但项目已禁用
+          !is_nil(user) && !user.is_root && !project.actived ->
+            {:error, nil}
           # 用户存在，且密码正确
-          user && Comeonin.Pbkdf2.checkpw(password, user.password_hash) ->
+          !is_nil(user) && Comeonin.Pbkdf2.checkpw(password, user.password_hash) ->
             {:ok, user}
           true ->
+            IO.puts("error in secend condition")
             {:error, nil}
         end
     end

@@ -6,10 +6,10 @@ import 'rxjs/add/operator/toPromise';
 
 import { User } from '../domain/user.domain';
 import { baseUrl } from '../../../shared/shared.service';
-import { getTokenOptions } from '../../passport/service/login.service';
+// import { getTokenOptions } from '../../passport/service/login.service';
 
 // import { dateToString } from '../utils/utils'
-//import { setTokenOptions } from '../_services/authentication.service';
+import { getTokenOptions } from '../../pages/login/login.service';
 @Injectable()
 export class UsersService {
 
@@ -18,15 +18,13 @@ export class UsersService {
   url = baseUrl+"users"
 
   listOnePage(q) {
-    let options = new RequestOptions({ params: q });
-    // `?page=${q.pi}&page_size=${q.ps}&sort_field=${q.sf}&sort_direction=${q.sd}&username=${q.name}`
-    return this.http.get(this.url, options)
+    return this.http.get(this.url, getTokenOptions(q))
                .toPromise().then(res => {return res.json()})           
   }
 
   add(v): Promise<any>{ 
     let param = { user: v} 
-    return this.http.post(this.url, param)
+    return this.http.post(this.url, param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
 
@@ -35,7 +33,7 @@ export class UsersService {
   }
 
   checkEmailAlreadyExists(email) {
-      return this.http.get(baseUrl + `users/email/${email}`, getTokenOptions()).map(response => response.json()).toPromise();
+      return this.http.get(baseUrl + `users/email/${email}`, getTokenOptions(null)).map(response => response.json()).toPromise();
   }
 
     delete(id: any) {
@@ -53,20 +51,20 @@ export class UsersService {
   //获取用户对象将提供给修改页面Form使用
   initUpdate(id){
 
-    return this.http.get(this.url + `/${id}`)
+    return this.http.get(this.url + `/${id}`, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
 
     activate(id){
         let obj = { user: { actived: true } } 
-        return this.http.put(this.url + `/${id}`, obj)
+        return this.http.put(this.url + `/${id}`, obj, getTokenOptions(null))
             .map(response => response.json())
             .toPromise();
     }
 
     disable(id){
         let obj = { user: {actived: false} }; 
-        return this.http.put(this.url + `/${id}`, obj)
+        return this.http.put(this.url + `/${id}`, obj, getTokenOptions(null))
             .map(response => response.json())
             .toPromise();
     }
@@ -75,17 +73,17 @@ export class UsersService {
     console.log("this is update")
     let obj = { user: v} 
     let param = JSON.stringify(obj);
-    return this.http.post(this.url + `/${cid}`,param)
+    return this.http.post(this.url + `/${cid}`,param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
 
   changePwd(pwd){
-    return this.http.post(this.url + `/changepwd/${pwd}`,"")
+    return this.http.post(this.url + `/changepwd/${pwd}`,"", getTokenOptions(null))
     .map(response => response.json()).toPromise();
   }
 
   getByName(name){
-    return this.http.get(this.url + `/username/${name}`)
+    return this.http.get(this.url + `/username/${name}`, getTokenOptions(null))
     .map(response => response.json()).toPromise();
   }
 

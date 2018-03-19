@@ -1,7 +1,11 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SettingsService } from '@delon/theme';
+// import { SettingsService } from '@core/services/settings.service';
+
+import { NzMessageService } from 'ng-zorro-antd';
+
+import { AuthenticationService } from './login.service';
 
 @Component({
   selector: 'app-pages-login',
@@ -9,24 +13,60 @@ import { SettingsService } from '@delon/theme';
 })
 export class LoginComponent {
   valForm: FormGroup;
+  
+  // 异步操作等待状态
+  waiting = false;
+  button_label = "登录";
 
-  constructor(public settings: SettingsService, fb: FormBuilder, private router: Router) {
+  // ngIf用来显示密码错误信息
+  invalidlogin = false;
+
+  constructor( private authenticationService: AuthenticationService, fb: FormBuilder, private router: Router, private msg: NzMessageService) {
     this.valForm = fb.group({
-      email: [null, Validators.compose([Validators.required, Validators.email])],
+      project: [null, Validators.compose([Validators.required])],
+      username: [null, Validators.compose([Validators.required])],
       password: [null, Validators.required],
       remember_me: [null]
     });
   }
 
   submit() {
+    
     // tslint:disable-next-line:forin
     for (const i in this.valForm.controls) {
       this.valForm.controls[i].markAsDirty();
     }
     if (this.valForm.valid) {
-      console.log('Valid!');
-      console.log(this.valForm.value);
-      this.router.navigate(['dashboard']);
+      this.waiting = true
+      this.button_label = "登录中..."
+      this.invalidlogin = false
+      this.authenticationService.login(this.valForm.value)
+			  .subscribe(result => {
+        console.log("@this is result@@@@@")
+        console.log(result)
+        this.waiting = false
+        this.button_label = "登录"
+			  if (result) {
+				// login successful
+          this.router.navigate(['dashboard/v1']);
+			  } else{
+          this.invalidlogin = true
+        }
+			  }, 
+			  err => { 
+          // this.msg.error(err);
+          this.waiting = false
+          this.button_label = "登录"
+          this.invalidlogin = true
+				  });
+
+      // this.router.navigate(['layout']);
     }
   }
+
+  onChange(){
+    this.invalidlogin = false
+  }
+
+
 }

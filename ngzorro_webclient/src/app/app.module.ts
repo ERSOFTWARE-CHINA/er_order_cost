@@ -23,6 +23,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { I18NService } from '@core/i18n/i18n.service';
 
+import { AuthGuard } from './routes/auth.guard';
+
+
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, `assets/i18n/`, '.json');
@@ -66,7 +69,9 @@ export function StartupServiceFactory(startupService: StartupService): Function 
             useFactory: StartupServiceFactory,
             deps: [StartupService],
             multi: true
-        }
+        },
+        AuthGuard
+        
     ],
     bootstrap: [AppComponent]
 })
