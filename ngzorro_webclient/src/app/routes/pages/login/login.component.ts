@@ -42,25 +42,19 @@ export class LoginComponent {
       this.invalidlogin = false
       this.authenticationService.login(this.valForm.value)
 			  .subscribe(result => {
-        console.log("@this is result@@@@@")
-        console.log(result)
         this.waiting = false
         this.button_label = "登录"
 			  if (result) {
-				// login successful
           this.router.navigate(['dashboard/v1']);
 			  } else{
           this.invalidlogin = true
         }
 			  }, 
 			  err => { 
-          // this.msg.error(err);
+          this.msg.error(err);
           this.waiting = false
           this.button_label = "登录"
-          this.invalidlogin = true
 				  });
-
-      // this.router.navigate(['layout']);
     }
   }
 

@@ -48,7 +48,8 @@ const routes: Routes = [
             { path: 'users', loadChildren: './users/users.module#UsersModule' },
             { path: 'organs', loadChildren: './organizations/organizations.module#OrganizationsModule' },
             { path: 'roles', loadChildren: './roles/roles.module#RoleModule' },
-            { path: 'orders', loadChildren: './order/order.module#OrderModule' }
+            { path: 'orders', loadChildren: './order/order.module#OrderModule' },
+            { path: 'projects', loadChildren: './projects/projects.module#ProjectsModule' },
         ],
         canActivate: [AuthGuard]
     },
