@@ -43,15 +43,10 @@ defmodule RestfulApiWeb.Router do
     resources "/conts", ContsController, except: [:new, :edit]
     get "/users/name/:name", UserController, :check_name
     get "/users/email/:email", UserController, :check_email
-<<<<<<< HEAD
 
 
     #order config
     resources "/orders",OrderController,except: [:new,:edit]
-=======
-    
-    
->>>>>>> 5306e9aff7bfead1254ef2c1c620120b01b5e830
   end
 
 end
