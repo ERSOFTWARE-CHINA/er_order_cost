@@ -7,7 +7,7 @@ defmodule RestfulApi.Accounts.User do
   schema "users" do
     field :name, :string
     field :email, :string
-    field :password, :string, virtual: true, default: "p@ssw0rd"
+    field :password, :string, virtual: true
     field :password_hash, :string
     field :real_name, :string
     field :position, :string
@@ -44,7 +44,7 @@ defmodule RestfulApi.Accounts.User do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
         put_change(changeset, :password_hash, Comeonin.Pbkdf2.hashpwsalt(password))
       _ ->
-        put_change(changeset, :password_hash, Comeonin.Pbkdf2.hashpwsalt("p@ssw0rd"))
+        changeset
     end
   end
 end

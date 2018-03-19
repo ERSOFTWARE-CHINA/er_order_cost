@@ -13,46 +13,46 @@
 #################
 # 初始化项目
 #################
-alias RestfulApi.Repo
-alias RestfulApi.Tenant.Project
+# alias RestfulApi.Repo
+# alias RestfulApi.Tenant.Project
 
-proj1 = 
-  %Project{
-    name: "company1",
-    perms_number: 255,
+# proj1 = 
+#   %Project{
+#     name: "root_project",
+#     perms_number: 255,
     
-  }
+#   }
 
-proj2 = 
-  %Project{
-    name: "company2",
-    perms_number: 1,
+# proj2 = 
+#   %Project{
+#     name: "user_project_01",
+#     perms_number: 1,
     
-  }
+#   }
 
-Repo.insert(proj1)
-Repo.insert(proj2)
+# Repo.insert(proj1)
+# Repo.insert(proj2)
 
 #################
 # 初始化角色
 #################
-alias RestfulApi.Repo
-alias RestfulApi.Authentication.Role
+# alias RestfulApi.Repo
+# alias RestfulApi.Authentication.Role
 
-admin_role = 
-  %Role{
-    name: "admin_role",
-    perms_number: 255
-  }
+# admin_role = 
+#   %Role{
+#     name: "admin_role",
+#     perms_number: 255
+#   }
 
-user_role = 
-  %Role{
-    name: "user_role",
-    perms_number: 1
-  }
+# user_role = 
+#   %Role{
+#     name: "user_role",
+#     perms_number: 1
+#   }
 
-Repo.insert(admin_role)
-Repo.insert(user_role)
+# Repo.insert(admin_role)
+# Repo.insert(user_role)
 
 #################
 # 初始化用户
