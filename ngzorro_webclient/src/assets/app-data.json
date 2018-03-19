@@ -9,6 +9,21 @@
         "email": "cipchk@qq.com"
     },
     "menu": [{
+        "text": "项目",
+        "translate": "项目",
+        "link":"",
+        "group": true,
+        "children": [{
+            "text": "项目管理",
+            "link": "",
+            "icon": "icon-wrench",
+            "children": [{
+                "text": "项目管理",
+                "link": "/projects/page"
+            }]
+        }]
+        },
+        {
         "text": "系统",
         "translate": "系统",
         "link":"",

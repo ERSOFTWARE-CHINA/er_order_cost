@@ -20,7 +20,19 @@ import { Exception403Component } from './exception/403.component';
 import { Exception404Component } from './exception/404.component';
 import { Exception500Component } from './exception/500.component';
 
+import { LoginComponent } from './pages/login/login.component';
+import { AuthGuard } from './auth.guard';
+
 const routes: Routes = [
+    {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+    },
+    {
+		path: 'login',
+		component: LoginComponent
+    },
     {
         path: '',
         component: LayoutDefaultComponent,
@@ -36,7 +48,8 @@ const routes: Routes = [
             { path: 'users', loadChildren: './users/users.module#UsersModule' },
             { path: 'organs', loadChildren: './organizations/organizations.module#OrganizationsModule' },
             { path: 'roles', loadChildren: './roles/roles.module#RoleModule' }
-        ]
+        ],
+        canActivate: [AuthGuard]
     },
     // 全屏布局
     // {
@@ -61,7 +74,12 @@ const routes: Routes = [
     { path: '403', component: Exception403Component },
     { path: '404', component: Exception404Component },
     { path: '500', component: Exception500Component },
-    { path: '**', redirectTo: 'dashboard' }
+    { path: '**', redirectTo: 'dashboard' },
+
+    {
+		path: '**', // fallback router must in the last
+		component: LoginComponent
+	}
 ];
 
 @NgModule({
