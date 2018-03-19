@@ -6,6 +6,7 @@ defmodule RestfulApi.Authentication.Role do
   schema "roles" do
     field :name, :string
     field :perms_number, :integer, default: 0
+    belongs_to :project, RestfulApi.Tenant.Project, on_replace: :nilify
     timestamps()
   end
 

@@ -5,13 +5,15 @@ defmodule RestfulApiWeb.LoginController do
 #   import RestfulApiWeb.TranslateError
   use Ecto.Schema
 
-  use RestfulApi.Accounts
+  alias RestfulApi.Accounts.User
+  alias RestfulApi.Tenant.Project
+  alias RestfulApi.Repo
+
       
-  def login(conn, params) do
-    %{"password" => pw, "username" => un} = params
-    case checkPassword(un, pw) do
+  def login(conn, %{"password" => pw, "username" => un, "project" => proj} = params) do
+    case checkPassword(un, pw, proj) do
       {:ok, user} ->
-        {:ok, token, claims} = RestfulApiWeb.Guardian.encode_and_sign(user, %{pem: %{"default" => user.perms_number}})
+        {:ok, token, claims} = RestfulApiWeb.Guardian.encode_and_sign(user, %{pem: %{"default" => user.perms_number}, project: proj})
         perms = Permissions.get_permissions(claims)
         json conn, %{user: get_user_map(user), jwt: token, perms: perms}
       {:error, _} ->
@@ -21,17 +23,23 @@ defmodule RestfulApiWeb.LoginController do
     end
   end
 
-  defp checkPassword(username, password) do
+  defp checkPassword(username, password, project) do
+    Project
+    |> Repo.get_by(name: project)
+    |> case do
+      nil -> {:error, nil}
+      project -> 
+        user = Repo.get_by(User, %{ name: username, project_id: project.id })
 
-    user = get_by_name(User, name: username)
-
-    cond do
-      # 用户存在，且密码正确
-      user && Comeonin.Pbkdf2.checkpw(password, user.password_hash) ->
-        {:ok, user}
-      true ->
-        {:error, nil}
+        cond do
+          # 用户存在，且密码正确
+          user && Comeonin.Pbkdf2.checkpw(password, user.password_hash) ->
+            {:ok, user}
+          true ->
+            {:error, nil}
+        end
     end
+    
   end
 
   defp get_user_map(user) do

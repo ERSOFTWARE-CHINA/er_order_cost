@@ -12,9 +12,9 @@ defmodule RestfulApi.Authentication do
     end
   end
 
-  def page(params) do 
+  def page(params, conn) do 
     Role
     |> query_like(params, "name")
-    |> get_pagination(params)
+    |> get_pagination(params, conn)
   end
 end
