@@ -4,12 +4,9 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
-// import { User } from '../domain/user.domain';
 import { baseUrl } from '../../../shared/shared.service';
-import { getTokenOptions } from '../../passport/service/login.service';
+import { getTokenOptions } from '../../pages/login/login.service';
 
-// import { dateToString } from '../utils/utils'
-//import { setTokenOptions } from '../_services/authentication.service';
 @Injectable()
 export class RolesService {
 
@@ -19,7 +16,7 @@ export class RolesService {
 
   // 所有角色不超过64个
   listAll() {
-    return this.http.get(this.url+`?page_size=64`)
+    return this.http.get(this.url+`?page_size=64`, getTokenOptions(null))
                .toPromise().then(res => {return res.json()})           
   }
 

@@ -6,10 +6,8 @@ import 'rxjs/add/operator/toPromise';
 
 import { User } from '../domain/user.domain';
 import { baseUrl } from '../../../shared/shared.service';
-// import { getTokenOptions } from '../../passport/service/login.service';
-
-// import { dateToString } from '../utils/utils'
 import { getTokenOptions } from '../../pages/login/login.service';
+
 @Injectable()
 export class UsersService {
 
@@ -22,14 +20,15 @@ export class UsersService {
                .toPromise().then(res => {return res.json()})           
   }
 
-  add(v): Promise<any>{ 
+  add(v, roles): Promise<any>{ 
+    v.roles = roles;
     let param = { user: v} 
     return this.http.post(this.url, param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
 
-  checkUsernameAlreadyExists(username) {
-    return this.http.get(baseUrl + `users/name/${username}`).map(response => response.json()).toPromise();
+  checkNameAlreadyExists(obj) {
+    return this.http.get(baseUrl + `users/check/name`, getTokenOptions(obj)).map(response => response.json()).toPromise();
   }
 
   checkEmailAlreadyExists(email) {
@@ -37,7 +36,7 @@ export class UsersService {
   }
 
     delete(id: any) {
-        return this.http.delete(this.url + `/${id}`)
+        return this.http.delete(this.url + `/${id}`, getTokenOptions(null))
                    .map(response => response.json())
                    .toPromise();
     }
@@ -46,7 +45,7 @@ export class UsersService {
   isAudit = false;
 
   formOperation = 'create';
-  updateUserManagement : User = null;
+  user : User = null;
 
   //获取用户对象将提供给修改页面Form使用
   initUpdate(id){
@@ -69,11 +68,11 @@ export class UsersService {
             .toPromise();
     }
 
-  update(cid, v): Promise<any>{
+  update(cid, v, roles): Promise<any>{
     console.log("this is update")
-    let obj = { user: v} 
-    let param = JSON.stringify(obj);
-    return this.http.post(this.url + `/${cid}`,param, getTokenOptions(null))
+    v.roles = roles
+    let obj = { user: v}; 
+    return this.http.post(this.url + `/${cid}`,obj, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
 

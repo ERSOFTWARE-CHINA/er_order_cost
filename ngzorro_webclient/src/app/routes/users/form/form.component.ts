@@ -1,5 +1,5 @@
 import {Component,OnInit} from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, EmailValidator } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -23,8 +23,6 @@ export class UsersFormComponent implements OnInit {
     form: FormGroup;
     user: User;
     card_title = "";
-    // 机构树
-    tree: any[] = [];
     // 角色列表
     roles: any[] = [];
 
@@ -33,7 +31,6 @@ export class UsersFormComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         private usersService: UsersService,
-        private organsService: OrganizationsService,
         private rolesService: RolesService,
         private msg: NzMessageService
         ) {
@@ -41,29 +38,23 @@ export class UsersFormComponent implements OnInit {
     
     ngOnInit() {
         this.setTitle();
-        this.getTree();
-        this.getRoles();
+        if (this.usersService.formOperation == 'create') {this.user=null; this.getRoles();}
+        if (this.usersService.formOperation == 'update') this.initUpdate();
         this.form = this.fb.group({
-            name : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.nameValidator.bind(this)],
-            email : [null,Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('#^[a-z_0-9.-]{1,64}@([a-z0-9-]{1,200}.){1,5}[a-z]{1,6}$#i')]), this.emailValidator.bind(this)],
-            real_name : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')])],
-            position : [this.user? this.user.position : ''],
-            actived : [this.user? this.user.actived : ''],
-            is_admin : [this.user? this.user.is_admin : ''],
-            organization : [this.user? this.user.organization : null],
-            roles : [this.user? this.user.roles : '']
+            name : ["", Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.nameValidator.bind(this)],
+            email : [this.user? this.user.email : null, EmailValidator],
+            real_name : [this.user? this.user.real_name : null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')])],
+            position : [this.user? this.user.position : null],
+            actived : [this.user? this.user.actived : null, Validators.required],
+            is_admin : [this.user? this.user.is_admin : null, Validators.required],
+            roles : [this.user? this.user.roles : null]
         });
+        this.form.controls["name"].setValue(this.user? this.user.name : "")
     }
 
     getRoles() {
         this.rolesService.listAll()
             .then(resp => this.roles = resp.data)
-            .catch((error) => {this.msg.error(error);})
-    }
-
-    getTree() {
-        this.organsService.listTree()
-            .then(resp => this.tree = [resp])
             .catch((error) => {this.msg.error(error);})
     }
 
@@ -79,11 +70,35 @@ export class UsersFormComponent implements OnInit {
     }
 
     _submitForm() {
+        for (const i in this.form.controls) {
+            this.form.controls[ i ].markAsDirty();
+        }
+        if (this.form.invalid) return ;
         this.formatForm();
-        console.log(this.user);
-        this.usersService.add(this.user)
-            .then(resp => {this.msg.success("用户: " + resp.data.name +" 已创建。");this.goBack()})
-            .catch((error) => {this.msg.error(error)})  
+        console.log("submit: 78")
+        // if (this.form.valid) {
+            let op = this.usersService.formOperation;
+            console.log("submit: 81")
+            if (op == 'create') this.usersService.add(this.form.value, this.roles).then(resp => {
+                if (resp.error) { 
+                    console.log("submit: 84")
+                    this.msg.error(resp.error);
+                } else {
+                    console.log("submit: 87")
+                    this.msg.success('用户 ' + resp.data.name + ' 已创建！');
+                    this.goBack();
+                }
+                }).catch(error => this.msg.error(error));
+            if (op == 'update') this.usersService.update(this.user.id, this.form.value, this.roles).then(resp => {
+                console.log("submit: 93")
+                if (resp.error) { 
+                    this.msg.error(resp.error);
+                } else {
+                    this.msg.success('用户 ' + resp.data.name + ' 已更新！');
+                    this.goBack();
+                }
+                }).catch(error => this.msg.error(error));
+        // }
     }
 
     goBack() {
@@ -92,54 +107,34 @@ export class UsersFormComponent implements OnInit {
 
     formatForm() {
         // 格式化form中的roles属性
-        this.user = this.form.value;
-        let roles = [];
-        let role_ids = this.form["controls"]["roles"].value;
-        for (var i=0; i<role_ids.length;i++) {
-            let r = {id:  role_ids[i]}
-            roles.push(r);   
-        }
-        this.user.roles = roles;
-
-        // 格式化form中的organization属性
-        let organ_id = this.form["controls"]["organization"].value.pop()
-        if (organ_id != null) {
-            let organ = { id: organ_id };
-            this.user.organization = organ;
-        }
+        // this.user = this.form.value;
+        if (this.form["controls"]["roles"].value != null) {
+            let roles = [];
+            let role_ids = this.form["controls"]["roles"].value;
+            for (var i=0; i<role_ids.length;i++) {
+                let r = {id:  role_ids[i]}
+                roles.push(r);   
+            }
+            this.roles = roles;
+        } 
     }
 
-    //用户名username异步验证
+    //用户名name异步验证
     nameValidator = (control: FormControl): Observable<any>  => {
-        // this.waiting = true
+        
         return control.valueChanges.pipe(
             debounceTime(200),
             map((value) => {
-                // this.waiting = true
-                this.usersService.checkUsernameAlreadyExists(control.value)
+                let obj = {name: control.value, id: this.user? this.user.id: -1}; //如果为新增的情况，id参数设置为-1传递给后台
+                console.log(obj);
+                this.usersService.checkNameAlreadyExists(obj)
                     .then(result => {
-                // this.waiting = false
-                if (result.error) {control.setErrors({ checked: true, error: true })} else if (!control.value){control.setErrors({ required: true })}  else {control.setErrors(null);};})
-
-                
+                if (result.error) {control.setErrors({ checked: true, error: true })} else if (!control.value){control.setErrors({ required: true })}  else {control.setErrors(null);};})   
             })
         )
     }
 
-    //邮箱email异步验证
-    emailValidator = (control: FormControl): Observable<any>  => {
-        // this.waiting = true
-        return control.valueChanges.pipe(
-            debounceTime(200),
-            map((value) => {
-                // this.waiting = true
-                this.usersService.checkEmailAlreadyExists(control.value)
-                    .then(result => {
-                // this.waiting = false
-                if (result.error) {control.setErrors({ checked: true, error: true })} else if (!control.value){control.setErrors({ required: true })}  else {control.setErrors(null);};})
-
-                
-            })
-        )
+    initUpdate() {
+        this.user = this.usersService.user;
     }
 }

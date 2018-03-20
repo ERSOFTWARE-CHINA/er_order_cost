@@ -42,10 +42,11 @@ defmodule RestfulApiWeb.ProjectController do
     end
   end
 
+  # get请求中的参数为字符串类型，这里需要将id转换微integer类型，因此前台需传送数字，否则报错
   def check_name(conn, %{"id"=> id,"name" => name}) do
-    case get_by_name(Project, conn, name: name) do
-      nil -> json conn, %{ok: "name ok"}
-      proj -> 
+    case check_name_exists(%{"id"=> String.to_integer(id),"name" => name}) do
+      {:ok, _} -> json conn, %{ok: "name ok"}
+      {:error, _} -> 
         json conn, %{error: "name error"}
     end
   end

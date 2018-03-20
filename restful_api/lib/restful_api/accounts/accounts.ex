@@ -27,4 +27,17 @@ defmodule RestfulApi.Accounts do
     |> get_pagination(params, conn)
   end
 
+  def check_name_exists(%{"id" => id, "name" => name}) do
+    User
+    |> Repo.get_by(name: name)
+    |> case do
+      nil -> {:ok, name}
+      proj ->
+        case proj.id == id do
+          true -> {:ok, name}
+          false -> {:error, name}
+        end
+    end
+  end
+
 end

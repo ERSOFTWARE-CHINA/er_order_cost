@@ -41,7 +41,7 @@ defmodule RestfulApiWeb.Router do
     resources "/roles", RoleController, except: [:new, :edit]
     resources "/organizations", OrganizationController, except: [:new, :edit]
     resources "/conts", ContsController, except: [:new, :edit]
-    get "/users/name/:name", UserController, :check_name
+    get "/users/check/name", UserController, :check_name
     get "/users/email/:email", UserController, :check_email
     get "/projects/check/name", ProjectController, :check_name
 

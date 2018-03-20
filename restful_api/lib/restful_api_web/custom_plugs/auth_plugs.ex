@@ -9,23 +9,23 @@ defmodule RestfulApiWeb.Plugs.Auth do
   # 验证登陆用户是否为根用户(root)
   def auth_root(conn, _) do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
-    IO.puts inspect resource
     case resource.is_root do
       true -> conn
       false -> conn |> halt()
     end
   end
 
-  # 验证登陆用户是否为管理员用户(admin)
+  # 验证登陆用户是否为管理员用户(admin),root用户将直接通过验证
   def auth_admin(conn, _) do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
-    case resource.is_admin do
+    case resource.is_admin || resource.is_root do
       true -> conn
-      false -> conn |> halt()
+      false -> 
+        conn |> halt()
     end
   end
 
-  # 验证登陆用户所属项目是否可用，不验证root用户
+  # 验证登陆用户所属项目是否可用，root用户将直接通过验证
   def project_active(conn, _) do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
     case resource.is_root do
@@ -33,7 +33,7 @@ defmodule RestfulApiWeb.Plugs.Auth do
         project = Repo.get(Project, resource.project_id)
         case project.actived do
           true -> conn
-          false -> json conn, %{error: "Your project is disabled!"}
+          false -> conn |> halt()
         end
       true -> conn
     end

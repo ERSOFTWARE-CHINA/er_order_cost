@@ -11,7 +11,7 @@
                             <ng-container *ngIf="form.controls['name'].dirty || form.controls['name'].touched">
                                 <p nz-form-explain *ngIf="form.controls['name'].errors?.required">请输入项目名称</p>
                                 <p nz-form-explain *ngIf="form.controls['name'].errors?.checked">项目名称已存在</p>
-                                <p nz-form-explain *ngIf="form.controls['name'].errors?.pattern ||form.controls['name'].errors?.minlength ">请输入2个字符以上的字母、数字和下划线</p>
+                                <p nz-form-explain *ngIf="form.controls['name'].errors?.pattern ||form.controls['name'].errors?.minlength ">请输入4个字符以上的字母、数字和下划线</p>
                             </ng-container>
                         </div>
                     </div>

@@ -8,7 +8,8 @@ defmodule RestfulApi.Accounts.User do
     field :name, :string
     field :email, :string
     field :password, :string, virtual: true
-    field :password_hash, :string
+    # 默认密码"admin123"
+    field :password_hash, :string, default: "$pbkdf2-sha512$160000$.0mu4IBJ8tD5cckQhz9tqQ$Iv05hJ49w8WqovfrVUfind8YFt.lrQpj2TNxVuSDXJ0FZHX2YMSl0l8M.FtqYoGdiZDvcTDUp/5xe4/RgkS7FQ"
     field :real_name, :string
     field :position, :string
     field :is_admin, :boolean, default: false

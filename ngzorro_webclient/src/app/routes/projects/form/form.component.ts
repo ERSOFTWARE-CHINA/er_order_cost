@@ -59,7 +59,7 @@ export class ProjectsFormComponent implements OnInit {
             this.form.controls[ i ].markAsDirty();
         }
         if (this.form.invalid) return ;
-        if (this.form.valid) {
+        // if (this.form.valid) {
             let op = this.projectsService.formOperation;
             if (op == 'create') this.projectsService.add(this.form.value).then(resp => {
                 if (resp.error) { 
@@ -77,24 +77,21 @@ export class ProjectsFormComponent implements OnInit {
                     this.goBack();
                 }
                 }).catch(error => this.msg.error(error));
-        }
+        // }
     }
 
     goBack() {
         this.router.navigateByUrl('/projects/page');
     }
 
-
     nameValidator = (control: FormControl): Observable<any>  => {
         return control.valueChanges.pipe(
             debounceTime(200),
             map((value) => {
-                let obj = {name: control.value, id: this.project? this.project.id: null};
+                let obj = {name: control.value, id: this.project? this.project.id: -1}; //如果为新增的情况，id参数设置为-1传递给后台
                 this.projectsService.checkNameAlreadyExists(obj)
                     .then(result => {
-                if (result.error) {control.setErrors({ checked: true, error: true })} else if (!control.value){control.setErrors({ required: true })}  else {control.setErrors(null);};})
-
-                
+                if (result.error) {control.setErrors({ checked: true, error: true })} else if (!control.value){control.setErrors({ required: true })}  else {control.setErrors(null);};})   
             })
         )
     }

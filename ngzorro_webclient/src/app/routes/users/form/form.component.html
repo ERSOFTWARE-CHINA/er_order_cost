@@ -34,11 +34,10 @@
                     <div nz-form-item nz-row>
                         <div nz-form-label nz-col><label nz-form-item-required>邮箱</label></div>
                         <div nz-form-control nz-col [nzValidateStatus]="email">
-                            <nz-input formControlName="email" nzPlaceHolder="请输入邮箱" nzSize="large"></nz-input>
+                            <nz-input formControlName="email" nzPlaceHolder="请输入邮箱" nzSize="large" email></nz-input>
                             <ng-container *ngIf="form.controls['email'].dirty || form.controls['email'].touched">
                                 <p nz-form-explain *ngIf="form.controls['email'].errors?.required">请输入邮箱</p>
-                                <p nz-form-explain *ngIf="form.controls['email'].errors?.checked">邮箱已存在</p>
-                                <p nz-form-explain *ngIf="form.controls['email'].errors?.pattern ||form.controls['email'].errors?.minlength ">请输入正确的邮箱格式</p>
+                                <p nz-form-explain *ngIf="form.controls['email'].errors?.email">请输入正确的邮箱格式</p>
                             </ng-container>
                         </div>
                     </div>
@@ -46,7 +45,7 @@
                 
                 <div nz-col nzMd="8" nzSm="12" nzXs="24">
                     <div nz-form-item nz-row>
-                        <div nz-form-label nz-col><label nz-form-item-required>岗位</label></div>
+                        <div nz-form-label nz-col><label>岗位</label></div>
                         <div nz-form-control nz-col nzHasFeedback [nzValidateStatus]="position" >
                             <nz-input formControlName="position" nzPlaceHolder="请输入岗位" nzSize="large"></nz-input>
                             <p nz-form-explain *ngIf="form.controls['position'].invalid && (form.controls['position'].dirty || form.controls['position'].touched) && form.controls['position'].errors.required">
@@ -80,31 +79,10 @@
                                     <nz-option [nzLabel]="'否'" [nzValue]="false"></nz-option>
                                 </nz-select>
                                 <p nz-form-explain *ngIf="form.controls['is_admin'].invalid && (form.controls['is_admin'].dirty || form.controls['is_admin'].touched) && form.controls['is_admin'].errors.required">
-                                    修改状态
+                                    请状态
                                 </p>                           
                             </div>
                         </div>
-                </div>
-
-                <div nz-col nzMd="8" nzSm="12" nzXs="24">
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col><label nz-form-item-required>部门</label></div>
-                        <div nz-form-control nz-col nzHasFeedback [nzValidateStatus]="organization" >
-                            <nz-cascader
-                                formControlName="organization"
-                                nzChangeOnSelect
-                                
-                                [nzSize]="'large'"
-                                [nzPlaceHolder]="'请选择'"
-                                [nzOptions]="tree"
-                                [nzValueProperty]="'id'"
-                                [nzLabelProperty]="'name'">
-                            </nz-cascader>
-                            <p nz-form-explain *ngIf="form.controls['organization'].invalid && (form.controls['organization'].dirty || form.controls['organization'].touched) && form.controls['organization'].errors.required">
-                                请选择部门
-                            </p>                           
-                        </div>
-                    </div>
                 </div>
 
                 <div nz-col nzMd="8" nzSm="12" nzXs="24">

@@ -20,6 +20,7 @@ defmodule RestfulApiWeb.UserController do
   def create(conn, %{"user" => user_params}) do
     role_changsets = roles_exists(user_params, conn)
     user_changeset = User.changeset(%User{}, user_params)
+    IO.puts inspect user_changeset
     user_changeset = Ecto.Changeset.put_assoc(user_changeset, :roles, role_changsets)
     with {:ok, %User{} = user} <- save_create(user_changeset, conn) do
       conn
@@ -64,10 +65,12 @@ defmodule RestfulApiWeb.UserController do
     
   end
 
-  def check_name(conn, %{"name" => name}) do
-    case get_by_name(User, conn, name: name) do
-      nil -> json conn, %{ok: "name ok"}
-      _ -> json conn, %{error: "name error"}
+  # get请求中的参数为字符串类型，这里需要将id转换微integer类型，因此前台需传送数字，否则报错
+  def check_name(conn, %{"id"=> id,"name" => name}) do
+    case check_name_exists(%{"id"=> String.to_integer(id),"name" => name}) do
+      {:ok, _} -> json conn, %{ok: "name ok"}
+      {:error, _} -> 
+        json conn, %{error: "name error"}
     end
   end
 

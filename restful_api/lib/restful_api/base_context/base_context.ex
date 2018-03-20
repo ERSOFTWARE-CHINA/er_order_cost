@@ -52,7 +52,6 @@ defmodule RestfulApi.BaseContext do
   end
 
   def save_create(changeset, conn) do
-    IO.puts inspect changeset
     Repo.insert(changeset |> set_belongs_to(conn))
   end
 
@@ -98,9 +97,6 @@ defmodule RestfulApi.BaseContext do
   end
 
   defp set_belongs_to(changeset, conn) do
-    IO.puts("conn is:")
-    IO.puts inspect conn
-    IO.puts("conn end:")
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
     case resource.is_root do
       false ->

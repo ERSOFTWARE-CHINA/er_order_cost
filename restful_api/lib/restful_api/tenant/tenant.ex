@@ -23,6 +23,19 @@ defmodule RestfulApi.Tenant do
     |> get_pagination(params, conn)
   end
 
+  def check_name_exists(%{"id" => id, "name" => name}) do
+    Project
+    |> Repo.get_by(name: name)
+    |> case do
+      nil -> {:ok, name}
+      proj ->
+        case proj.id == id do
+          true -> {:ok, name}
+          false -> {:error, name}
+        end
+    end
+  end
+
   # def save_project(Project, id, attrs, conn) do
   #   Project
   #   |> get_by_id(id, conn)
