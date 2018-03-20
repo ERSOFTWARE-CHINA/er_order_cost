@@ -23,16 +23,16 @@ defmodule RestfulApi.Tenant do
     |> get_pagination(params, conn)
   end
 
-  def save_project(Project, id, attrs, conn) do
-    Project
-    |> get_by_id(id, conn)
-    |> case do
-      {:error, :not_found} -> {:error, :not_found}
-      {:ok, entity} ->
-        entity
-        |> Project.changeset(attrs)
-        |> Repo.update()
-    end
-  end 
+  # def save_project(Project, id, attrs, conn) do
+  #   Project
+  #   |> get_by_id(id, conn)
+  #   |> case do
+  #     {:error, :not_found} -> {:error, :not_found}
+  #     {:ok, entity} ->
+  #       entity
+  #       |> Project.changeset(attrs)
+  #       |> Repo.update()
+  #   end
+  # end 
 
 end

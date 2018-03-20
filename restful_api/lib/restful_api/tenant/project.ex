@@ -20,6 +20,5 @@ defmodule RestfulApi.Tenant.Project do
     |> unique_constraint(:name)
     |> validate_length(:name, min: 4)
     |> validate_required([:actived])
-    |> validate_required([:perms_number])
   end
 end

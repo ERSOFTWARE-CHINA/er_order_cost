@@ -90,7 +90,11 @@ export class ProjectsListComponent implements OnInit {
     }
 
     update(id) {
-
+        this.projectsService.formOperation='update';
+        this.projectsService.initUpdate(id)
+            .then(result => { this.projectsService.project = result.data;console.log(result.data)})
+            .then(() => this.router.navigateByUrl('/projects/form')).catch((error)=>
+            this.msg.error(error)); 
     }
 
     activate(id) {
@@ -120,6 +124,7 @@ export class ProjectsListComponent implements OnInit {
     formatForm() {
         if ((this.q.name == null)||(this.q.name == "")){delete this.q.name}
         if (this.q.actived == null){delete this.q.actived}
+        if ((this.q.deadline == null)||(this.q.deadline == "")){delete this.q.deadline}
     }
 
     // 删除确认框相关

@@ -71,12 +71,12 @@
                     <td nz-td>{{i.name}}</td>
                     <td nz-td>{{i.deadline}}</td>
                     <td nz-td>{{i.perms_number}}</td>
-                    <td nz-td>{{i.actived | userStatusPipe}}</td>
+                    <td nz-td>{{i.acitived | userStatusPipe}}</td>
                     <td nz-td>
-                        <a (click)="activate(i.id)" *ngIf="!i.actived">激活</a>
-                        <span nz-table-divider *ngIf="!i.actived"></span>
-                        <a (click)="disable(i.id)" *ngIf="i.actived">禁用</a>
-                        <span nz-table-divider *ngIf="i.actived"></span>
+                        <a (click)="activate(i.id)" *ngIf="!i.acitived">激活</a>
+                        <span nz-table-divider *ngIf="!i.acitived"></span>
+                        <a (click)="disable(i.id)" *ngIf="i.acitived">禁用</a>
+                        <span nz-table-divider *ngIf="i.acitived"></span>
                         <a (click)="update(i.id)">修改</a>
                         <span nz-table-divider></span>
                         <a (click)="remove(i)">删除</a>

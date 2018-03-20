@@ -9,9 +9,10 @@ defmodule RestfulApiWeb.Plugs.Auth do
   # 验证登陆用户是否为根用户(root)
   def auth_root(conn, _) do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
+    IO.puts inspect resource
     case resource.is_root do
       true -> conn
-      false -> json conn, %{error: "You are not a root user!"}
+      false -> conn |> halt()
     end
   end
 
@@ -20,7 +21,7 @@ defmodule RestfulApiWeb.Plugs.Auth do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
     case resource.is_admin do
       true -> conn
-      false -> json conn, %{error: "You are not a admin user!"}
+      false -> conn |> halt()
     end
   end
 

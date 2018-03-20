@@ -1,5 +1,5 @@
 import {Component,OnInit} from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs/Observable';
@@ -28,17 +28,19 @@ export class ProjectsFormComponent implements OnInit {
         private router: Router,
         private projectsService: ProjectsService,
         private msg: NzMessageService
-        ) {
-    }
+        ) {}
     
     ngOnInit() {
         this.setTitle();
+        if (this.projectsService.formOperation == 'create') this.project=null;
+        if (this.projectsService.formOperation == 'update') this.initUpdate();
         this.form = this.fb.group({
-            name : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.nameValidator.bind(this)],
-            perms_number : [this.project? this.project.deadline : 0],
-            deadline : [this.project? this.project.deadline : ''],
-            actived : [this.project? this.project.actived : null]
+            name : ["", Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.nameValidator.bind(this)],
+            perms_number : [this.project? this.project.perms_number : 0],
+            deadline : [this.project? this.project.deadline : null],
+            acitived : [this.project? this.project.acitived : null, Validators.required]
         });
+        this.form.controls["name"].setValue(this.project? this.project.name : "")
     }
 
     setTitle() {
@@ -53,9 +55,29 @@ export class ProjectsFormComponent implements OnInit {
     }
 
     _submitForm() {
-        this.projectsService.add(this.project)
-            .then(resp => {this.msg.success("项目: " + resp.data.name +" 已创建。");this.goBack()})
-            .catch((error) => {this.msg.error(error)})  
+        for (const i in this.form.controls) {
+            this.form.controls[ i ].markAsDirty();
+        }
+        if (this.form.invalid) return ;
+        if (this.form.valid) {
+            let op = this.projectsService.formOperation;
+            if (op == 'create') this.projectsService.add(this.form.value).then(resp => {
+                if (resp.error) { 
+                    this.msg.error(resp.error);
+                } else {
+                    this.msg.success('项目 ' + resp.data.name + ' 已创建！');
+                    this.goBack();
+                }
+                }).catch(error => this.msg.error(error));
+            if (op == 'update') this.projectsService.update(this.project.id, this.form.value).then(resp => {
+                if (resp.error) { 
+                    this.msg.error(resp.error);
+                } else {
+                    this.msg.success('项目 ' + resp.data.name + ' 已更新！');
+                    this.goBack();
+                }
+                }).catch(error => this.msg.error(error));
+        }
     }
 
     goBack() {
@@ -64,19 +86,21 @@ export class ProjectsFormComponent implements OnInit {
 
 
     nameValidator = (control: FormControl): Observable<any>  => {
-        // this.waiting = true
         return control.valueChanges.pipe(
             debounceTime(200),
             map((value) => {
-                // this.waiting = true
-                this.projectsService.checkNameAlreadyExists(control.value)
+                let obj = {name: control.value, id: this.project? this.project.id: null};
+                this.projectsService.checkNameAlreadyExists(obj)
                     .then(result => {
-                // this.waiting = false
                 if (result.error) {control.setErrors({ checked: true, error: true })} else if (!control.value){control.setErrors({ required: true })}  else {control.setErrors(null);};})
 
                 
             })
         )
+    }
+
+    initUpdate() {
+        this.project = this.projectsService.project;
     }
 
 }

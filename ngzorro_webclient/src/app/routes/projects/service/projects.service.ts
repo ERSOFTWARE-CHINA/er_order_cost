@@ -14,23 +14,23 @@ export class ProjectsService {
    
   url = baseUrl+"projects"
 
-  listOnePage(q) {
-    return this.http.get(this.url, getTokenOptions(q))
-               .toPromise().then(res => {return res.json()})           
-  }
+    listOnePage(q) {
+        return this.http.get(this.url, getTokenOptions(q))
+                   .toPromise().then(res => {return res.json()})           
+    }
 
-  add(v): Promise<any>{ 
-    let param = { user: v} 
-    return this.http.post(this.url, param, getTokenOptions(null))
-               .map(response => response.json()).toPromise();
-  }
+    add(v): Promise<any>{ 
+        let param = { project: v} 
+        return this.http.post(this.url, param, getTokenOptions(null))
+                   .map(response => response.json()).toPromise();
+    }
 
-  checkNameAlreadyExists(projectname) {
-    return this.http.get(baseUrl + `projects/name/${projectname}`).map(response => response.json()).toPromise();
-  }
+    checkNameAlreadyExists(obj) {
+      return this.http.get(baseUrl + `projects/check/name`, getTokenOptions(obj)).map(response => response.json()).toPromise();
+    }
 
     delete(id: any) {
-        return this.http.delete(this.url + `/${id}`)
+        return this.http.delete(this.url + `/${id}`, getTokenOptions(null))
                    .map(response => response.json())
                    .toPromise();
     }
@@ -49,44 +49,28 @@ export class ProjectsService {
   }
 
     activate(id){
-        let obj = { user: { actived: true } } 
+        let obj = { project: { actived: true } } 
         return this.http.put(this.url + `/${id}`, obj, getTokenOptions(null))
             .map(response => response.json())
             .toPromise();
     }
 
     disable(id){
-        let obj = { user: {actived: false} }; 
+        let obj = { project: {actived: false} }; 
         return this.http.put(this.url + `/${id}`, obj, getTokenOptions(null))
             .map(response => response.json())
             .toPromise();
     }
 
   update(cid, v): Promise<any>{
-    console.log("this is update")
-    let obj = { user: v} 
-    let param = JSON.stringify(obj);
-    return this.http.post(this.url + `/${cid}`,param, getTokenOptions(null))
+    let obj = { project: v} 
+    return this.http.put(this.url + `/${cid}`,obj, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
 
   changePwd(pwd){
     return this.http.post(this.url + `/changepwd/${pwd}`,"", getTokenOptions(null))
     .map(response => response.json()).toPromise();
-  }
-
-  getByName(name){
-    return this.http.get(this.url + `/username/${name}`, getTokenOptions(null))
-    .map(response => response.json()).toPromise();
-  }
-
-  uploadAvatar(token, file){
-
-    const formData = new FormData();
-    formData.append("avatar", file);
-
-    return this.http.post(this.url + `/avatar/upload/${token}`,formData)
-      .map(response => response.json()).toPromise();
   }
 
 }

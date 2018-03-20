@@ -1,7 +1,7 @@
 export class Project {
     id: number;
     name: string;
-    actived: boolean;
+    acitived: boolean;
     deadline: string;
     perms_number: string;
 }
