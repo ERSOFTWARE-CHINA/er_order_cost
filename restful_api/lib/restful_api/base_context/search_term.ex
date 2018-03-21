@@ -32,15 +32,5 @@ defmodule RestfulApi.SearchTerm do
   def query_preload(query, field_name_atom_list) do
     preload(query, [e], ^field_name_atom_list)
   end
-
-  # 从一个分页中删除每一个对象的相关字段
-  def drop_fields_in_page(page,field_list) do
-    cond do
-    page.entries > 0 ->
-        %{page | entries: page.entries |> Enum.map(fn(u) -> Map.drop(u, field_list) end)}
-    true ->
-        page
-    end
-  end
   
 end

@@ -1,7 +1,7 @@
 defmodule RestfulApiWeb.RoleController do
   use RestfulApiWeb, :controller
   use RestfulApi.Authentication
-  import RestfulApiWeb.Permissions, only: [need_perms: 1]
+  import RestfulApiWeb.Permissions, only: [need_perms: 1, get_all_permissions: 0, get_max_perms_number: 0]
   alias Guardian.Permissions.Bitwise
 
   import RestfulApiWeb.Plugs.Auth, only: [project_active: 2, auth_admin: 2]
@@ -46,5 +46,9 @@ defmodule RestfulApiWeb.RoleController do
     with {:ok, %Role{} = role} <- delete_by_id(Role, id, conn) do
       render(conn, "show.json", role: role)
     end
+  end
+
+  def list_all_perms(conn, _) do
+    json conn, get_all_permissions
   end
 end

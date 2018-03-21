@@ -25,7 +25,7 @@ defmodule RestfulApiWeb.ProjectUserController do
       conn
       |> put_status(:created)
       |> put_resp_header("location", user_path(conn, :show, user))
-      |> render("show.json", user: user)
+      |> render("show.json", project_user: user)
     end
   end
 
@@ -41,14 +41,14 @@ defmodule RestfulApiWeb.ProjectUserController do
       user_changeset = User.changeset(user, user_params)
       user_changeset = Ecto.Changeset.put_assoc(user_changeset, :roles, role_changsets)
       with {:ok, %User{} = user} <- save_update(user_changeset, conn) do
-        render(conn, "show.json", user: user)
+        render(conn, "show.json", project_user: user)
       end
     end
   end
 
   def delete(conn, %{"id" => id}) do
     with {:ok, %User{} = user} <- delete_by_id(User, id, conn) do
-      render(conn, "show.json", user: user)
+      render(conn, "show.json", project_user: user)
     end
   end
 

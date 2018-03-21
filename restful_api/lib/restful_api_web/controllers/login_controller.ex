@@ -8,12 +8,15 @@ defmodule RestfulApiWeb.LoginController do
   alias RestfulApi.Accounts.User
   alias RestfulApi.Tenant.Project
   alias RestfulApi.Repo
+  import Ecto.Query, only: [where: 3, order_by: 3, preload: 3]
 
       
   def login(conn, %{"password" => pw, "username" => un, "project" => proj} = params) do
     case checkPassword(un, pw, proj) do
-      {:ok, user} ->
-        {:ok, token, claims} = RestfulApiWeb.Guardian.encode_and_sign(user, %{pem: %{"default" => user.perms_number}, project: proj})
+      {:ok, user, project_id} ->
+        # 将权限和项目名编码进token
+        perms_number = Permissions.get_perms_from_roles(user.roles)
+        {:ok, token, claims} = Guardian.encode_and_sign(user, %{pem: %{"default" => perms_number}, project: project_id})
         perms = Permissions.get_permissions(claims)
         json conn, %{user: get_user_map(user), jwt: token, perms: perms}
       {:error, _} ->
@@ -29,7 +32,10 @@ defmodule RestfulApiWeb.LoginController do
     |> case do
       nil -> {:error, nil}
       project -> 
-        user = Repo.get_by(User, %{ name: username, project_id: project.id })
+        # user = Repo.get_by(User, %{ name: username, project_id: project.id })
+        user = User
+        |> preload([e], [:roles])
+        |> Repo.get_by(%{ name: username, project_id: project.id })
         cond do
           # 用户存在，且不为root，但用户未激活
           !is_nil(user) && !user.is_root && !user.actived ->
@@ -39,7 +45,7 @@ defmodule RestfulApiWeb.LoginController do
             {:error, nil}
           # 用户存在，且密码正确
           !is_nil(user) && Comeonin.Pbkdf2.checkpw(password, user.password_hash) ->
-            {:ok, user}
+            {:ok, user, project.id}
           true ->
             {:error, nil}
         end
