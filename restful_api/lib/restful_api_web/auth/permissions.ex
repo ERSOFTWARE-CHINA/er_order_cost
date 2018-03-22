@@ -1,4 +1,5 @@
 defmodule RestfulApiWeb.Permissions do
+	alias RestfulApiWeb.Permissions
 	use Guardian, otp_app: :restful_backend,
 		permissions: %{
 					# 每组最大31个权限
@@ -40,7 +41,7 @@ defmodule RestfulApiWeb.Permissions do
 							:write_model16,  
 							:read_model17, 
 							:write_model17         
-					]  # 31个权限位：2147483647
+					]
 					}
 	use Guardian.Permissions.Bitwise
 
@@ -59,12 +60,23 @@ defmodule RestfulApiWeb.Permissions do
         |> Enum.map(fn(r) -> r.perms_number end)
         |> Enum.reduce(0, fn(n, acc) -> n ||| acc end)
       end
-    end
+	end
+	
+	# 由权限列表获得权限的整型表示
+	# 例子: input: %{default: [base_bit]}  output: %{default: 1}
+	def get_number_from_perms(map) do
+		map
+		|> RestfulApiWeb.Permissions.encode_permissions!
+	end
+
+	# 由权限整型表示获得权限列表
+	def get_perms_from_number(%{default: perms_number} = map) do
+		Permissions.decode_permissions(map)
+	end
 
 	# 获取用户权限
 	def get_permissions(claims) do
 		RestfulApiWeb.Permissions.decode_permissions_from_claims(claims)
-		
 	end
 
 	# 获取所有权限的列表

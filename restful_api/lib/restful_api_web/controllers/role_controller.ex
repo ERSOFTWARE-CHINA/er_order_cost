@@ -1,7 +1,7 @@
 defmodule RestfulApiWeb.RoleController do
   use RestfulApiWeb, :controller
   use RestfulApi.Authentication
-  import RestfulApiWeb.Permissions, only: [need_perms: 1, get_all_permissions: 0, get_max_perms_number: 0]
+  import RestfulApiWeb.Permissions, only: [need_perms: 1, get_all_permissions: 0, get_max_perms_number: 0, get_perms_from_number: 1]
   alias Guardian.Permissions.Bitwise
 
   import RestfulApiWeb.Plugs.Auth, only: [project_active: 2, auth_admin: 2]

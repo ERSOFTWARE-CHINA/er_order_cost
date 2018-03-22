@@ -22,7 +22,7 @@ defmodule RestfulApiWeb.ProjectView do
       name: project.name,
       acitived: project.actived,
       deadline: project.deadline,
-      perms_number: project.perms_number
+      perms_number: project.perms_number,
 
     }
   end

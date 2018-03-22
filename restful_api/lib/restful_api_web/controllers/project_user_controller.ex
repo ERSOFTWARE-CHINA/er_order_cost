@@ -38,8 +38,10 @@ defmodule RestfulApiWeb.ProjectUserController do
   def update(conn, %{"id" => id, "user" => user_params}) do
     with {:ok, user} <- get_by_id(User, id, conn, [:project, :roles]) do
       role_changsets = roles_exists(user_params, conn)
+      project_changeset = get_project_changeset(user_params, conn) 
       user_changeset = User.changeset(user, user_params)
       user_changeset = Ecto.Changeset.put_assoc(user_changeset, :roles, role_changsets)
+      user_changeset = Ecto.Changeset.put_assoc(user_changeset, :project, project_changeset)
       with {:ok, %User{} = user} <- save_update(user_changeset, conn) do
         render(conn, "show.json", project_user: user)
       end
