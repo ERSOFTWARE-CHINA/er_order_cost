@@ -59,13 +59,9 @@ defmodule RestfulApiWeb.ProjectController do
     |> Map.get("perms", []) }
     |> get_number_from_perms
 
-    IO.puts inspect params
-    IO.puts inspect params |> Map.get("perms", [])
-
     params = params
     |> Map.update("perms_number", perms_number, fn(v) -> perms_number end)
 
-    IO.puts inspect params
     params
   end
 end

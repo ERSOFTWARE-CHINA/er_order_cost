@@ -49,7 +49,6 @@ export class ProjectsService {
 
   //获取用户对象将提供给修改页面Form使用
   initUpdate(id){
-
     return this.http.get(this.url + `/${id}`, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }

@@ -17,6 +17,7 @@ defmodule RestfulApiWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
+    user_params = user_params |> disable_is_root
     role_changsets = roles_exists(user_params, conn)
     user_changeset = User.changeset(%User{}, user_params)
     user_changeset = Ecto.Changeset.put_assoc(user_changeset, :roles, role_changsets)
@@ -35,6 +36,7 @@ defmodule RestfulApiWeb.UserController do
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
+    user_params = user_params |> disable_is_root
     with {:ok, user} <- get_by_id(User, id, conn, [:organization, :roles]) do
       role_changsets = roles_exists(user_params, conn)
       user_changeset = User.changeset(user, user_params)
@@ -49,18 +51,6 @@ defmodule RestfulApiWeb.UserController do
     with {:ok, %User{} = user} <- delete_by_id(User, id, conn) do
       render(conn, "show.json", user: user)
     end
-  end
-
-  def assign_to_project(conn, %{"id" => id, "project_id" => project_id}) do
-    with {:ok, user} <- get_by_id(User, id, conn, [:project]) do
-      project_changset = project_exists(project_id, conn)
-      user_changeset = change(User, user)
-      user_changeset = Ecto.Changeset.put_assoc(user_changeset, :project, project_changset)
-      with {:ok, %User{} = user} <- save_update(user_changeset, conn) do
-        render(conn, "show.json", user: user)
-      end
-    end
-    
   end
 
   # get请求中的参数为字符串类型，这里需要将id转换微integer类型，因此前台需传送数字，否则报错
@@ -100,6 +90,12 @@ defmodule RestfulApiWeb.UserController do
       nil -> nil
       project -> change(Project, project)
     end
+  end
+
+  # 创建普通用户时，不能指定is_root字段
+  defp disable_is_root(user_params) do
+    user_params
+    |> Map.update("is_root", false, fn(_) -> false end)
   end
 
 

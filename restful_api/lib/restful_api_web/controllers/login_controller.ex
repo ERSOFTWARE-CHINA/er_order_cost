@@ -16,7 +16,7 @@ defmodule RestfulApiWeb.LoginController do
       {:ok, user, project_id} ->
         # 将权限和项目名编码进token
         perms_number = Permissions.get_perms_from_roles(user.roles)
-        {:ok, token, claims} = Guardian.encode_and_sign(user, %{pem: %{"default" => perms_number}, project: project_id})
+        {:ok, token, claims} = Guardian.encode_and_sign(user, %{pem: %{"default" => perms_number}, project: project_id, is_root: user.is_root})
         perms = Permissions.get_permissions(claims)
         json conn, %{user: get_user_map(user), jwt: token, perms: perms}
       {:error, _} ->

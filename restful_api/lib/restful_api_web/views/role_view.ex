@@ -18,6 +18,8 @@ defmodule RestfulApiWeb.RoleView do
 
   def render("role.json", %{role: role}) do
     %{id: role.id,
-      name: role.name}
+      name: role.name,
+      perms_number: role.perms_number
+    }
   end
 end

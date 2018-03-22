@@ -15,6 +15,7 @@ defmodule RestfulApi.Authentication do
   def page(params, conn) do 
     Role
     |> query_like(params, "name")
+    |> query_order_by(params, "name")
     |> get_pagination(params, conn)
   end
 end

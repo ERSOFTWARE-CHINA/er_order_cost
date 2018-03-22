@@ -9,11 +9,10 @@ const routes: Routes = [{
     path: '', 
     component: RoleComponent,
     children: [
-      { path: '', redirectTo: 'page', pathMatch: 'full', data: { translate: 'dashboard_analysis' }  },
-      { path: 'page', component: RoleListComponent, data: { translate: 'dashboard_analysis' }  },
+      { path: '', redirectTo: 'page', pathMatch: 'full' },
+      { path: 'page', component: RoleListComponent} ,
       { path: 'form', component: RoleFormComponent },
-    ],
-    data: { translate: 'dashboard_analysis' } 
+    ]
 }];
 
 @NgModule({

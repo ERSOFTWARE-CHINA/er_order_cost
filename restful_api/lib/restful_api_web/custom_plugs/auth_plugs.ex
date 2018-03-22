@@ -11,7 +11,7 @@ defmodule RestfulApiWeb.Plugs.Auth do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
     case resource.is_root do
       true -> conn
-      false -> conn |> halt()
+      false -> conn |> redirect(to: "/") |> halt()
     end
   end
 
@@ -21,7 +21,7 @@ defmodule RestfulApiWeb.Plugs.Auth do
     case resource.is_admin || resource.is_root do
       true -> conn
       false -> 
-        conn |> halt()
+        conn |> redirect(to: "/") |> halt()
     end
   end
 
@@ -33,7 +33,7 @@ defmodule RestfulApiWeb.Plugs.Auth do
         project = Repo.get(Project, resource.project_id)
         case project.actived do
           true -> conn
-          false -> conn |> halt()
+          false -> conn |> redirect(to: "/") |> halt()
         end
       true -> conn
     end

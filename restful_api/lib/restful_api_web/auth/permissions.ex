@@ -19,7 +19,7 @@ defmodule RestfulApiWeb.Permissions do
 							:write_model06,
 							:read_model07, 
 							:write_model07,
-							:read_model07, 
+							:read_model08, 
 							:write_model08,
 							:read_model09, 
 							:write_model09,
@@ -35,12 +35,12 @@ defmodule RestfulApiWeb.Permissions do
 							:write_model14,
 							:read_model15, 
 							:write_model15,
-							:read_model15, 
-							:write_model15,
 							:read_model16, 
-							:write_model16,  
+							:write_model16,
 							:read_model17, 
-							:write_model17         
+							:write_model17,  
+							:read_model18, 
+							:write_model18         
 					]
 					}
 	use Guardian.Permissions.Bitwise
