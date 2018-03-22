@@ -20,6 +20,9 @@
             "children": [{
                 "text": "项目管理",
                 "link": "/projects/page"
+            }, {
+                "text": "用户管理(项目)",
+                "link": "/project_users/page"
             }]
         }]
         },

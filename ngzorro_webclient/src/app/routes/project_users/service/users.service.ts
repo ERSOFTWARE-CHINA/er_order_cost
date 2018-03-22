@@ -13,16 +13,18 @@ export class UsersService {
 
   constructor(private http: Http) {}
    
-  url = baseUrl+"users"
+  url = baseUrl+"project_users"
 
   listOnePage(q) {
     return this.http.get(this.url, getTokenOptions(q))
                .toPromise().then(res => {return res.json()})           
   }
 
-  add(v, roles): Promise<any>{ 
+  add(v, roles, project_id): Promise<any>{ 
     v.roles = roles;
+    v.project = {id: project_id};
     let param = { user: v} 
+    console.log(param)
     return this.http.post(this.url, param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
@@ -68,10 +70,11 @@ export class UsersService {
             .toPromise();
     }
 
-  update(cid, v, roles): Promise<any>{
+  update(cid, v, roles, project_id): Promise<any>{
     console.log("this is update")
     v.roles = roles
-    let obj = { user: v}; 
+    v.project = {id: project_id};
+    let obj = { user: v }; 
     return this.http.put(this.url + `/${cid}`,obj, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }

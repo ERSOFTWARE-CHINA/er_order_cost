@@ -29,20 +29,26 @@ export class UsersFormComponent implements OnInit {
     // 已选择角色
     multi_roles: any[];
 
+    // 项目列表
+    projects: any[] =[];
+    // 已选择项目
+    single_project: any= null; 
+
     constructor(
         private reuseTabService: ReuseTabService,
         private fb: FormBuilder,
         private router: Router,
         private usersService: UsersService,
         private rolesService: RolesService,
+        private projectsService: ProjectsService,
         private msg: NzMessageService
         ) {
     }
     
     ngOnInit() {
         this.setTitle();
-        if (this.usersService.formOperation == 'create') {this.user=null; this.getRoles();}
-        if (this.usersService.formOperation == 'update') this.initUpdate();
+        if (this.usersService.formOperation == 'create') {this.user=null; this.getRoles(); this.getProjects();}
+        if (this.usersService.formOperation == 'update') {this.getRoles();this.getProjects();this.initUpdate()};
         this.form = this.fb.group({
             name : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.nameValidator.bind(this)],
             email : [this.user? this.user.email : null, EmailValidator],
@@ -50,7 +56,8 @@ export class UsersFormComponent implements OnInit {
             position : [this.user? this.user.position : null],
             actived : [this.user? this.user.actived : null, Validators.required],
             is_admin : [this.user? this.user.is_admin : null, Validators.required],
-            roles : [this.user? this.user.roles : null]
+            roles : [this.user? this.user.roles : null],
+            project : [this.user? this.user.project_id : null]
         });
         this.form.controls["name"].setValue(this.user? this.user.name : "")
     }
@@ -61,14 +68,20 @@ export class UsersFormComponent implements OnInit {
             .catch((error) => {this.msg.error(error);})
     }
 
+    getProjects() {
+        this.projectsService.listAll()
+            .then(resp => this.projects = resp.data)
+            .catch((error) => {this.msg.error(error);})
+    }
+
     setTitle() {
         if (this.usersService.formOperation == "create") { 
-            this.reuseTabService.title ="创建用户"; 
-            this.card_title = "创建用户";
+            this.reuseTabService.title ="创建用户(项目)"; 
+            this.card_title = "创建用户(项目)";
         }
         if (this.usersService.formOperation == "update") { 
-            this.reuseTabService.title ="修改用户";
-            this.card_title = "修改用户";
+            this.reuseTabService.title ="修改用户(项目)";
+            this.card_title = "修改用户(项目)";
         }
     }
 
@@ -80,7 +93,7 @@ export class UsersFormComponent implements OnInit {
         this.formatForm();
 
         let op = this.usersService.formOperation;
-        if (op == 'create') this.usersService.add(this.form.value, this.roles).then(resp => {
+        if (op == 'create') this.usersService.add(this.form.value, this.roles, this.single_project).then(resp => {
             if (resp.error) { 
                 this.msg.error(resp.error);
             } else {
@@ -88,7 +101,7 @@ export class UsersFormComponent implements OnInit {
                 this.goBack();
             }
             }).catch(error => this.msg.error(error));
-        if (op == 'update') this.usersService.update(this.user.id, this.form.value, this.roles).then(resp => {
+        if (op == 'update') this.usersService.update(this.user.id, this.form.value, this.roles, this.single_project).then(resp => {
             if (resp.error) { 
                 this.msg.error(resp.error);
             } else {
@@ -100,7 +113,7 @@ export class UsersFormComponent implements OnInit {
     }
 
     goBack() {
-        this.router.navigateByUrl('/users/page');
+        this.router.navigateByUrl('/project_users/page');
     }
 
     formatForm() {
@@ -132,13 +145,15 @@ export class UsersFormComponent implements OnInit {
 
     initUpdate() {
         this.user = this.usersService.user;
-        this.roles = this.usersService.user.roles;
+        let roles = this.usersService.user.roles;
         // 加载roles到form control
         let roles_ids = []
-        for (var i=0; i<this.roles.length;i++) {
-            let r = this.roles[i].id;
+        for (var i=0; i<roles.length;i++) {
+            let r = roles[i].id;
             roles_ids.push(r);   
         }
         this.multi_roles = roles_ids;
+        // 加载project到form control
+        this.single_project = this.user.project_id;
     }
 }
