@@ -38,6 +38,8 @@ import {
     NzTabsModule,
     NzTagModule,
     NzTimePickerModule,
+
+    NzTransferModule,
     NzUtilModule,
     NzStepsModule,
     NzDropDownModule,
@@ -90,6 +92,8 @@ export const ZORROMODULES = [
     NzTabsModule,
     NzTagModule,
     NzTimePickerModule,
+
+    NzTransferModule,
     NzUtilModule,
     NzStepsModule,
     NzDropDownModule,

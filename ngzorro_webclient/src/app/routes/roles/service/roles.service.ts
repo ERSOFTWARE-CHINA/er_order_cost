@@ -13,6 +13,7 @@ export class RolesService {
   constructor(private http: Http) {}
    
   url = baseUrl+"roles"
+  perms_url =baseUrl +"permissions"
 
   // 所有角色不超过64个
   listAll() {
@@ -20,5 +21,10 @@ export class RolesService {
                .toPromise().then(res => {return res.json()})           
   }
 
+  // 获取所有权限的列表
+  listAllPerms() {
+    return this.http.get(this.perms_url, getTokenOptions(null))
+      .toPromise().then(res => {return res.json()}) 
+  }
   
 }

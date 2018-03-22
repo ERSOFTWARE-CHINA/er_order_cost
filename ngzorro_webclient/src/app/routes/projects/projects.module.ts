@@ -8,6 +8,7 @@ import { ProjectsComponent } from './projects.component';
 import { ProjectsListComponent } from './list/list.component';
 import { ProjectsFormComponent } from './form/form.component';
 import { ProjectsService } from './service/projects.service';
+import { RolesService } from '../roles/service/roles.service';
 import { MainPipe } from '../../pipes/pipes.module';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MainPipe } from '../../pipes/pipes.module';
     ProjectsFormComponent
   ],
   providers: [
-    ProjectsService
+    ProjectsService,
+    RolesService
   ]
 })
 export class ProjectsModule { }

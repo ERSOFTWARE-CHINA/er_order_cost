@@ -3,5 +3,5 @@ export class Project {
     name: string;
     acitived: boolean;
     deadline: string;
-    perms_number: string;
+    perms_number: any;
 }
