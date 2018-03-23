@@ -99,7 +99,7 @@ export class UsersListComponent implements OnInit {
     update(id) {
         this.usersService.formOperation='update';
         this.usersService.initUpdate(id)
-            .then(result => { this.usersService.user = result.data;console.log(result.data)})
+            .then(result => { this.usersService.user = result.data;})
             .then(() => this.router.navigateByUrl('/users/form')).catch((error)=>
             this.msg.error(error)); 
     }

@@ -92,7 +92,7 @@ export class ProjectsListComponent implements OnInit {
     update(id) {
         this.projectsService.formOperation='update';
         this.projectsService.initUpdate(id)
-            .then(result => { this.projectsService.project = result.data;console.log(result.data)})
+            .then(result => { this.projectsService.project = result.data;})
             .then(() => this.router.navigateByUrl('/projects/form')).catch((error)=>
             this.msg.error(error)); 
     }

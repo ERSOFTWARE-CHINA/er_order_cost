@@ -23,8 +23,7 @@ export class UsersService {
   add(v, roles, project_id): Promise<any>{ 
     v.roles = roles;
     v.project = {id: project_id};
-    let param = { user: v} 
-    console.log(param)
+    let param = { user: v}; 
     return this.http.post(this.url, param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
@@ -71,8 +70,7 @@ export class UsersService {
     }
 
   update(cid, v, roles, project_id): Promise<any>{
-    console.log("this is update")
-    v.roles = roles
+    v.roles = roles;
     v.project = {id: project_id};
     let obj = { user: v }; 
     return this.http.put(this.url + `/${cid}`,obj, getTokenOptions(null))

@@ -69,7 +69,6 @@ export class UsersService {
     }
 
   update(cid, v, roles): Promise<any>{
-    console.log("this is update")
     v.roles = roles
     let obj = { user: v}; 
     return this.http.put(this.url + `/${cid}`,obj, getTokenOptions(null))

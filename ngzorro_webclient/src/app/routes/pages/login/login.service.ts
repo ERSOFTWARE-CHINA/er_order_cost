@@ -30,8 +30,6 @@ export class AuthenticationService {
         let options = new RequestOptions({ headers: headers });
         return this.http.post(baseUrl + `login`, value, options)
             .map((response: Response) => {
-                console.log("@@@@login ok@@@@")
-                console.log(response.json())
                 let error = response.json() && response.json().error;
                 let token = response.json() && response.json().jwt;
                 let username = response.json() && response.json().user && response.json().user.name;
@@ -48,10 +46,8 @@ export class AuthenticationService {
                     localStorage.setItem('username', username);
                     localStorage.setItem('email', email)
                     localStorage.setItem('avatar', avatar)
-                    console.log("valid login!")
                     return true;
                 } else {
-                    console.log("invalid login!")
                     return false;
                 }
             });

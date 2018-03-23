@@ -26,8 +26,6 @@ export class RegisterComponent {
       this.valForm.controls[i].markAsDirty();
     }
     if (this.valForm.valid) {
-      console.log('Valid!');
-      console.log(this.valForm.value);
       this.router.navigate(['dashboard']);
     }
   }

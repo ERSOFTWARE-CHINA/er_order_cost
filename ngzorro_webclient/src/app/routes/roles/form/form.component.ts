@@ -103,7 +103,6 @@ export class RoleFormComponent implements OnInit {
         // if (this.form.valid) {
             
             this.form.controls["perms"].setValue(this.getListFromTransferItem(this.selected_perms_list));
-            console.log(this.getListFromTransferItem(this.selected_perms_list));
             let op = this.rolesService.formOperation;
             if (op == 'create') this.rolesService.add(this.form.value).then(resp => {
                 if (resp.error) { 
@@ -142,7 +141,7 @@ export class RoleFormComponent implements OnInit {
             this.selected_perms_list = this.selected_perms_list.concat(ret.list);
         } else {
             for (const i in ret.list) {
-                this.selected_perms_list = this.selected_perms_list.filter(function(x) { return x.name != ret.list[i].name })
+                this.selected_perms_list = this.selected_perms_list.filter(function(x) { return x.title != ret.list[i].title })
             }
         }
     }

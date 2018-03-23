@@ -42,7 +42,7 @@ export class UsersFormComponent implements OnInit {
     ngOnInit() {
         this.setTitle();
         if (this.usersService.formOperation == 'create') {this.user=null; this.getRoles();}
-        if (this.usersService.formOperation == 'update') this.initUpdate();
+        if (this.usersService.formOperation == 'update') {this.getRoles();this.initUpdate();}
         this.form = this.fb.group({
             name : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.nameValidator.bind(this)],
             email : [this.user? this.user.email : null, EmailValidator],
@@ -57,7 +57,7 @@ export class UsersFormComponent implements OnInit {
 
     getRoles() {
         this.rolesService.listAll()
-            .then(resp => this.roles = resp.data)
+            .then(resp => {this.roles = resp.data;})
             .catch((error) => {this.msg.error(error);})
     }
 

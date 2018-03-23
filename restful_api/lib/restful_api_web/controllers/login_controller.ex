@@ -14,7 +14,7 @@ defmodule RestfulApiWeb.LoginController do
   def login(conn, %{"password" => pw, "username" => un, "project" => proj} = params) do
     case checkPassword(un, pw, proj) do
       {:ok, user, project_id} ->
-        # 将权限和项目名编码进token
+        # 将权限和项目id编码进token
         perms_number = Permissions.get_perms_from_roles(user.roles)
         {:ok, token, claims} = Guardian.encode_and_sign(user, %{pem: %{"default" => perms_number}, project: project_id, is_root: user.is_root})
         perms = Permissions.get_permissions(claims)

@@ -109,7 +109,6 @@ export class ProjectsFormComponent implements OnInit {
         // if (this.form.valid) {
             
             this.form.controls["perms"].setValue(this.getListFromTransferItem(this.selected_perms_list));
-            console.log(this.getListFromTransferItem(this.selected_perms_list));
             let op = this.projectsService.formOperation;
             if (op == 'create') this.projectsService.add(this.form.value).then(resp => {
                 if (resp.error) { 
@@ -160,10 +159,11 @@ export class ProjectsFormComponent implements OnInit {
     change(ret: any) {
         if (ret.to == "right") {
             this.selected_perms_list = this.selected_perms_list.concat(ret.list);
-        } else {
+        } else if (ret.to == "left") {
             for (const i in ret.list) {
-                this.selected_perms_list = this.selected_perms_list.filter(function(x) { return x.name != ret.list[i].name })
+                this.selected_perms_list = this.selected_perms_list.filter(function(x) { return x.title != ret.list[i].title })
             }
+           
         }
     }
 

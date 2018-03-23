@@ -34,6 +34,7 @@ defmodule RestfulApiWeb.ProjectController do
   def update(conn, %{"id" => id, "project" => project_params}) do
     with {:ok, project} <- get_by_id(Project, id, conn) do
       with {:ok, %Project{} = proj} <- save_update(Project.changeset(project, project_params|>convert_perms_to_number), conn) do
+        IO.puts inspect update_project_with_handle_perms(project, Project.changeset(project, project_params|>convert_perms_to_number), conn)
         render(conn, "show.json", project: proj)
       end
     end

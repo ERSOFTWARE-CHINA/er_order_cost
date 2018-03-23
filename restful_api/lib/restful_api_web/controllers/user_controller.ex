@@ -30,14 +30,14 @@ defmodule RestfulApiWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    with {:ok, user} <- get_by_id(User, id, conn, [:organization, :roles]) do
+    with {:ok, user} <- get_by_id(User, id, conn, [:roles]) do
       render(conn, "show.json", user: user)
     end
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user_params = user_params |> disable_is_root
-    with {:ok, user} <- get_by_id(User, id, conn, [:organization, :roles]) do
+    with {:ok, user} <- get_by_id(User, id, conn, [:roles, :project]) do
       role_changsets = roles_exists(user_params, conn)
       user_changeset = User.changeset(user, user_params)
       user_changeset = Ecto.Changeset.put_assoc(user_changeset, :roles, role_changsets)
@@ -83,13 +83,6 @@ defmodule RestfulApiWeb.UserController do
       end
     end)
     |> Enum.filter(fn(r)-> !is_nil(r) end)
-  end
-
-  defp project_exists(id, conn) do
-    case get_by_id(Project, id, conn) do
-      nil -> nil
-      project -> change(Project, project)
-    end
   end
 
   # 创建普通用户时，不能指定is_root字段
