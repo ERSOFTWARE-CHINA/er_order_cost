@@ -8,7 +8,6 @@ import { UsersComponent } from './users.component';
 import { UsersListComponent } from './list/list.component';
 import { UsersFormComponent } from './form/form.component';
 import { UsersService } from './service/users.service';
-import { OrganizationsService } from '../organizations/service/organizations.service';
 import { RolesService } from '../roles/service/roles.service';
 import { ProjectsService } from '../projects/service/projects.service';
 import { MainPipe } from '../../pipes/pipes.module';
@@ -22,7 +21,6 @@ import { MainPipe } from '../../pipes/pipes.module';
   ],
   providers: [
     UsersService,
-    OrganizationsService,
     RolesService,
     ProjectsService
     // ConfirmationService

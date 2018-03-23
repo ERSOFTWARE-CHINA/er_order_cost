@@ -11,7 +11,6 @@ import { NzMessageService } from 'ng-zorro-antd';
 
 import { UsersService } from '../service/users.service';
 import { User } from '../domain/user.domain'; 
-import { OrganizationsService } from '../../organizations/service/organizations.service';
 import { RolesService } from '../../roles/service/roles.service'; 
 import { ProjectsService } from '../../projects/service/projects.service';
 

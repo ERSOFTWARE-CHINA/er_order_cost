@@ -6,7 +6,6 @@ import { _HttpClient } from '@delon/theme';
 import { tap } from 'rxjs/operators';
 
 import { UsersService } from '../service/users.service';
-import { OrganizationsService } from '../../organizations/service/organizations.service';
 import { UserStatusPipe } from '../../../pipes/pipes'; 
 
 @Component({
@@ -24,8 +23,7 @@ export class UsersListComponent implements OnInit {
         actived: null,
         real_name: null,
         email: null,
-        position: null,
-        organization_id: null
+        position: null
     };
     // 记录总数
     total: number;
@@ -49,7 +47,6 @@ export class UsersListComponent implements OnInit {
         private http: _HttpClient, 
         public msg: NzMessageService,
         private usersService: UsersService,
-        private organsService: OrganizationsService,
         private router: Router
         ) {}
 
@@ -64,7 +61,6 @@ export class UsersListComponent implements OnInit {
     getData() {
         this.formatForm()
         this.loading = true;
-        this.q.organization = this.q.organization instanceof Array ? this.q.organization.pop() : null
         this.usersService.listOnePage(this.q)
                          .then(resp => {
                              if (resp.error) {
@@ -134,7 +130,6 @@ export class UsersListComponent implements OnInit {
         if ((this.q.real_name == null)||(this.q.real_name == "")){delete this.q.real_name}
         if ((this.q.email == null)||(this.q.email == "")){delete this.q.email}
         if ((this.q.position == null)||(this.q.position == "")){delete this.q.position}
-        if (this.q.organization_id == null){delete this.q.organization_id}
     }
 
     // 删除确认框相关

@@ -24,6 +24,7 @@ import { ALAIN_I18N_TOKEN } from '@delon/theme';
 import { I18NService } from '@core/i18n/i18n.service';
 
 import { AuthGuard } from './routes/auth.guard';
+import { ACLGuard } from './routes/acl.guard';
 
 
 // AoT requires an exported function for factories
@@ -70,7 +71,8 @@ export function StartupServiceFactory(startupService: StartupService): Function 
             deps: [StartupService],
             multi: true
         },
-        AuthGuard
+        AuthGuard,
+        ACLGuard
         
     ],
     bootstrap: [AppComponent]

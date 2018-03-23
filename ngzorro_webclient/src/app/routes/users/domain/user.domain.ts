@@ -8,7 +8,6 @@ export class User {
     actived: boolean;
     roles: any[];
     avatar :string;
-    organization: any;
     project_id: number;
     // 设置默认值
     constructor() { 

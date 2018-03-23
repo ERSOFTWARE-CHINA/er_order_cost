@@ -27,8 +27,7 @@ export class OrderListComponent implements OnInit {
         actived: null,
         real_name: null,
         email: null,
-        position: null,
-        organization_id: null
+        position: null
         // sorter: '',
         // status: null,
         // statusList: []

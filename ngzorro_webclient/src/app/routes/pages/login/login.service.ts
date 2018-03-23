@@ -3,6 +3,9 @@ import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
+import { ACLService } from '@delon/acl';
+import { MenuService } from '@delon/theme';
+
 import { baseUrl } from '../../../shared/shared.service';
 
 export function getTokenOptions(paramsobj): RequestOptions{
@@ -18,7 +21,7 @@ export function getTokenOptions(paramsobj): RequestOptions{
 export class AuthenticationService {
     public token: string;
  
-    constructor(private http: Http) {
+    constructor(private http: Http,public aclSrv: ACLService,private menuSrv: MenuService) {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
@@ -46,12 +49,23 @@ export class AuthenticationService {
                     localStorage.setItem('username', username);
                     localStorage.setItem('email', email)
                     localStorage.setItem('avatar', avatar)
+                    this.setACL(response.json());
                     return true;
                 } else {
                     return false;
                 }
             });
     }
+
+    setACL(obj){
+        this.aclSrv.setFull(false);
+        let acl: string[]= obj.perms.default
+        if (obj.user.is_root) {acl.push("root")}
+        if (obj.user.is_admin) {acl.push("admin")}
+        this.aclSrv.setRole(acl);
+        this.menuSrv.resume();
+    }
+
 
     checkUsernameAlreadyExists(username) {
         return this.http.get(baseUrl + `users/username/${username}`).map(response => response.json()).toPromise();

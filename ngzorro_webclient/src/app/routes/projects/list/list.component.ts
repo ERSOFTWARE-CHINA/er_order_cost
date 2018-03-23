@@ -57,7 +57,6 @@ export class ProjectsListComponent implements OnInit {
     getData() {
         this.formatForm()
         this.loading = true;
-        this.q.organization = this.q.organization instanceof Array ? this.q.organization.pop() : null
         this.projectsService.listOnePage(this.q)
                          .then(resp => {
                              if (resp.error) {

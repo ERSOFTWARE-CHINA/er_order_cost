@@ -21,7 +21,9 @@ import { Exception404Component } from './exception/404.component';
 import { Exception500Component } from './exception/500.component';
 
 import { LoginComponent } from './pages/login/login.component';
+import { ACLComponent } from '../routes/acl/acl.component';
 import { AuthGuard } from './auth.guard';
+import { ACLGuard } from './acl.guard';
 
 const routes: Routes = [
     {
@@ -46,11 +48,11 @@ const routes: Routes = [
             { path: 'dict', loadChildren: './dictionary/dict.module#DictModule' },
             { path: 'pages', loadChildren: './pages/pages.module#PagesModule' },
             { path: 'users', loadChildren: './users/users.module#UsersModule' },
-            { path: 'organs', loadChildren: './organizations/organizations.module#OrganizationsModule' },
+            { path: 'acl', component: ACLComponent },
             { path: 'roles', loadChildren: './roles/roles.module#RoleModule' },
             { path: 'orders', loadChildren: './order/order.module#OrderModule' },
-            { path: 'projects', loadChildren: './projects/projects.module#ProjectsModule' },
-            { path: 'project_users', loadChildren: './project_users/users.module#UsersModule' },
+            { path: 'projects', loadChildren: './projects/projects.module#ProjectsModule', data: {roles: ['root']}, canActivate: [ACLGuard]},
+            { path: 'project_users', loadChildren: './project_users/users.module#UsersModule', data: {roles: ['root']}, canActivate: [ACLGuard] },
         ],
         canActivate: [AuthGuard]
     },

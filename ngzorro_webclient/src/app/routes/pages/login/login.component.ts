@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 // import { SettingsService } from '@core/services/settings.service';
 
 import { NzMessageService } from 'ng-zorro-antd';
+import { ACLService } from '@delon/acl';
+import { MenuService } from '@delon/theme';
 
 import { AuthenticationService } from './login.service';
 
@@ -21,7 +23,12 @@ export class LoginComponent {
   // ngIf用来显示密码错误信息
   invalidlogin = false;
 
-  constructor( private authenticationService: AuthenticationService, fb: FormBuilder, private router: Router, private msg: NzMessageService) {
+  constructor( private authenticationService: AuthenticationService, 
+               fb: FormBuilder, 
+               private router: Router,
+               private msg: NzMessageService,
+               public aclSrv: ACLService,
+               private menuSrv: MenuService) {
     this.valForm = fb.group({
       project: [null, Validators.compose([Validators.required])],
       username: [null, Validators.compose([Validators.required])],

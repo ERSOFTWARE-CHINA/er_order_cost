@@ -49,24 +49,6 @@
                     </div>
                 </div>
 
-                <!-- <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
-                    <div nz-form-item class="d-flex">
-                        <div nz-form-label><label for="organization_id">部门名称</label></div>
-                        <div nz-form-control class="flex-1">
-                            <nz-cascader
-                                name="organization"
-                                nzChangeOnSelect
-                                [nzSize]="'large'"
-                                [nzPlaceHolder]="'请选择'"
-                                [nzOptions]="tree"
-                                [nzValueProperty]="'id'"
-                                [nzLabelProperty]="'name'"
-                                [(ngModel)]="q.organization_id">
-                            </nz-cascader>
-                        </div>
-                    </div>
-                </div> -->
-
                 <div nz-col [nzSpan]="expandForm ? 24 : 8" class="mb-md" [class.text-right]="expandForm">
                     <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'" >查询</button>
                     <button nz-button type="reset" (click)="getData()" [nzSize]="'large'" class="mx-sm">重置</button>

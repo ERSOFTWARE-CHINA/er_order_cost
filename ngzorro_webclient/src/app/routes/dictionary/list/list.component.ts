@@ -23,7 +23,6 @@ export class DictListComponent implements OnInit {
         real_name: null,
         email: null,
         position: null,
-        organization_id: null
         // sorter: '',
         // status: null,
         // statusList: []

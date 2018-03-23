@@ -64,11 +64,10 @@ defmodule RestfulApiWeb.LoginController do
           real_name: user.real_name,
           position: user.position,
           is_admin: user.is_admin,
+          is_root: user.is_root,
           actived: user.actived,
           perms_number: user.perms_number,
-          avatar: user.avatar,
-          roles: user.roles,
-          organization: user.organization
+          avatar: user.avatar
         }
     end
   end

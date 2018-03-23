@@ -13,6 +13,7 @@
         "translate": "项目",
         "link":"",
         "group": true,
+        "acl": "root",
         "children": [{
             "text": "项目管理",
             "link": "",
@@ -31,6 +32,7 @@
         "translate": "系统",
         "link":"",
         "group": true,
+        "acl": "admin",
         "children": [{
             "text": "系统设置",
             "link": "",
@@ -42,8 +44,8 @@
                 "text": "角色管理",
                 "link": "/roles/page"
             }, {
-                "text": "机构管理",
-                "link": "/organs/page"
+                "text": "权限测试",
+                "link": "/acl"
             }, {
                 "text": "数据字典",
                 "link": "/dict/page"
