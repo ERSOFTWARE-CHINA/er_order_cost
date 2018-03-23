@@ -13,50 +13,28 @@
 #################
 # 初始化项目
 #################
-# alias RestfulApi.Repo
-# alias RestfulApi.Tenant.Project
+alias RestfulApi.Repo
+alias RestfulApi.Tenant.Project
 
-# proj1 = 
-#   %Project{
-#     name: "root_project",
-#     perms_number: 255,
-    
-#   }
+proj1 = 
+  %Project{
+    name: "root_project",
+    perms_number: 137438953471,
+    actived: true
+  }
 
-# proj2 = 
-#   %Project{
-#     name: "user_project_01",
-#     perms_number: 1,
-    
-#   }
+proj2 = 
+  %Project{
+    name: "user_project",
+    perms_number: 255,
+    actived: true
+  }
 
-# Repo.insert(proj1)
-# Repo.insert(proj2)
-
-#################
-# 初始化角色
-#################
-# alias RestfulApi.Repo
-# alias RestfulApi.Authentication.Role
-
-# admin_role = 
-#   %Role{
-#     name: "admin_role",
-#     perms_number: 255
-#   }
-
-# user_role = 
-#   %Role{
-#     name: "user_role",
-#     perms_number: 1
-#   }
-
-# Repo.insert(admin_role)
-# Repo.insert(user_role)
-
-#################
-# 初始化用户
-#################
+#####################################################
+# 初始化root用户(超级管理员)，和admin用户(用户管理员)
+# 所属项目：root_project  用户名：root   密码：root123
+# 所属项目：user_project  用户名：admin  密码：admin123
+#####################################################
 alias RestfulApi.Repo
 alias RestfulApi.Accounts.User
 
@@ -65,12 +43,13 @@ root =
   name: "root",
   password_hash: Comeonin.Pbkdf2.hashpwsalt("root123"),
   email: "root@phx.com",
-  real_name: "WangLei",
+  real_name: "如特",
   position: "Root Administrator",
   perms_number: 255,
   actived: true,
   is_admin: true,
-  is_root: true
+  is_root: true,
+  project: proj1
 }
 
 admin = 
@@ -78,24 +57,13 @@ admin =
     name: "admin",
     password_hash: Comeonin.Pbkdf2.hashpwsalt("admin123"),
     email: "admin@phx.com",
-    real_name: "WangLei",
-    position: "Administrator",
+    real_name: "阿德明",
+    position: "User Administrator",
     perms_number: 255,
     actived: true,
-    is_admin: true
-  }
-
-user01 = 
-  %User{
-    name: "user01",
-    password_hash: Comeonin.Pbkdf2.hashpwsalt("user01"),
-    email: "user01@phx.com",
-    real_name: "LiMing",
-    perms_number: 0,
-    actived: true,
-    is_admin: false
+    is_admin: true,
+    project: proj2
   }
 
 Repo.insert(root)
 Repo.insert(admin)
-Repo.insert(user01)
