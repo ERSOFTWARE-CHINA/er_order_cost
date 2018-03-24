@@ -82,6 +82,10 @@
                             "link": "/productions/page"
                         },
                         {
+                            "text": "配件信息管理",
+                            "link": "/spareparts/page"
+                        },
+                        {
                             "text": "订单信息管理",
                             "link": "/orders/page"
                         }
