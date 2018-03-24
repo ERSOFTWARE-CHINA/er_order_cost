@@ -51,7 +51,7 @@
                 "link": "/dict/page"
             },{
                 "text":"订单管理",
-                "link":"orders/page"
+                "link":"/orders/page"
             }]
         }]
     }]
