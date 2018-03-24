@@ -53,6 +53,7 @@ const routes: Routes = [
             { path: 'orders', loadChildren: './order/order.module#OrderModule' },
             { path: 'projects', loadChildren: './projects/projects.module#ProjectsModule', data: {roles: ['root']}, canActivate: [ACLGuard]},
             { path: 'project_users', loadChildren: './project_users/users.module#UsersModule', data: {roles: ['root']}, canActivate: [ACLGuard] },
+            {path : 'productions',loadChildren: './production/production.module#ProdcutionModule'}
         ],
         canActivate: [AuthGuard]
     },

@@ -8,52 +8,86 @@
         "avatar": "./assets/img/zorro.svg",
         "email": "cipchk@qq.com"
     },
-    "menu": [{
-        "text": "项目",
-        "translate": "项目",
-        "link":"",
-        "group": true,
-        "acl": "root",
-        "children": [{
-            "text": "项目管理",
+    "menu": [
+        {
+            "text": "项目",
+            "translate": "项目",
             "link": "",
-            "icon": "icon-wrench",
-            "children": [{
-                "text": "项目管理",
-                "link": "/projects/page"
-            }, {
-                "text": "用户管理(项目)",
-                "link": "/project_users/page"
-            }]
-        }]
+            "group": true,
+            "acl": "root",
+            "children": [
+                {
+                    "text": "项目管理",
+                    "link": "",
+                    "icon": "icon-wrench",
+                    "children": [
+                        {
+                            "text": "项目管理",
+                            "link": "/projects/page"
+                        },
+                        {
+                            "text": "用户管理(项目)",
+                            "link": "/project_users/page"
+                        }
+                    ]
+                }
+            ]
         },
         {
-        "text": "系统",
-        "translate": "系统",
-        "link":"",
-        "group": true,
-        "acl": "admin",
-        "children": [{
-            "text": "系统设置",
+            "text": "系统",
+            "translate": "系统",
             "link": "",
-            "icon": "icon-wrench",
-            "children": [{
-                "text": "用户管理",
-                "link": "/users/page"
-            }, {
-                "text": "角色管理",
-                "link": "/roles/page"
-            }, {
-                "text": "权限测试",
-                "link": "/acl"
-            }, {
-                "text": "数据字典",
-                "link": "/dict/page"
-            },{
-                "text":"订单管理",
-                "link":"/orders/page"
-            }]
-        }]
-    }]
+            "group": true,
+            "acl": "admin",
+            "children": [
+                {
+                    "text": "系统设置",
+                    "link": "",
+                    "icon": "icon-wrench",
+                    "children": [
+                        {
+                            "text": "用户管理",
+                            "link": "/users/page"
+                        },
+                        {
+                            "text": "角色管理",
+                            "link": "/roles/page"
+                        },
+                        {
+                            "text": "权限测试",
+                            "link": "/acl"
+                        },
+                        {
+                            "text": "数据字典",
+                            "link": "/dict/page"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "text": "订单",
+            "translate": "订单",
+            "link": "",
+            "group": true,
+            "acl": "root",
+            "children": [
+                {
+                    "text": "订单管理",
+                    "link": "",
+                    "icon": "icon-wrench",
+                    "children": [
+                        {
+                            "text": "产品信息管理",
+                            "link": "/productions/page"
+                        },
+                        {
+                            "text": "订单信息管理",
+                            "link": "/orders/page"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
-        
