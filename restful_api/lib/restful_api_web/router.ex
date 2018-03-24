@@ -48,8 +48,11 @@ defmodule RestfulApiWeb.Router do
     get "/projects/check/name", ProjectController, :check_name
 
 
+    #production config
+    resources "/prodctions", ProductionController, except: [:new, :edit]
     #order config
     resources "/orders",OrderController,except: [:new,:edit]
+
   end
 
 end
