@@ -7,7 +7,7 @@ defmodule RestfulApi.OrderService.Order do
 
   schema "orders" do
     field :name, :string
-    belongs_to :project_id, Project
+    belongs_to :project, Project, on_replace: :nilify
 
     timestamps()
   end
