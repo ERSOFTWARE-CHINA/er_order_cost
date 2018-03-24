@@ -48,9 +48,11 @@ defmodule RestfulApiWeb.Router do
     get "/projects/check/name", ProjectController, :check_name
 
 
-    #production config
+    #产品信息配置
     resources "/prodctions", ProductionController, except: [:new, :edit]
-    #order config
+    #配件信息配置
+    resources "/spareparts", SparepartController, except: [:new, :edit]
+    #订单信息配置
     resources "/orders",OrderController,except: [:new,:edit]
 
   end
