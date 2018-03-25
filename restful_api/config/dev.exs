@@ -52,7 +52,7 @@ config :phoenix, :stacktrace_depth, 20
 config :restful_api, RestfulApi.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
-  password: "postgres",
+  password: "root",
   database: "restful_api_dev",
   hostname: "localhost",
   pool_size: 10
