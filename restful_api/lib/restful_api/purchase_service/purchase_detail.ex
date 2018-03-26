@@ -6,8 +6,8 @@ defmodule RestfulApi.PurchaseService.PurchaseDetail do
 
 	schema "purchase_details" do
 		field :price, :float			 # 配件单价
-		field :amount, :integer    # 数量
-		field :total_price, :float # 总价
+		field :amount, :integer    		 # 数量
+		field :total_price, :float 		 # 总价
 		has_one :sparepart, Sparepart, on_replace: :nilify
 		timestamps()
 	end

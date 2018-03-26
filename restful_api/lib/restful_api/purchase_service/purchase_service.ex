@@ -1,104 +1,23 @@
 defmodule RestfulApi.PurchaseService do
-  @moduledoc """
-  The PurchaseService context.
-  """
 
   import Ecto.Query, warn: false
-  alias RestfulApi.Repo
-
+  use RestfulApi.BaseContext
   alias RestfulApi.PurchaseService.Purchase
 
-  @doc """
-  Returns the list of perchases.
-
-  ## Examples
-
-      iex> list_perchases()
-      [%Purchase{}, ...]
-
-  """
-  def list_perchases do
-    Repo.all(Purchase)
+  defmacro __using__(_opts) do
+    quote do
+      import RestfulApi.PurchaseService
+      use RestfulApi.BaseContext
+      alias RestfulApi.PurchaseService.Purchase
+      alias RestfulApi.PurchaseService.PurchaseDetail
+    end
   end
 
-  @doc """
-  Gets a single purchase.
-
-  Raises `Ecto.NoResultsError` if the Purchase does not exist.
-
-  ## Examples
-
-      iex> get_purchase!(123)
-      %Purchase{}
-
-      iex> get_purchase!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_purchase!(id), do: Repo.get!(Purchase, id)
-
-  @doc """
-  Creates a purchase.
-
-  ## Examples
-
-      iex> create_purchase(%{field: value})
-      {:ok, %Purchase{}}
-
-      iex> create_purchase(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_purchase(attrs \\ %{}) do
-    %Purchase{}
-    |> Purchase.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a purchase.
-
-  ## Examples
-
-      iex> update_purchase(purchase, %{field: new_value})
-      {:ok, %Purchase{}}
-
-      iex> update_purchase(purchase, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_purchase(%Purchase{} = purchase, attrs) do
-    purchase
-    |> Purchase.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a Purchase.
-
-  ## Examples
-
-      iex> delete_purchase(purchase)
-      {:ok, %Purchase{}}
-
-      iex> delete_purchase(purchase)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_purchase(%Purchase{} = purchase) do
-    Repo.delete(purchase)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking purchase changes.
-
-  ## Examples
-
-      iex> change_purchase(purchase)
-      %Ecto.Changeset{source: %Purchase{}}
-
-  """
-  def change_purchase(%Purchase{} = purchase) do
-    Purchase.changeset(purchase, %{})
+  def page(params, conn) do 
+    Purchase
+    |> query_like(params, "pno")
+    |> query_equal(params, "order_id")
+    |> query_order_by(params, "date")
+    |> get_pagination(params, conn)
   end
 end

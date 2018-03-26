@@ -91,6 +91,4 @@ defmodule RestfulApiWeb.UserController do
     |> Map.update("is_root", false, fn(_) -> false end)
   end
 
-
-
 end
