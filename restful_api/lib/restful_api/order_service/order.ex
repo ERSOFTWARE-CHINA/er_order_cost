@@ -16,6 +16,6 @@ defmodule RestfulApi.OrderService.Order do
   def changeset(order, attrs) do
     order
     |> cast(attrs, [:name,:project_id])
-    |> validate_required([:name,:project_id])
+    |> validate_required([:name])
   end
 end

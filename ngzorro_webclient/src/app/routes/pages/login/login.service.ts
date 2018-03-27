@@ -59,9 +59,10 @@ export class AuthenticationService {
 
     setACL(obj){
         this.aclSrv.setFull(false);
-        let acl: string[]= obj.perms.default
-        if (obj.user.is_root) {acl.push("root")}
-        if (obj.user.is_admin) {acl.push("admin")}
+        let acl: string[]= obj.perms.default;
+        if (obj.user.is_root) {acl.push("root")};
+        if (obj.user.is_admin) {acl.push("admin")};
+        localStorage.setItem('acl', acl.join(','));
         this.aclSrv.setRole(acl);
         this.menuSrv.resume();
     }
