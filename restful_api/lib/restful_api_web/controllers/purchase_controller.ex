@@ -38,7 +38,7 @@ defmodule RestfulApiWeb.PurchaseController do
   end
 
   def update(conn, %{"id" => id, "purchase" => purchase_params}) do
-    with {:ok, purchase} <- get_by_id(Purchase, id, conn, [:order, :details]) do
+    with {:ok, purchase} <- get_by_id(Purchase, id, conn, [:order, :details,:project]) do
       order_changset = get_order_changeset(purchase_params, conn)
       details_changeset = get_details_changesets(purchase_params, conn)
       purchase_changeset = Purchase.changeset(purchase, purchase_params)
@@ -74,12 +74,14 @@ defmodule RestfulApiWeb.PurchaseController do
     purchase_params
     |> Map.get("details", [])
     |> Enum.map(fn(d)->
+      sparepart_changeset = d |> get_sparepart_changeset(conn)
       PurchaseDetail.changeset(%PurchaseDetail{}, d)
+      |> Ecto.Changeset.put_assoc(:sparepart, sparepart_changeset)
     end)
   end
 
-  defp get_sparepart_changeset(detail_params, conn) do
-    detail_params
+  defp get_sparepart_changeset(detail_param, conn) do
+    detail_param
     |> Map.get("sparepart", %{})
     |> Map.get("id")
     |> case do

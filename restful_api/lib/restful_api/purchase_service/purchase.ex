@@ -12,7 +12,7 @@ defmodule RestfulApi.PurchaseService.Purchase do
     field :price,  :float     # 采购单价格
     field :date,   :date      # 采购日期
     field :remark, :string      # 备注
-    has_many :details, PurchaseDetail, on_replace: :delete
+    has_many :details, PurchaseDetail, on_delete: :delete_all, on_replace: :delete
     belongs_to :order, Order, on_replace: :nilify
     belongs_to :project, Project, on_replace: :nilify
 

@@ -2,13 +2,15 @@ defmodule RestfulApi.PurchaseService.PurchaseDetail do
 	use Ecto.Schema
 	import Ecto.Changeset
 	alias RestfulApi.SparepartService.Sparepart
+	alias RestfulApi.PurchaseService.Purchase
 
 
 	schema "purchase_details" do
 		field :price, :float			 # 配件单价
 		field :amount, :integer    		 # 数量
 		field :total_price, :float 		 # 总价
-		has_one :sparepart, Sparepart, on_replace: :nilify
+		belongs_to :sparepart, Sparepart, on_replace: :nilify
+		belongs_to :purchase, Purchase, on_replace: :delete
 		timestamps()
 	end
 
@@ -16,7 +18,7 @@ defmodule RestfulApi.PurchaseService.PurchaseDetail do
 	def changeset(purchase_detail, attrs) do
 		purchase_detail
 		|> cast(attrs, [:price, :amount, :total_price])
-		|> validate_required([:price, :amount, :total_price])
+		|> validate_required([:price, :amount])
 		|> set_totalprice()
 	end
 

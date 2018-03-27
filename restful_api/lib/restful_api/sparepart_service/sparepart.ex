@@ -8,6 +8,8 @@ defmodule RestfulApi.SparepartService.Sparepart do
     field :name, :string
     field :specifications, :string
 
+    belongs_to :project, Project, on_replace: :nilify
+
     timestamps()
   end
 
