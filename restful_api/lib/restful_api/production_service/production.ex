@@ -2,13 +2,13 @@ defmodule RestfulApi.ProductionService.Production do
   use Ecto.Schema
   import Ecto.Changeset
 
-  import RestfulApi.Tenant.Project
 
-  schema "prodctions" do
+  schema "productions" do
     field :attributes, :string
     field :name, :string
     field :specifications, :string
-    belongs_to :project, Project, on_replace: :nilify
+
+    belongs_to :project, RestfulApi.Tenant.Project
 
     timestamps()
   end
@@ -16,7 +16,7 @@ defmodule RestfulApi.ProductionService.Production do
   @doc false
   def changeset(production, attrs) do
     production
-    |> cast(attrs, [:name, :attributes, :specifications,:project])
-    |> validate_required([:name,:project])
+    |> cast(attrs, [:name, :attributes, :specifications])
+    |> validate_required([:name])
   end
 end
