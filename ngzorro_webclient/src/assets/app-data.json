@@ -70,7 +70,6 @@
             "translate": "订单",
             "link": "",
             "group": true,
-            "acl": "root",
             "children": [
                 {
                     "text": "订单管理",
@@ -88,6 +87,10 @@
                         {
                             "text": "订单信息管理",
                             "link": "/orders/page"
+                        },
+                        {
+                            "text": "采购单信息管理",
+                            "link": "/purchases/page"
                         }
                     ]
                 }

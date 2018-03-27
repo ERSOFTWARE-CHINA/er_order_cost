@@ -1,6 +1,7 @@
 defmodule RestfulApi.SparepartService.Sparepart do
   use Ecto.Schema
   import Ecto.Changeset
+  alias RestfulApi.Tenant.Project
 
 
   schema "spareparts" do
