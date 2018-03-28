@@ -3,12 +3,20 @@ defmodule RestfulApi.Repo.Migrations.CreateOrders do
 
   def change do
     create table(:orders) do
-      add :name, :string
-      add :project_id, references(:projects, on_delete: :nothing)
-
+      add :pno, :integer
+      add :price, :float
+      add :date, :date
+      add :remark, :text
+      add :project_id, references(:projects)
       timestamps()
     end
 
-    create index(:orders, [:project_id])
+    create table(:orders_details) do
+      add :price, :float
+      add :amount, :integer
+      add :total_price, :float
+      add :order_id, references(:orders)
+      timestamps()
+    end
   end
 end
