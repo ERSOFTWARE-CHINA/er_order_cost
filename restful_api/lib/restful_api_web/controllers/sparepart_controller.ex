@@ -1,7 +1,6 @@
 defmodule RestfulApiWeb.SparepartController do
   use RestfulApiWeb, :controller
   use RestfulApi.SparepartService
-  alias RestfulApi.SparepartService
   alias RestfulApi.SparepartService.Sparepart
   import RestfulApiWeb.Plugs.Auth, only: [project_active: 2]
 

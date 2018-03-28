@@ -10,6 +10,14 @@ defmodule RestfulApi.ProductionService do
 
   use RestfulApi.BaseContext
 
+  defmacro __using__(_opts) do
+    quote do
+      import RestfulApi.ProductionService
+      use RestfulApi.BaseContext
+      alias RestfulApi.ProductionService.Production
+    end
+  end
+
   def page(params, conn) do
     Production
     |> query_like(params, "name")
