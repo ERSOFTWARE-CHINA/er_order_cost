@@ -42,7 +42,7 @@ export class ProductionFormComponent implements OnInit {
             name : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.nameValidator.bind(this)],
             attributes : [this.production? this.production.attributes : null],
             specifications : [this.production? this.production.specifications : null, ],
-            type : [this.production? this.production.type : null],
+            // type : [this.production? this.production.type : null],
         });
         this.form.controls["name"].setValue(this.production? this.production.name : "")
     }
