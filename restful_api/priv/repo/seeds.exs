@@ -75,7 +75,7 @@ admin =
 
 #####################################################
 # init production
-# 
+#
 #####################################################
 alias RestfulApi.ProductionService.Production
 
@@ -87,4 +87,22 @@ production1 =
     specifications: "prod_specifications01"
   })
   |> put_assoc(:project, proj1)
+  |> Repo.insert!()
+
+
+
+#####################################################
+# init sparepart
+#
+#####################################################
+alias RestfulApi.SparepartService.Sparepart
+
+sparepart =
+  %Sparepart{}
+  |> Sparepart.changeset(%{
+    name: "part_name01",
+    attributes: "part_attributes01",
+    specifications: "part_specifications01"
+  })
+  |> put_assoc(:project, proj2)
   |> Repo.insert!()
