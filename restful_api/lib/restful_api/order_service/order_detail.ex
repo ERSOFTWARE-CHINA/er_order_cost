@@ -1,4 +1,4 @@
-defmodule RestfulApi.PurchaseService.OrderDetail do
+defmodule RestfulApi.OrderService.OrderDetail do
 	use Ecto.Schema
 	import Ecto.Changeset
 	alias RestfulApi.OrderService.Order

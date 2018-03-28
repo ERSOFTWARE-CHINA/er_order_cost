@@ -89,8 +89,6 @@ production1 =
   |> put_assoc(:project, proj1)
   |> Repo.insert!()
 
-
-
 #####################################################
 # init sparepart
 #
@@ -105,4 +103,40 @@ sparepart =
     specifications: "part_specifications01"
   })
   |> put_assoc(:project, proj2)
+  |> Repo.insert!()
+
+#####################################################
+# init order
+#
+#####################################################
+alias RestfulApi.OrderService.Order
+alias RestfulApi.OrderService.OrderDetail
+
+orderDetail01 =
+  %OrderDetail{}
+  |> OrderDetail.changeset(%{
+    price: 12.25,
+    amount: 20
+  })
+  |> put_assoc(:production, production1)
+  |> Repo.insert!()
+
+orderDetail02 =
+  %OrderDetail{}
+  |> OrderDetail.changeset(%{
+    price: 14.25,
+    amount: 10
+  })
+  |> put_assoc(:production, production1)
+  |> Repo.insert!()
+
+order =
+  %Order{}
+  |> Order.changeset(%{
+    name: "订单名称",
+    pno: "12345",
+    price: 122.35,
+    remark: "备注"
+  })
+  |> put_assoc(:details, [orderDetail01, orderDetail02])
   |> Repo.insert!()
