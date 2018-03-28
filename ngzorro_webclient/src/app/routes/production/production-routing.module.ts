@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ProdcutionModule } from './production.module';
+import { ProductionModule } from './production.module';
 import { ProductionListComponent } from './production-list/production-list.component';
 import { ProductionFormComponent } from './production-form/production-form.component';
 
@@ -9,9 +9,9 @@ import { ProductionFormComponent } from './production-form/production-form.compo
 const routes: Routes = [{ 
   path: '', 
   children: [
-    { path: '', redirectTo: 'page', pathMatch: 'full' },
+      { path: '', redirectTo: 'page', pathMatch: 'full' },
       { path: 'page', component: ProductionListComponent },
-      { path: 'form', component: ProductionFormComponent },
+      { path: 'form', component: ProductionFormComponent }
   ]
 }];
 
