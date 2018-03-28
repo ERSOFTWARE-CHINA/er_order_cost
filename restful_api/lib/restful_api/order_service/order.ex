@@ -2,7 +2,7 @@ defmodule RestfulApi.OrderService.Order do
   use Ecto.Schema
   import Ecto.Changeset
 
-  import RestfulApi.Tenant.Project
+  alias RestfulApi.Tenant.Project
 
 
   schema "orders" do

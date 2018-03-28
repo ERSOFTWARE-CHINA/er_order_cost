@@ -12,6 +12,8 @@ import { PurchaseListComponent } from './list/list.component';
 import { PurchaseRoutes} from './purchase.routes';
 
 import { PurchaseService } from './service/purchase.service';
+import { OrderService } from '../order/order-service/order.service';
+import { SparepartService } from '../sparepart/sparepart-service/sparepart.service';
 
 @NgModule({
   imports: [
@@ -27,7 +29,9 @@ import { PurchaseService } from './service/purchase.service';
     PurchaseListComponent
   ],
   providers: [
-    PurchaseService
+    PurchaseService,
+    OrderService,
+    SparepartService
   ]
 })
 export class PurchaseModule { }

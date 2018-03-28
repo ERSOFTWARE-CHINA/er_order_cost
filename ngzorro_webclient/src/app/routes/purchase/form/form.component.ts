@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
 
 import { PurchaseService } from '../service/purchase.service';
+import { SparepartService } from '../../sparepart/sparepart-service/sparepart.service';
+import { OrderService } from '../../order/order-service/order.service';
 import { Purchase } from '../domain/purchase.domain'; 
 // import { stringToDate} from '../../../../utils/utils';
 
@@ -22,6 +24,8 @@ export class PurchaseFormComponent implements OnInit {
 
     // 订单列表
     orders: any[] =[];
+    // 配件列表
+    spareparts: any[] =[];
     // 已选择项目
     single_order: any= null; 
 
@@ -29,6 +33,8 @@ export class PurchaseFormComponent implements OnInit {
         private fb: FormBuilder, 
         private router: Router, 
         private purchaseService: PurchaseService, 
+        private orderService: OrderService,
+        private sparepartService: SparepartService,
         private msg: NzMessageService) {}
 
     ngOnInit() {
@@ -39,8 +45,8 @@ export class PurchaseFormComponent implements OnInit {
             pno: [this.purchase? this.purchase.pno : '', [Validators.required, ,Validators.maxLength(30), Validators.minLength(4),
                                                               Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$') ]],
             date: [this.purchase? this.purchase.date : '', [Validators.required]],
-            price : [this.purchase? this.purchase.price : '', [Validators.required]],
-            remark : [this.purchase? this.purchase.remark : '', [Validators.required]],
+            price : [this.purchase? this.purchase.price : '', [Validators.required,this.validateNumber.bind(this)]],
+            remark : [this.purchase? this.purchase.remark : ''],
             order : [this.purchase? this.purchase.order : '', [Validators.required]],
 
             details: this.fb.array([])
@@ -50,6 +56,9 @@ export class PurchaseFormComponent implements OnInit {
             const field = this.createDetail();
             field.patchValue(i);
             this.details.push(field);
+            // console.log(this.purchase.details);
+            // console.log(i);
+            field.controls["sparepart"].setValue(i.sparepart.name);
         }) : console.log("tihs contract has no details.");}
 
     }
@@ -58,13 +67,21 @@ export class PurchaseFormComponent implements OnInit {
         return this.fb.group({
             price: [ null, [ Validators.required ] ],
             amount: [ null, [ Validators.required ] ],
-            total_price: [ null, [ Validators.required ] ],
+            total_price: [ null ],
             sparepart: [ null, [ Validators.required ] ]
         });
     }
 
     getOrders() {
-        
+        this.orderService.listAll()
+        .then(resp => this.orders = resp.data)
+        .catch((error) => {this.msg.error(error);})
+    }
+
+    getSpareparts() {
+        this.sparepartService.listAll()
+        .then(resp => this.spareparts = resp.data)
+        .catch((error) => {this.msg.error(error);})
     }
 
     // //#region get form fields
@@ -104,9 +121,12 @@ export class PurchaseFormComponent implements OnInit {
         this.details.at(index).markAsDirty();
         if (this.details.at(index).invalid) return;
         let total = this.details.at(index)['controls']['price'].value * this.details.at(index)['controls']['amount'].value
-        this.details.at(index)['controls']['totalprice'].setValue(total)
+        this.details.at(index)['controls']['total_price'].setValue(total)
+        let a= this.details.at(index)['controls']['sparepart'].value
+        console.log(a)
+        // this.details.at(index)['controls']['sparepart'].setValue(a)
         this.editIndex = -1;
-
+        
     }
 
     cancel(index: number) {
@@ -127,6 +147,7 @@ export class PurchaseFormComponent implements OnInit {
         }
         if (this.form.invalid) return ;
         if (this.form.valid) {
+            this.formatForm() 
             let op = this.purchaseService.formOperation;
             if (op == 'create') this.purchaseService.add(this.form.value).then(resp => {
                 if (resp.error) { 
@@ -153,11 +174,36 @@ export class PurchaseFormComponent implements OnInit {
 
     initCreate() {
         this.getOrders();
+        this.getSpareparts();
     }
 
     initUpdate() {
         this.getOrders();
+        this.getSpareparts();
         this.purchase = this.purchaseService.purchase;
+        // 加载project到form control
+        this.single_order = this.purchase.order_id;
     }
+
+    formatForm() {
+        // 根据后端格式，重新组装details参数
+        let details = [];
+        let form_details = this.form.controls["details"].value;
+        for (const i in form_details) {
+            let v = form_details[i]
+            let sparepart = {name : form_details[i].sparepart} 
+            v.sparepart = sparepart
+            details.push(v)
+        }
+        this.form.controls["details"].setValue(details);
+
+    
+    }
+
+    //数字验证
+    validateNumber(c: FormControl) {
+        return c.value > 0 ? null : {validateNumber: true}
+    };
+    
 
 }

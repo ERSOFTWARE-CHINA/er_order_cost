@@ -8,7 +8,7 @@ defmodule RestfulApi.PurchaseService.Purchase do
 
 
   schema "purchases" do
-    field :pno,    :integer   # 采购单号
+    field :pno,    :string   # 采购单号
     field :price,  :float     # 采购单价格
     field :date,   :date      # 采购日期
     field :remark, :string      # 备注

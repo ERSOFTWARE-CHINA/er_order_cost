@@ -19,5 +19,6 @@ defmodule RestfulApi.SparepartService.Sparepart do
     sparepart
     |> cast(attrs, [:name, :attributes, :specifications])
     |> validate_required([:name, :attributes, :specifications])
+    |> unique_constraint(:name)
   end
 end

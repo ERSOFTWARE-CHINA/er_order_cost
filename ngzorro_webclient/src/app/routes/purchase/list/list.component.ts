@@ -109,6 +109,20 @@ export class PurchaseListComponent implements OnInit {
         if ((this.q.remark == null)||(this.q.remark == "")){delete this.q.remark}
     }
 
+    reset() {
+        this.q = {
+            page_index: 1,
+            page_size: 15,
+            sort_field: "date",
+            sort_direction: "desc",
+            pno: null,
+            date: null,
+            remark: null,
+            order: null
+        };
+        this.getData()
+    }
+
     // 删除确认框相关
     confirmContent = ""
     modalVisible = false;

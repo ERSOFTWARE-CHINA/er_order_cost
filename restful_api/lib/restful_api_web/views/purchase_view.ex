@@ -17,12 +17,16 @@ defmodule RestfulApiWeb.PurchaseView do
   end
 
   def render("purchase.json", %{purchase: purchase}) do
+    IO.puts("############")
+    IO.puts("############")
+    IO.puts inspect purchase
     %{
       id: purchase.id,
       pno: purchase.pno,
       price: purchase.price,
       date: purchase.date,
       remark: purchase.remark,
+      order_id: purchase.order_id,
 
       details: purchase.details,
       order: purchase.order,

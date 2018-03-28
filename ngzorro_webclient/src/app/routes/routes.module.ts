@@ -20,7 +20,6 @@ import { Exception500Component } from './exception/500.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthenticationService } from './pages/login/login.service';
 
-import { ACLComponent } from '../routes/acl/acl.component';
 
 @NgModule({
     imports: [ SharedModule, RouteRoutingModule ],
@@ -38,8 +37,7 @@ import { ACLComponent } from '../routes/acl/acl.component';
         Exception403Component,
         Exception404Component,
         Exception500Component,
-        LoginComponent,
-        ACLComponent
+        LoginComponent
         // UsersListComponent
     ],
     providers: [ AuthenticationService ]

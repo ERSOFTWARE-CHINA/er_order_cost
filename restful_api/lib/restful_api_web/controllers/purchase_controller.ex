@@ -32,7 +32,7 @@ defmodule RestfulApiWeb.PurchaseController do
   end
 
   def show(conn, %{"id" => id}) do
-    with {:ok, purchase} <- get_by_id(Purchase, id, conn, [:details, :order]) do
+    with {:ok, purchase} <- get_by_id(Purchase, id, conn, [details: [:sparepart]]) do
       render(conn, "show.json", purchase: purchase)
     end
   end
@@ -83,11 +83,11 @@ defmodule RestfulApiWeb.PurchaseController do
   defp get_sparepart_changeset(detail_param, conn) do
     detail_param
     |> Map.get("sparepart", %{})
-    |> Map.get("id")
+    |> Map.get("name")
     |> case do
       nil -> nil
-      id ->
-        case get_by_id(Sparepart, id, conn) do
+      name ->
+        case get_by_name(Sparepart, conn, name: name) do
           {:error, _} -> nil
           {:ok, sparepart} -> change(Sparepart, sparepart)
         end

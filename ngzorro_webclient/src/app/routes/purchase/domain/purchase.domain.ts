@@ -8,4 +8,5 @@ export class Purchase {
     remark: string;
     order: any;
     details: Detail[];
+    order_id: number;
 }
