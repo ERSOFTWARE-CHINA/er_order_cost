@@ -13,7 +13,7 @@ defmodule RestfulApiWeb.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :api_auth do  
+  pipeline :api_auth do
     plug Guardian.Plug.Pipeline, module: RestfulApiWeb.Guardian,
       error_handler: RestfulApiWeb.AuthErrorHandler
     plug Guardian.Plug.VerifyHeader, realm: "Bearer"
@@ -49,14 +49,14 @@ defmodule RestfulApiWeb.Router do
 
 
     #产品信息配置
-    resources "/prodctions", ProductionController, except: [:new, :edit]
+    resources "/productions", ProductionController, except: [:new, :edit]
     #配件信息配置
     resources "/spareparts", SparepartController, except: [:new, :edit]
     #订单信息配置
     resources "/orders",OrderController,except: [:new,:edit]
     #采购单信息配置
     resources "/purchases", PurchaseController, except: [:new, :edit]
-    
+
 
   end
 
