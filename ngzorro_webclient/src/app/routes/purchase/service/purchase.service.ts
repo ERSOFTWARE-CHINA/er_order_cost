@@ -21,7 +21,8 @@ export class PurchaseService {
     }
 
     add(v): Promise<any>{ 
-        let param = { project: v} 
+        v.order = {id: v.order}
+        let param = { purchase: v} 
         return this.http.post(this.url, param, getTokenOptions(null))
                    .map(response => response.json()).toPromise();
     }
@@ -42,8 +43,9 @@ export class PurchaseService {
     }
 
     update(cid, v): Promise<any>{
-        let obj = { project: v} 
-        return this.http.put(this.url + `/${cid}`,obj, getTokenOptions(null))
+        v.order = {id: v.order}
+        let param = { purchase: v} 
+        return this.http.put(this.url + `/${cid}`,param, getTokenOptions(null))
                 .map(response => response.json()).toPromise();
     }
 

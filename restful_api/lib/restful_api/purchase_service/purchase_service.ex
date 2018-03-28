@@ -16,6 +16,7 @@ defmodule RestfulApi.PurchaseService do
   def page(params, conn) do 
     Purchase
     |> query_like(params, "pno")
+    |> query_like(params, "remark")
     |> query_equal(params, "order_id")
     |> query_order_by(params, "date")
     |> get_pagination(params, conn)

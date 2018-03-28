@@ -42,6 +42,10 @@ defmodule RestfulApi.BaseContext do
     query
     |> add_belongs_to(conn)
     |> Repo.get_by(field_value)
+    |> case do
+      nil -> {:error, :not_found}
+      entity -> {:ok, entity}
+    end
   end
 
   def save_create(struct, attrs, conn) do

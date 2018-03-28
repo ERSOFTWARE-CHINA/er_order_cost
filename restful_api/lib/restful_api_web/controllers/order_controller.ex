@@ -1,18 +1,23 @@
 defmodule RestfulApiWeb.OrderController do
   use RestfulApiWeb, :controller
 
+  use RestfulApi.OrderService
   alias RestfulApi.OrderService
   alias RestfulApi.OrderService.Order
+  import RestfulApiWeb.Permissions, only: [need_perms: 1]
+  import RestfulApiWeb.Plugs.Auth, only: [project_active: 2]
+
+  plug :project_active
 
   action_fallback RestfulApiWeb.FallbackController
 
-  def index(conn, _params) do
-    orders = OrderService.list_orders()
-    render(conn, "index.json", orders: orders)
+  def index(conn, params) do
+    page = page(params, conn)
+    render(conn, "index.json", page: page)
   end
 
   def create(conn, %{"order" => order_params}) do
-    with {:ok, %Order{} = order} <- OrderService.create_order(order_params) do
+    with {:ok, %Order{} = order} <- save_create(Order.changeset(%Order{}, order_params), conn) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", order_path(conn, :show, order))
@@ -21,22 +26,22 @@ defmodule RestfulApiWeb.OrderController do
   end
 
   def show(conn, %{"id" => id}) do
-    order = OrderService.get_order!(id)
-    render(conn, "show.json", order: order)
-  end
-
-  def update(conn, %{"id" => id, "order" => order_params}) do
-    order = OrderService.get_order!(id)
-
-    with {:ok, %Order{} = order} <- OrderService.update_order(order, order_params) do
+    with {:ok, order} <- get_by_id(Order, id, conn) do
       render(conn, "show.json", order: order)
     end
   end
 
+  def update(conn, %{"id" => id, "order" => order_params}) do
+    with {:ok, order} <- get_by_id(Order, id, conn) do
+      with {:ok, %Order{} = order} <- save_update(Order.changeset(order, order_params), conn) do
+        render(conn, "show.json", order: order)
+      end
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
-    order = OrderService.get_order!(id)
-    with {:ok, %Order{}} <- OrderService.delete_order(order) do
-      send_resp(conn, :no_content, "")
+    with {:ok, %Order{} = order} <- delete_by_id(Order, id, conn) do
+      render(conn, "show.json", order: order)
     end
   end
 end
