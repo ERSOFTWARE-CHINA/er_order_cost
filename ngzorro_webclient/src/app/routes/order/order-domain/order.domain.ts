@@ -7,7 +7,6 @@ export class Order {
   price: number;
   date: Date;
   remark: string;
-  order: any;
   details: OrderDetail[];
   project_id: number;
 }
