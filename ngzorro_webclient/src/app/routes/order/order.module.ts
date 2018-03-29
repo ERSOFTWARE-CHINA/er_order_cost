@@ -4,6 +4,7 @@ import { OrderComponent } from './order.component';
 import { OrderRoutingModule } from "./order-routing.module";
 import { OrderListComponent } from './order-list/order-list.component';
 import { OrderFormComponent } from './order-form/order-form.component';
+import { OrderService } from './order-service/order.service';
 
 
 const COMPONENT_NOROUNT = [];
@@ -15,6 +16,8 @@ const COMPONENT_NOROUNT = [];
       OrderListComponent,
       OrderFormComponent
   ],
-  entryComponents: COMPONENT_NOROUNT
+  providers: [
+    OrderService,
+  ]
 })
 export class OrderModule { }

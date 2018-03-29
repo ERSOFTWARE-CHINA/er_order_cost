@@ -25,7 +25,6 @@ export class OrderService {
                .toPromise().then(res => {return res.json()})           
   }
 
-  // 所有角色不超过64个
   listAll() {
     return this.http.get(this.url+`?page_size=1024`, getTokenOptions(null))
                .toPromise().then(res => {return res.json()})           

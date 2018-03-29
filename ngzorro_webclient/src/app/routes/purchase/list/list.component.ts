@@ -104,7 +104,7 @@ export class PurchaseListComponent implements OnInit {
     }
 
     formatForm() {
-        if ((this.q.pno == null)||(this.q.name == "")){delete this.q.pno}
+        if ((this.q.pno == null)||(this.q.pno == "")){delete this.q.pno}
         if ((this.q.date == null)||(this.q.date == "")){delete this.q.date}
         if ((this.q.remark == null)||(this.q.remark == "")){delete this.q.remark}
     }
