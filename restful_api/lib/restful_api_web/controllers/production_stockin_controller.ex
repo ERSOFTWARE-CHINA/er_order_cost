@@ -22,7 +22,7 @@ defmodule RestfulApiWeb.ProductionStockinController do
     prodstockin_changeset = ProductionStockin.changeset(%ProductionStockin{}, params)
     |> Ecto.Changeset.put_assoc(:order, order_changset)
     |> Ecto.Changeset.put_assoc(:production, prod_changeset)
-    with {:ok, %ProductionStockin{} = prodstockin} <- save_create(prodstockin_changeset, conn) do
+    with {:ok, %ProductionStockin{} = prodstockin} <- create_stockin(prodstockin_changeset, conn) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", production_stockin_path(conn, :show, prodstockin))
@@ -37,20 +37,20 @@ defmodule RestfulApiWeb.ProductionStockinController do
   end
 
   def update(conn, %{"id" => id, "production_stockin" => params}) do
-    with {:ok, prodstockin} <- get_by_id(ProductionStockin, id, conn, [:order, :details,:project]) do
+    with {:ok, prodstockin} <- get_by_id(ProductionStockin, id, conn, [:order, :production, :project]) do
       order_changset = get_order_changeset(params, conn)
       prod_changeset = get_production_changeset(params, conn)
       prodstockin_changeset = ProductionStockin.changeset(prodstockin, params)
       |> Ecto.Changeset.put_assoc(:order, order_changset)
       |> Ecto.Changeset.put_assoc(:production, prod_changeset)
-      with {:ok, %ProductionStockin{} = prodstockin} <- save_update(prodstockin_changeset, conn) do
+      with {:ok, %ProductionStockin{} = prodstockin} <- update_stockin(prodstockin_changeset, conn) do
         render(conn, "show.json", production_stockin: prodstockin)
       end
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    with {:ok, %ProductionStockin{} = prodstockin} <- delete_by_id(ProductionStockin, id, conn) do
+    with {:ok, %ProductionStockin{} = prodstockin} <- delete_stockin(ProductionStockin, id, conn) do
       render(conn, "show.json", production_stockin: prodstockin)
     end
   end

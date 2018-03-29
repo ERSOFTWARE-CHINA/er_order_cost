@@ -18,7 +18,7 @@ defmodule RestfulApiWeb.ProductionControllerTest do
   end
 
   describe "index" do
-    test "lists all prodctions", %{conn: conn} do
+    test "lists all productions", %{conn: conn} do
       conn = get conn, production_path(conn, :index)
       assert json_response(conn, 200)["data"] == []
     end

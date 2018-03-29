@@ -3,7 +3,7 @@ defmodule RestfulApi.ProductionServiceTest do
 
   alias RestfulApi.ProductionService
 
-  describe "prodctions" do
+  describe "productions" do
     alias RestfulApi.ProductionService.Production
 
     @valid_attrs %{attributes: "some attributes", name: "some name", specifications: "some specifications"}
@@ -19,9 +19,9 @@ defmodule RestfulApi.ProductionServiceTest do
       production
     end
 
-    test "list_prodctions/0 returns all prodctions" do
+    test "list_productions/0 returns all productions" do
       production = production_fixture()
-      assert ProductionService.list_prodctions() == [production]
+      assert ProductionService.list_productions() == [production]
     end
 
     test "get_production!/1 returns the production with given id" do

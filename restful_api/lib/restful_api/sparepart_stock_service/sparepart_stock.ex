@@ -5,7 +5,7 @@ defmodule RestfulApi.SparepartStockService.SparepartStock do
   alias RestfulApi.Tenant.Project
   alias RestfulApi.SparepartService.Sparepart
 
-  schema "sparepart_stock" do
+  schema "sparepart_stocks" do
     field :no,      :string      # 采购单号
     field :amount,  :integer     # 数量
     field :unit,    :string      # 单位

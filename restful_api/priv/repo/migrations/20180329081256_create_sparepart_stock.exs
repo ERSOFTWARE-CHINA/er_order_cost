@@ -9,7 +9,7 @@ defmodule RestfulApi.Repo.Migrations.CreateSparepartStock do
       add :status, :boolean, null: false
 
       add :project_id, references(:projects)
-      add :production_id, references(:spareparts)
+      add :sparepart_id, references(:spareparts)
 
       timestamps()
     end

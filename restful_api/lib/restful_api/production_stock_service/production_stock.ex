@@ -5,11 +5,11 @@ defmodule RestfulApi.ProductionStockService.ProductionStock do
   alias RestfulApi.Tenant.Project
   alias RestfulApi.ProductionService.Production
 
-  schema "production_stock" do
-    field :no,      :string      # 产品入库单号
-    field :amount,  :integer     # 数量
-    field :unit,    :string      # 单位
-    field :status,  :boolean     # 状态
+  schema "production_stocks" do
+    field :no,      :string                       # 产品入库单号
+    field :amount,  :integer                      # 数量
+    field :unit,    :string                       # 单位
+    field :status,  :boolean,  default: false     # 状态
     belongs_to :production, Production, on_replace: :nilify
     belongs_to :project, Project, on_replace: :nilify
     timestamps()

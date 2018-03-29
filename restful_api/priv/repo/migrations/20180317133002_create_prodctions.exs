@@ -1,4 +1,4 @@
-defmodule RestfulApi.Repo.Migrations.CreateProdctions do
+defmodule RestfulApi.Repo.Migrations.CreateProductions do
   use Ecto.Migration
 
   def change do
