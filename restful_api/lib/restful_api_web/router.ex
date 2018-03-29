@@ -56,8 +56,13 @@ defmodule RestfulApiWeb.Router do
     resources "/orders",OrderController,except: [:new,:edit]
     #采购单信息配置
     resources "/purchases", PurchaseController, except: [:new, :edit]
-
-
+    
+    #产品库存信息
+    resources "/production_stock",ProductionStockController,only: [:index]
+    #配件库存信息
+    resources "/sparepart_stock",SparepartStockController,only: [:index]
+    #产品入库单
+    resources "/production_stockins", ProductionStockinController, except: [:new, :edit]
   end
 
 end

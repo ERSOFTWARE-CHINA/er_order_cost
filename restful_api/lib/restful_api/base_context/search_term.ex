@@ -24,6 +24,11 @@ defmodule RestfulApi.SearchTerm do
     order_by(query, [e], ^sort)
   end
 
+  def query_order_desc_by(query, params, default_field) do
+    sort = [{Map.get(params, "sort_direction", "desc") |> String.to_existing_atom, Map.get(params, "sort_field", default_field) |> String.to_existing_atom}]
+    order_by(query, [e], ^sort)
+  end
+
   def query_paginate(query, params) do
     query
     |> Repo.paginate(page: Map.get(params, "page_index", "1"), page_size: Map.get(params, "page_size", "20"))

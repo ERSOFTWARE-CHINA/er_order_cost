@@ -4,8 +4,6 @@ defmodule RestfulApiWeb.ProductionController do
   import RestfulApiWeb.Plugs.Auth, only: [auth_root: 2]
   alias RestfulApi.ProductionService.Production
 
-  plug :auth_root
-
   action_fallback RestfulApiWeb.FallbackController
 
   def index(conn, params) do
