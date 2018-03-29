@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
-import { Sparepart } from '../sparepart-domain/sparepart.domain';
+import { Sparepart } from '../domain/sparepart.domain';
 import { baseUrl } from '../../../shared/shared.service';
 import { getTokenOptions } from '../../pages/login/login.service';
 
@@ -13,11 +13,12 @@ export class SparepartService {
 
   constructor(private http: Http) {}
    
-  url = baseUrl+"spareparts"
+  url = baseUrl + "spareparts"
 
   isUpdate = false;
 
   formOperation = 'create';
+  
   sparepart : Sparepart = null;
 
   listOnePage(q) {
@@ -27,12 +28,12 @@ export class SparepartService {
 
   // 所有角色不超过64个
   listAll() {
-    return this.http.get(this.url+`?page_size=1024`, getTokenOptions(null))
+    return this.http.get(this.url+`?page_size=64`, getTokenOptions(null))
                .toPromise().then(res => {return res.json()})           
   }
 
   add(v): Promise<any>{ 
-    let param = { role: v} 
+    let param = { sparepart: v} 
     return this.http.post(this.url, param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
@@ -43,7 +44,7 @@ export class SparepartService {
   }
 
   update(cid, v): Promise<any>{
-    let obj = { role: v} 
+    let obj = { sparepart: v} 
     return this.http.put(this.url + `/${cid}`,obj, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
@@ -52,6 +53,10 @@ export class SparepartService {
     return this.http.delete(this.url + `/${id}`, getTokenOptions(null))
                .map(response => response.json())
                .toPromise();
+  }
+
+  checkNameAlreadyExists(obj) {
+    return this.http.get(baseUrl + `spareparts/check/name`, getTokenOptions(obj)).map(response => response.json()).toPromise();
   }
   
 }

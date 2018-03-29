@@ -10,9 +10,19 @@
                         </div>
                     </div>
                 </div>
+                
                 <div nz-col [nzSpan]="8" class="mb-md">
                     <div nz-form-item class="d-flex">
-                        <div nz-form-label><label for="attributes">型号</label></div>
+                        <div nz-form-label><label for="specifications">型号</label></div>
+                        <div nz-form-control class="flex-1">
+                            <nz-input [(ngModel)]="q.specifications" name="specifications" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="name"></nz-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="expandForm" nz-col [nzSpan]="8" class="mb-md">
+                    <div nz-form-item class="d-flex">
+                        <div nz-form-label><label for="attributes">类型</label></div>
                         <div nz-form-control class="flex-1">
                             <nz-input [(ngModel)]="q.attributes" name="attributes" [nzSize]="'large'" [nzPlaceHolder]="'请输入'" nzId="name"></nz-input>
                         </div>
@@ -48,6 +58,10 @@
                         <span>型号</span>
                         <nz-table-sort [(nzValue)]="sortMap.specifications" (nzValueChange)="sort('specifications',$event)"></nz-table-sort>
                     </th>
+                    <th nz-th>
+                        <span>类型</span>
+                        <nz-table-sort [(nzValue)]="sortMap.attributes" (nzValueChange)="sort('attributes',$event)"></nz-table-sort>
+                    </th>
 
                     <th nz-th><span>操作</span></th>
                 </tr>
@@ -57,6 +71,7 @@
 
                     <td nz-td>{{i.name}}</td>
                     <td nz-td>{{i.specifications}}</td>
+                    <td nz-td>{{i.attributes}}</td>
                     <td nz-td>
                         <a (click)="update(i.id)">修改</a>
                         <span nz-table-divider></span>
