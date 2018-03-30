@@ -138,5 +138,6 @@ order =
     price: 122.35,
     remark: "备注"
   })
+  |> put_assoc(:project,proj1)
   |> put_assoc(:details, [orderDetail01, orderDetail02])
-  |> Repo.insert!()
+  |> Repo.insert()

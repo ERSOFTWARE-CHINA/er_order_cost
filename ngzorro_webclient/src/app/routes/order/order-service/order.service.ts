@@ -31,7 +31,7 @@ export class OrderService {
   }
 
   add(v): Promise<any>{ 
-    let param = { role: v} 
+    let param = { order: v} 
     return this.http.post(this.url, param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
