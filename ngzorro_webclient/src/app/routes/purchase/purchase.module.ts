@@ -13,7 +13,7 @@ import { PurchaseRoutes} from './purchase.routes';
 
 import { PurchaseService } from './service/purchase.service';
 import { OrderService } from '../order/order-service/order.service';
-import { SparepartService } from '../sparepart/sparepart-service/sparepart.service';
+import { SparepartService } from '../sparepart/service/sparepart.service';
 
 @NgModule({
   imports: [

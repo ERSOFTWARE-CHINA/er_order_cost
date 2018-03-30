@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
 
 import { PurchaseService } from '../service/purchase.service';
-import { SparepartService } from '../../sparepart/sparepart-service/sparepart.service';
+import { SparepartService } from '../../sparepart/service/sparepart.service';
 import { OrderService } from '../../order/order-service/order.service';
 import { Purchase } from '../domain/purchase.domain'; 
 // import { stringToDate} from '../../../../utils/utils';
