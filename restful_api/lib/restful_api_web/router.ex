@@ -62,7 +62,8 @@ defmodule RestfulApiWeb.Router do
     #配件库存信息
     resources "/sparepart_stock",SparepartStockController,only: [:index]
     #产品入库单
-    resources "/production_stockins", ProductionStockinController, except: [:new, :edit]
+    resources "/production_stockin", ProductionStockinController, except: [:new, :edit]
+    get "/production_stockin/check/no", ProductionStockinController, :check_no
   end
 
 end

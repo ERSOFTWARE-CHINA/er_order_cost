@@ -24,8 +24,8 @@
                     <div nz-form-item class="d-flex">
                         <div nz-form-label><label for="order">所属订单</label></div>
                         <div nz-form-control class="flex-1">
-                            <nz-select [(ngModel)]="q.order_id" name="order_id" [nzSize]="'large'" [nzPlaceHolder]="'请选择'" [(ngModel)]="single_order">
-                                <nz-option *ngFor="let i of orders" [nzLabel]="i.no" [nzValue]="i.id"></nz-option>
+                            <nz-select [(ngModel)]="q.order_id" name="order_id" [nzSize]="'large'" [nzPlaceHolder]="'请选择'">
+                                <nz-option *ngFor="let i of orders" [nzLabel]="i.pno" [nzValue]="i.id"></nz-option>
                             </nz-select>
                         </div>
                     </div>
@@ -64,25 +64,20 @@
             <thead nz-thead>
                 <tr>
                     <th nz-th>
-                        <span>用户名称</span>
-                        <nz-table-sort [(nzValue)]="sortMap.name" (nzValueChange)="sort('name',$event)"></nz-table-sort>
+                        <span>入库单号</span>
+                        <nz-table-sort [(nzValue)]="sortMap.no" (nzValueChange)="sort('no',$event)"></nz-table-sort>
                     </th>
                     <th nz-th>
-                        <span>电子邮箱</span>
-                        <nz-table-sort [(nzValue)]="sortMap.email" (nzValueChange)="sort('email',$event)"></nz-table-sort>
+                        <span>数量</span>
+                        <nz-table-sort [(nzValue)]="sortMap.amount" (nzValueChange)="sort('amount',$event)"></nz-table-sort>
                     </th>
                     <th nz-th>
-                        <span>真实姓名</span>
-                        <nz-table-sort [(nzValue)]="sortMap.real_name" (nzValueChange)="sort('real_name',$event)"></nz-table-sort>
+                        <span>单位</span>
+                        <nz-table-sort [(nzValue)]="sortMap.unit" (nzValueChange)="sort('unit',$event)"></nz-table-sort>
                     </th>
                     <th nz-th>
-                        <span>岗位</span>
-                        <nz-table-sort [(nzValue)]="sortMap.position" (nzValueChange)="sort('position',$event)"></nz-table-sort>
-                    </th>
-
-                    <th nz-th>
-                        <span>状态</span>
-                        <nz-table-sort [(nzValue)]="sortMap.actived" (nzValueChange)="sort('actived',$event)"></nz-table-sort>
+                        <span>时间</span>
+                        <nz-table-sort [(nzValue)]="sortMap.date" (nzValueChange)="sort('date',$event)"></nz-table-sort>
                     </th>
                     <th nz-th><span>操作</span></th>
                 </tr>
@@ -90,16 +85,11 @@
             <tbody nz-tbody>
                 <tr nz-tbody-tr *ngFor="let i of nzTable.data">
 
-                    <td nz-td>{{i.name}}</td>
-                    <td nz-td>{{i.email}}</td>
-                    <td nz-td>{{i.real_name}}</td>
-                    <td nz-td>{{i.position}}</td>
-                    <td nz-td>{{i.actived | userStatusPipe}}</td>
+                    <td nz-td>{{i.no}}</td>
+                    <td nz-td>{{i.amount}}</td>
+                    <td nz-td>{{i.unit}}</td>
+                    <td nz-td>{{i.date}}</td>
                     <td nz-td>
-                        <a (click)="activate(i.id)" *ngIf="!i.actived">激活</a>
-                        <span nz-table-divider *ngIf="!i.actived"></span>
-                        <a (click)="disable(i.id)" *ngIf="i.actived">禁用</a>
-                        <span nz-table-divider *ngIf="i.actived"></span>
                         <a (click)="update(i.id)">修改</a>
                         <span nz-table-divider></span>
                         <a (click)="remove(i)">删除</a>

@@ -82,4 +82,13 @@ defmodule RestfulApiWeb.ProductionStockinController do
         end
     end
   end
+
+  # get请求中的参数为字符串类型，这里需要将id转换微integer类型，因此前台需传送数字，否则报错
+  def check_no(conn, %{"id"=> id,"no" => no}) do
+    case check_no_exists(%{"id"=> String.to_integer(id),"no" => no}) do
+      {:ok, _} -> json conn, %{ok: "no ok"}
+      {:error, _} -> 
+        json conn, %{error: "no error"}
+    end
+  end
 end

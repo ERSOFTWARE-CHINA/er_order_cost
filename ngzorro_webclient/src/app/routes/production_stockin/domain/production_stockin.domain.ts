@@ -11,7 +11,8 @@ export class ProductionStockin {
     order_id: number;
     order: Order;
     production: Production;
-    // 设置默认值
+    // 初始化日期不需要默认值
     constructor() { 
+        this.date = null;
     }
 }

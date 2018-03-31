@@ -21,18 +21,13 @@ import { OrderService } from '../../order/order-service/order.service';
 export class ProductionStockinFormComponent implements OnInit {
 
     form: FormGroup;
-    productionStockin: ProductionStockin;
+    productionStockin: ProductionStockin = new ProductionStockin();
     card_title = "";
     // 产品列表
     productions: any[] = [];
-    // 已选择产品
-    single_production: any = null;
-
     // 订单列表
     orders: any[] =[];
-    // 已选择订单
-    single_order: any= null; 
-
+ 
     constructor(
         private reuseTabService: ReuseTabService,
         private fb: FormBuilder,
@@ -41,32 +36,36 @@ export class ProductionStockinFormComponent implements OnInit {
         private productionService: ProductionService,
         private orderService: OrderService,
         private msg: NzMessageService
-        ) {
-    }
+        ) { }
     
     ngOnInit() {
         this.setTitle();
-        if (this.psiService.formOperation == 'create') {this.productionStockin=null; this.getProductions(); this.getOrders();}
-        if (this.psiService.formOperation == 'update') {this.getProductions();this.getOrders();this.initUpdate()};
+        this.initData();
+        this.initForm();
+    }
+
+    // 初始化表单
+    initForm() {
         this.form = this.fb.group({
             no : [null, Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$')]), this.noValidator.bind(this)],
             amount : [this.productionStockin? this.productionStockin.amount : null, [Validators.required, this.validateNumber.bind(this)]],
-            unit : [this.productionStockin? this.productionStockin.unit : null,],
+            unit : [this.productionStockin? this.productionStockin.unit : null],
+            date : [this.productionStockin? this.productionStockin.date : null],
             remark : [this.productionStockin? this.productionStockin.remark : null],
-            production : [this.productionStockin? this.productionStockin.production : null],
-            order : [this.productionStockin? this.productionStockin.order : null]
+            production : [this.productionStockin? this.productionStockin.production_id : null, [Validators.required]],
+            order : [this.productionStockin? this.productionStockin.order_id : null, [Validators.required]]
         });
         this.form.controls["no"].setValue(this.productionStockin? this.productionStockin.no : null)
     }
-
+    
     getProductions() {
-        this.productionService.listAll()
+        return this.productionService.listAll()
             .then(resp => this.productions = resp.data)
             .catch((error) => {this.msg.error(error);})
     }
 
     getOrders() {
-        this.orderService.listAll()
+        return this.orderService.listAll()
             .then(resp => this.orders = resp.data)
             .catch((error) => {this.msg.error(error);})
     }
@@ -87,44 +86,30 @@ export class ProductionStockinFormComponent implements OnInit {
             this.form.controls[ i ].markAsDirty();
         }
         if (this.form.invalid) return ;
-        this.formatForm();
-
         let op = this.psiService.formOperation;
-        if (op == 'create') this.psiService.add(this.form.value).then(resp => {
+        
+        if (op == 'create') {
+            this.psiService.add(this.productionStockin).then(resp => {
+                if (resp.error) { 
+                    this.msg.error(resp.error);
+                } else {
+                    this.msg.success('入库信息 ' + resp.data.no + ' 已创建！');
+                    this.goBack();
+                }
+                }).catch(error => this.msg.error(error));
+        }
+        if (op == 'update') this.psiService.update(this.productionStockin).then(resp => {
             if (resp.error) { 
                 this.msg.error(resp.error);
             } else {
-                this.msg.success('入库信息 ' + resp.data.name + ' 已创建！');
+                this.msg.success('入库信息 ' + resp.data.no + ' 已更新！');
                 this.goBack();
             }
             }).catch(error => this.msg.error(error));
-        if (op == 'update') this.psiService.update(this.productionStockin.id, this.form.value).then(resp => {
-            if (resp.error) { 
-                this.msg.error(resp.error);
-            } else {
-                this.msg.success('入库信息 ' + resp.data.name + ' 已更新！');
-                this.goBack();
-            }
-            }).catch(error => this.msg.error(error));
-
     }
 
     goBack() {
-        this.router.navigateByUrl('/production_stock/page');
-    }
-
-    formatForm() {
-        // 格式化form中的roles属性
-        // this.user = this.form.value;
-        // if (this.form["controls"]["roles"].value != null) {
-        //     let roles = [];
-        //     let role_ids = this.form["controls"]["roles"].value;
-        //     for (var i=0; i<role_ids.length;i++) {
-        //         let r = {id:  role_ids[i]}
-        //         roles.push(r);   
-        //     }
-        //     this.roles = roles;
-        // } 
+        this.router.navigateByUrl('/production_stockin/page');
     }
 
     //单号no异步验证
@@ -132,10 +117,15 @@ export class ProductionStockinFormComponent implements OnInit {
         return control.valueChanges.pipe(
             debounceTime(200),
             map((value) => {
-                let obj = {name: control.value, id: this.productionStockin? this.productionStockin.id: -1}; //如果为新增的情况，id参数设置为-1传递给后台
+                let obj = {no: control.value, id: this.productionStockin.id? this.productionStockin.id: -1}; //如果为新增的情况，id参数设置为-1传递给后台
                 this.psiService.checkNoAlreadyExists(obj)
                     .then(result => {
-                if (result.error) {control.setErrors({ checked: true, error: true })} else if (!control.value){control.setErrors({ required: true })}  else {control.setErrors(null);};})   
+                        if (result.error) {
+                            control.setErrors({ checked: true, error: true })
+                        } else if (!control.value) {
+                            control.setErrors({ required: true })
+                        }  else {control.setErrors(null);};}
+                    )   
             })
         )
     }
@@ -145,17 +135,13 @@ export class ProductionStockinFormComponent implements OnInit {
         return c.value > 0 ? null : {validateNumber: true}
     };
 
-    initUpdate() {
-        this.productionStockin = this.psiService.productionStockin;
-        // let roles = this.usersService.user.roles;
-        // // 加载roles到form control
-        // let roles_ids = []
-        // for (var i=0; i<roles.length;i++) {
-        //     let r = roles[i].id;
-        //     roles_ids.push(r);   
-        // }
-        // this.multi_roles = roles_ids;
-        // // 加载project到form control
-        // this.single_project = this.user.project_id;
+    // 初始化form所需的所有数据
+    initData() {
+        if (this.psiService.formOperation == "update") {
+            this.productionStockin = this.psiService.productionStockin;
+        }
+        this.getOrders();
+        this.getProductions();
     }
+
 }

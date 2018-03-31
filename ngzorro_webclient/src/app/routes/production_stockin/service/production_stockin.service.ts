@@ -47,16 +47,19 @@ export class ProductionStockinService {
                .map(response => response.json()).toPromise();
   }
 
-  update(id, v): Promise<any>{
+  update(v): Promise<any>{
+    console.log(v);
     v.production = {id: v.production_id};
     v.order = {id: v.order_id}
     let param = { production_stockin: v}; 
-    return this.http.put(this.url + `/${id}`,param, getTokenOptions(null))
+    console.log(param)
+    return this.http.put(this.url + `/${v.id}`,param, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
 
   checkNoAlreadyExists(obj) {
-    return this.http.get(baseUrl + `production_stockins/check/no`, getTokenOptions(obj)).map(response => response.json()).toPromise();
+    console.log(obj)
+    return this.http.get(baseUrl + `production_stockin/check/no`, getTokenOptions(obj)).map(response => response.json()).toPromise();
   }
 
 }

@@ -54,10 +54,6 @@
                             "link": "/roles/page"
                         },
                         {
-                            "text": "权限测试",
-                            "link": "/acl"
-                        },
-                        {
                             "text": "数据字典",
                             "link": "/dict/page"
                         }
@@ -91,6 +87,10 @@
                         {
                             "text": "采购单信息管理",
                             "link": "/purchases/page"
+                        },
+                        {
+                            "text": "产品入库信息管理",
+                            "link": "/production_stockin/page"
                         }
                     ]
                 }

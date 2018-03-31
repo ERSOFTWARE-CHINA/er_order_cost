@@ -17,16 +17,17 @@ defmodule RestfulApiWeb.ProductionStockinView do
   end
 
   def render("production_stockin.json", %{production_stockin: production_stockin}) do
-    %{
-      id: production_stockin.id,
-      no: production_stockin.no,
-      amount: production_stockin.amount,
-      date: production_stockin.date,
-      unit: production_stockin.unit,
-      remark: production_stockin.remark,
-      order: production_stockin.order,
-      production: production_stockin.production,
+    production_stockin
+    # %{
+    #   id: production_stockin.id,
+    #   no: production_stockin.no,
+    #   amount: production_stockin.amount,
+    #   date: production_stockin.date,
+    #   unit: production_stockin.unit,
+    #   remark: production_stockin.remark,
+    #   order: production_stockin.order,
+    #   production: production_stockin.production,
 
-    }
+    # }
   end
 end

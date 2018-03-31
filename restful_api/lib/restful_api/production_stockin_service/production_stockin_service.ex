@@ -77,5 +77,18 @@ defmodule RestfulApi.ProductionStockinService do
     |> Enum.map(fn(e) -> Repo.delete(e) end)
     prod_stockin
   end
+
+  def check_no_exists(%{"id" => id, "no" => no}) do
+    ProductionStockin
+    |> Repo.get_by(no: no)
+    |> case do
+      nil -> {:ok, no}
+      psi ->
+        case psi.id == id do
+          true -> {:ok, no}
+          false -> {:error, no}
+        end
+    end
+  end
   
 end

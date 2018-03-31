@@ -21,7 +21,7 @@ defmodule RestfulApi.OrderService.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:name,:pno,:date,:price,:remark])
+    |> cast(attrs, [:name,:pno])
     |> validate_required([:name,:pno])
   end
 end
