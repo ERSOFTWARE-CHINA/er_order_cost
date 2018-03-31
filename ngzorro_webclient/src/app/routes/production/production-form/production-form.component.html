@@ -5,7 +5,7 @@
             <div nz-row [nzGutter]="16">
                 <div nz-col nzMd="8" nzSm="12" nzXs="24">
                     <div nz-form-item nz-row>
-                        <div nz-form-label nz-col nz-form-item-required><label>用户名</label></div>
+                        <div nz-form-label nz-col nz-form-item-required><label>产品名</label></div>
                         <div nz-form-control nz-col nzHasFeedback [nzValidateStatus]="name">
                             <nz-input formControlName="name" nzPlaceHolder="请输入产品" nzSize="large"></nz-input>
                             <ng-container *ngIf="form.controls['name'].dirty || form.controls['name'].touched">

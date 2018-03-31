@@ -52,6 +52,7 @@ export class ProductionListComponent implements OnInit {
     }
 
     getData() {
+        console.log(this.q)
         this.formatForm()
         this.loading = true;
         this.productionService.listOnePage(this.q)

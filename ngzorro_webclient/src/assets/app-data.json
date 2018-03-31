@@ -91,6 +91,10 @@
                         {
                             "text": "产品入库信息管理",
                             "link": "/production_stockin/page"
+                        },
+                        {
+                            "text": "员工信息管理",
+                            "link": "/staffs/page"
                         }
                     ]
                 }
