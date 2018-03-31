@@ -21,6 +21,8 @@ defmodule RestfulApi.ProductionService do
   def page(params, conn) do
     Production
     |> query_like(params, "name")
+    |> query_like(params, "specifications")
+    |> query_like(params, "attributes")
     |> query_order_by(params, "name")
     |> get_pagination(params, conn)
   end

@@ -27,7 +27,7 @@ defmodule RestfulApiWeb.ProductionController do
   end
 
   def update(conn, %{"id" => id, "production" => production_params}) do
-    with {:ok, production} <- get_by_id(Production, id, conn, [:production]) do
+    with {:ok, production} <- get_by_id(Production, id, conn) do
       with {:ok, %Production{} = production} <- save_update(Production.changeset(production, production_params), conn) do
         render(conn, "show.json", production: production)
       end
