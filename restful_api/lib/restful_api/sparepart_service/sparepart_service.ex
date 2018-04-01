@@ -11,7 +11,7 @@ defmodule RestfulApi.SparepartService do
     end
   end
 
-  def page(params, conn) do 
+  def page(params, conn) do
     Sparepart
     |> query_like(params, "name")
     |> query_like(params, "attributes")
@@ -19,4 +19,20 @@ defmodule RestfulApi.SparepartService do
     |> query_order_by(params, "name")
     |> get_pagination(params, conn)
   end
+
+  def check_name_exists(%{"id" => id, "name" => name}) do
+    Sparepart
+    |> Repo.get_by(name: name)
+    |> case do
+      nil ->
+        {:ok, name}
+
+        sparepart ->
+        case sparepart.id == id do
+          true -> {:ok, name}
+          false -> {:error, name}
+        end
+    end
+  end
+
 end

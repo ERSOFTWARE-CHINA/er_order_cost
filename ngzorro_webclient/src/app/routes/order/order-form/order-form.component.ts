@@ -139,14 +139,14 @@ export class OrderFormComponent implements OnInit {
                 if (resp.error) { 
                     this.msg.error(resp.error);
                 } else {
-                    this.msg.success('创建采购单 ' + resp.pno + ' 成功！');
+                    this.msg.success('创建订单 ' + resp.pno + ' 成功！');
                 }
                 console.log(resp);this.goBack()}).catch(error => this.msg.error(error));
             if (op == 'update') this.orderService.update(this.order.id, this.form.value).then(resp => {
                 if (resp.error) { 
                     this.msg.error(resp.error);
                 } else {
-                    this.msg.success('更新采购单 ' + resp.pno + ' 成功！');
+                    this.msg.success('更新订单 ' + resp.pno + ' 成功！');
                 }
                 this.goBack();}).catch(error => this.msg.error(error));
             
@@ -169,7 +169,7 @@ export class OrderFormComponent implements OnInit {
     }
 
     goBack() {
-        this.router.navigateByUrl('/purchases/page');
+        this.router.navigateByUrl('/orders/page');
     }
 
 }

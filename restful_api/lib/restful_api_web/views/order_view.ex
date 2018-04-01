@@ -21,9 +21,9 @@ defmodule RestfulApiWeb.OrderView do
       id: order.id,
       name: order.name,
       pno: order.pno,
-      # price: order.price,
-      # date: order.date,
-      # remark: order.remark,
+      price: order.price,
+      date: order.date,
+      remark: order.remark,
       details: order.details,
       project: order.project
     }
