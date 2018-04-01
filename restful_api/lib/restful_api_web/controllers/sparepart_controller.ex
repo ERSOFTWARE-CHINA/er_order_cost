@@ -45,8 +45,9 @@ defmodule RestfulApiWeb.SparepartController do
   def check_name(conn, %{"id"=> id,"name" => name}) do
     case check_name_exists(%{"id"=> String.to_integer(id),"name" => name}) do
       {:ok, _} -> json conn, %{ok: "name ok"}
-      {:error, _} -> 
+      {:error, _} ->
         json conn, %{error: "name error"}
     end
+  end
 
 end
