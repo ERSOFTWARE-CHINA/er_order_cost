@@ -64,6 +64,8 @@ defmodule RestfulApiWeb.Router do
     #产品入库单
     resources "/production_stockin", ProductionStockinController, except: [:new, :edit]
     get "/production_stockin/check/no", ProductionStockinController, :check_no
+    # 员工信息
+    resources "/staffs",StaffController,only: [:index]
   end
 
 end
