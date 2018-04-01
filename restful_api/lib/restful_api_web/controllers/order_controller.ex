@@ -4,6 +4,7 @@ defmodule RestfulApiWeb.OrderController do
   use RestfulApi.OrderService
   alias RestfulApi.OrderService.Order
   alias RestfulApi.OrderService.OrderDetail
+  alias RestfulApi.ProductionService.Production
   import RestfulApiWeb.Plugs.Auth, only: [project_active: 2]
 
   plug :project_active
