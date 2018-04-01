@@ -6,7 +6,7 @@ defmodule RestfulApiWeb.PurchaseController do
   alias RestfulApi.OrderService.Order
   alias RestfulApi.SparepartService.Sparepart
 
-  import RestfulApiWeb.Plugs.Auth, only: [project_active: 2, auth_root: 2, auth_admin: 2]
+  import RestfulApiWeb.Plugs.Auth, only: [project_active: 2]
 
   plug :project_active
 

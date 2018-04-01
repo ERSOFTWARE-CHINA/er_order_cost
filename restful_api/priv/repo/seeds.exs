@@ -46,7 +46,7 @@ root =
   %User{}
   |> User.changeset(%{
     name: "root",
-    password_hash: Comeonin.Pbkdf2.hashpwsalt("root123"),
+    password: "root123",
     email: "root@phx.com",
     real_name: "如特",
     position: "Root Administrator",
@@ -62,7 +62,7 @@ admin =
   %User{}
   |> User.changeset(%{
     name: "admin",
-    password_hash: Comeonin.Pbkdf2.hashpwsalt("admin123"),
+    password_hash: "admin123",
     email: "admin@phx.com",
     real_name: "阿德明",
     position: "User Administrator",

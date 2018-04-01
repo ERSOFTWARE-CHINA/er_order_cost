@@ -70,6 +70,8 @@ defmodule RestfulApiWeb.Router do
     #订单费用信息
     #员工信息
     resources "/staffs", StaffController, except: [:new, :edit]
+    #领料单信息
+    resources "/material_requisitions", MaterialRequisitionController, except: [:new, :edit]
   end
 
 end
