@@ -28,14 +28,17 @@ defmodule RestfulApiWeb.OrderController do
   end
 
   def show(conn, %{"id" => id}) do
-    with {:ok, order} <- get_by_id(Order, id, conn) do
+    with {:ok, order} <- get_by_id(Order, id, conn, [details: [:production]]) do
       render(conn, "show.json", order: order)
     end
   end
 
   def update(conn, %{"id" => id, "order" => order_params}) do
-    with {:ok, order} <- get_by_id(Order, id, conn) do
-      with {:ok, %Order{} = order} <- save_update(Order.changeset(order, order_params), conn) do
+    with {:ok, order} <- get_by_id(Order, id, conn, [:details,:project]) do
+      details_changeset = get_details_changesets(order_params, conn)
+      order_changeset = Order.changeset(order, order_params)
+      |> Ecto.Changeset.put_assoc(:details, details_changeset)
+      with {:ok, %Order{} = order} <- save_update(order_changeset, conn) do
         render(conn, "show.json", order: order)
       end
     end

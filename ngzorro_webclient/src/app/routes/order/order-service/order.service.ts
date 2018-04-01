@@ -42,7 +42,7 @@ export class OrderService {
   }
 
   update(cid, v): Promise<any>{
-    let obj = { role: v} 
+    let obj = { order: v} 
     return this.http.put(this.url + `/${cid}`,obj, getTokenOptions(null))
                .map(response => response.json()).toPromise();
   }
