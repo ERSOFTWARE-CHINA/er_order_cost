@@ -53,6 +53,7 @@ defmodule RestfulApiWeb.Router do
     get "/productions/check/name", ProductionController, :check_name
     #配件信息配置
     resources "/spareparts", SparepartController, except: [:new, :edit]
+    get "/spareparts/check/name", SparepartController, :check_name
     #订单信息配置
     resources "/orders",OrderController,except: [:new,:edit]
     #采购单信息配置
