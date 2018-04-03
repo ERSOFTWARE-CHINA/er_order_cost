@@ -95,6 +95,10 @@
                         {
                             "text": "员工信息管理",
                             "link": "/staffs/page"
+                        },
+                        {
+                            "text": "领料信息管理",
+                            "link": "/material_requisition/page"
                         }
                     ]
                 }

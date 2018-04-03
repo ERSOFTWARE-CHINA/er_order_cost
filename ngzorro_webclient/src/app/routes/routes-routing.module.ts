@@ -55,7 +55,8 @@ const routes: Routes = [
             {path : 'spareparts',loadChildren: './sparepart/sparepart.module#SparepartModule'},
             {path : 'purchases',loadChildren: './purchase/purchase.module#PurchaseModule'},
             {path : 'production_stockin',loadChildren: './production_stockin/production_stockin.module#ProductionStockinModule'},
-            {path : 'staffs',loadChildren: './staff/staff.module#StaffModule'}
+            {path : 'staffs',loadChildren: './staff/staff.module#StaffModule'},
+            {path : 'material_requisition',loadChildren: './material_requisition/material_requisition.module#MaterialRequisitionModule'},
         ],
         canActivate: [AuthGuard]
     },
