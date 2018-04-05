@@ -17,7 +17,7 @@ defmodule RestfulApi.Repo.Migrations.CreateMaterialRequisitions do
       add :amount, :integer
       add :total_price, :float
       add :sparepart_id, references(:spareparts)
-      add :material_requisitions_id, references(:material_requisitions)
+      add :material_requisition_id, references(:material_requisitions)
       timestamps()
     end
 

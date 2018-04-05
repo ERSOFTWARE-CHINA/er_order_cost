@@ -2,6 +2,8 @@ defmodule RestfulApi.MaterialRequisitionService.MaterialRequisition do
   use Ecto.Schema
   import Ecto.Changeset
   alias RestfulApi.MaterialRequisitionService.MaterialRequisitionDetail
+  alias RestfulApi.Tenant.Project
+  alias RestfulApi.OrderService.Order
 
 
   schema "material_requisitions" do
@@ -10,7 +12,7 @@ defmodule RestfulApi.MaterialRequisitionService.MaterialRequisition do
     field :date,   :date
     field :remark, :string
 
-    has_many   :details, MaterialRequisitionDetail, on_delete: :delete_all, on_replace: :delete   
+    has_many   :details, MaterialRequisitionDetail, on_delete: :delete_all, on_replace: :delete
     belongs_to :project, Project,                   on_replace: :nilify
     belongs_to :order,   Order,                     on_replace: :nilify
 

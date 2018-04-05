@@ -5,11 +5,11 @@
                 <div nz-col nzMd="6" nzSm="12" nzXs="24">
                     <div nz-form-item nz-row>
                         <div nz-form-label nz-col><label nz-form-item-required>领料单号</label></div>
-                        <div nz-form-control nz-col nzHasFeedback [nzValidateStatus]="pno">
-                            <nz-input formControlName="pno" nzPlaceHolder="请输入领料单号" nzSize="large"></nz-input>
-                            <ng-container *ngIf="form.controls['pno'].dirty || form.controls['pno'].touched">
-                                <p nz-form-explain *ngIf="form.controls['pno'].errors?.required">请输入领料单号</p>
-                                <p nz-form-explain *ngIf="form.controls['pno'].errors?.minlength ">采购单号不少于4个字符</p>
+                        <div nz-form-control nz-col nzHasFeedback [nzValidateStatus]="no">
+                            <nz-input formControlName="no" nzPlaceHolder="请输入领料单号" nzSize="large"></nz-input>
+                            <ng-container *ngIf="form.controls['no'].dirty || form.controls['no'].touched">
+                                <p nz-form-explain *ngIf="form.controls['no'].errors?.required">请输入领料单号</p>
+                                <p nz-form-explain *ngIf="form.controls['no'].errors?.minlength ">采购单号不少于4个字符</p>
                             </ng-container>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                                 <div nz-form-control [nzValidateStatus]="date">
                                     <nz-datepicker style="width: 100%;" [nzSize]="'large'" formControlName="date" [nzPlaceHolder]="'签订日期'" nzFormat="YYYY-MM-DD"></nz-datepicker>
                                     <ng-container *ngIf="form.controls['date'].dirty || form.controls['date'].touched">
-                                        <p nz-form-explain *ngIf="form.controls['pno'].errors?.required">请选择领料日期</p>
+                                        <p nz-form-explain *ngIf="form.controls['date'].errors?.required">请选择领料日期</p>
                                     </ng-container>
                                 </div>
                             </div>

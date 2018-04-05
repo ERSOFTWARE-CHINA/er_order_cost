@@ -104,7 +104,7 @@ export class MaterialRequisitionListComponent implements OnInit {
     }
 
     formatForm() {
-        if ((this.q.pno == null)||(this.q.pno == "")){delete this.q.pno}
+        if ((this.q.no == null)||(this.q.no == "")){delete this.q.no}
         if ((this.q.date == null)||(this.q.date == "")){delete this.q.date}
         if ((this.q.remark == null)||(this.q.remark == "")){delete this.q.remark}
     }
@@ -115,7 +115,7 @@ export class MaterialRequisitionListComponent implements OnInit {
             page_size: 15,
             sort_field: "date",
             sort_direction: "desc",
-            pno: null,
+            no: null,
             date: null,
             remark: null,
             order: null

@@ -4,6 +4,7 @@ defmodule RestfulApiWeb.MaterialRequisitionController do
   use RestfulApi.MaterialRequisitionService
   alias RestfulApi.OrderService.Order
   alias RestfulApi.SparepartService.Sparepart
+  alias RestfulApi.MaterialRequisitionService.MaterialRequisition
 
   import RestfulApiWeb.Plugs.Auth, only: [project_active: 2]
 

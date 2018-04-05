@@ -5,10 +5,10 @@ defmodule RestfulApi.MaterialRequisitionService.MaterialRequisitionDetail do
 	alias RestfulApi.MaterialRequisitionService.MaterialRequisition
 
 
-	schema "material_requisition_details" do
-		field :price,  		:float			 
-		field :amount, 		:integer    		 
-		field :total_price, :float 		 
+	schema "material_requisitions_details" do
+		field :price,  		:float
+		field :amount, 		:integer
+		field :total_price, :float
 		belongs_to :sparepart, 			  Sparepart, 		   on_replace: :nilify
 		belongs_to :material_requisition, MaterialRequisition, on_replace: :delete
 		timestamps()

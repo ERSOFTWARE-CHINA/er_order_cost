@@ -40,7 +40,7 @@ export class MaterialRequisitionFormComponent implements OnInit {
         if (op == 'create') this.initCreate();
         if (op == 'update') this.initUpdate();
         this.form = this.fb.group({
-            pno: [this.materialRequisition? this.materialRequisition.no : '', [Validators.required, ,Validators.maxLength(30), Validators.minLength(4),
+            no: [this.materialRequisition? this.materialRequisition.no : '', [Validators.required, ,Validators.maxLength(30), Validators.minLength(4),
                                                               Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$') ]],
             date: [this.materialRequisition? this.materialRequisition.date : '', [Validators.required]],
             price : [this.materialRequisition? this.materialRequisition.price : '', [Validators.required,this.validateNumber.bind(this)]],
@@ -136,14 +136,14 @@ export class MaterialRequisitionFormComponent implements OnInit {
                 if (resp.error) { 
                     this.msg.error(resp.error);
                 } else {
-                    this.msg.success('创建领料单 ' + resp.pno + ' 成功！');
+                    this.msg.success('创建领料单 ' + resp.no + ' 成功！');
                 }
                 console.log(resp);this.goBack()}).catch(error => this.msg.error(error));
             if (op == 'update') this.mrSrv.update(this.materialRequisition.id, this.form.value).then(resp => {
                 if (resp.error) { 
                     this.msg.error(resp.error);
                 } else {
-                    this.msg.success('更新领料单 ' + resp.pno + ' 成功！');
+                    this.msg.success('更新领料单 ' + resp.no + ' 成功！');
                 }
                 this.goBack();}).catch(error => this.msg.error(error));
             
@@ -175,8 +175,10 @@ export class MaterialRequisitionFormComponent implements OnInit {
             let sparepart = {name : form_details[i].sparepart} 
             v.sparepart = sparepart
             details.push(v)
+            console.log(v)
         }
         this.form.controls["details"].setValue(details);
+       
     }
 
     //数字验证
