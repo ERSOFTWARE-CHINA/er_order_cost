@@ -55,8 +55,8 @@
                         <nz-table-sort [(nzValue)]="sortMap.no" (nzValueChange)="sort('no',$event)"></nz-table-sort>
                     </th>
                     <th nz-th>
-                        <span>材料价格</span>
-                        <nz-table-sort [(nzValue)]="sortMap.price" (nzValueChange)="sort('price',$event)"></nz-table-sort>
+                        <span>领料人</span>
+                        <nz-table-sort [(nzValue)]="sortMap.picker" (nzValueChange)="sort('picker',$event)"></nz-table-sort>
                     </th>
                     <th nz-th>
                         <span>领料日期</span>
@@ -74,7 +74,7 @@
                 <tr nz-tbody-tr *ngFor="let i of nzTable.data">
 
                     <td nz-td>{{i.no}}</td>
-                    <td nz-td>{{i.price}}</td>
+                    <td nz-td>{{i.picker}}</td>
                     <td nz-td>{{i.date}}</td>
                     <td nz-td>{{i.remark}}</td>
                     <td nz-td>

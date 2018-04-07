@@ -6,9 +6,9 @@ defmodule RestfulApi.MaterialRequisitionService.MaterialRequisitionDetail do
 
 
 	schema "material_requisitions_details" do
-		field :price,  		:float
+		# field :price,  		:float
 		field :amount, 		:integer
-		field :total_price, :float
+		# field :total_price, :float
 		belongs_to :sparepart, 			  Sparepart, 		   on_replace: :nilify
 		belongs_to :material_requisition, MaterialRequisition, on_replace: :delete
 		timestamps()
@@ -17,17 +17,17 @@ defmodule RestfulApi.MaterialRequisitionService.MaterialRequisitionDetail do
 	@doc false
 	def changeset(purchase_detail, attrs) do
 		purchase_detail
-		|> cast(attrs, [:price, :amount, :total_price])
-		|> validate_required([:price, :amount])
-		|> set_totalprice()
+		|> cast(attrs, [:amount])
+		|> validate_required([:amount])
+		# |> set_totalprice()
 	end
 
-	defp set_totalprice(changeset) do
-		case changeset do
-			%Ecto.Changeset{valid?: true, changes: %{amount: amount, price: price}} ->
-				put_change(changeset, :total_price, amount * price)
-			_ ->
-				changeset
-		end
-	end
+	# defp set_totalprice(changeset) do
+	# 	case changeset do
+	# 		%Ecto.Changeset{valid?: true, changes: %{amount: amount, price: price}} ->
+	# 			put_change(changeset, :total_price, amount * price)
+	# 		_ ->
+	# 			changeset
+	# 	end
+	# end
 end

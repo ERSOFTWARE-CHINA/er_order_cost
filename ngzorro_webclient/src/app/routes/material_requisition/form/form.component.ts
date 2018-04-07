@@ -43,9 +43,10 @@ export class MaterialRequisitionFormComponent implements OnInit {
             no: [this.materialRequisition? this.materialRequisition.no : '', [Validators.required, ,Validators.maxLength(30), Validators.minLength(4),
                                                               Validators.pattern('[\u4E00-\u9FA5-a-zA-Z0-9_]*$') ]],
             date: [this.materialRequisition? this.materialRequisition.date : '', [Validators.required]],
-            price : [this.materialRequisition? this.materialRequisition.price : '', [Validators.required,this.validateNumber.bind(this)]],
-            remark : [this.materialRequisition? this.materialRequisition.remark : ''],
-            order : [this.materialRequisition? this.materialRequisition.order : '', [Validators.required]],
+            // price : [this.materialRequisition? this.materialRequisition.price : '', [Validators.required,this.validateNumber.bind(this)]],
+            picker: [this.materialRequisition? this.materialRequisition.picker : null, [Validators.required]],
+            remark : [this.materialRequisition? this.materialRequisition.remark : null],
+            order : [this.materialRequisition? this.materialRequisition.order_id : null, [Validators.required]],
 
             details: this.fb.array([])
         });
@@ -63,9 +64,9 @@ export class MaterialRequisitionFormComponent implements OnInit {
 
     createDetail(): FormGroup {
         return this.fb.group({
-            price: [ null, [ Validators.required ] ],
+            // price: [ null, [ Validators.required ] ],
             amount: [ null, [ Validators.required ] ],
-            total_price: [ null ],
+            // total_price: [ null ],
             sparepart: [ null, [ Validators.required ] ]
         });
     }
@@ -105,8 +106,8 @@ export class MaterialRequisitionFormComponent implements OnInit {
         
         this.details.at(index).markAsDirty();
         if (this.details.at(index).invalid) return;
-        let total = this.details.at(index)['controls']['price'].value * this.details.at(index)['controls']['amount'].value
-        this.details.at(index)['controls']['total_price'].setValue(total)
+        // let total = this.details.at(index)['controls']['price'].value * this.details.at(index)['controls']['amount'].value
+        // this.details.at(index)['controls']['total_price'].setValue(total)
         let a= this.details.at(index)['controls']['sparepart'].value
         this.editIndex = -1;
         
@@ -164,6 +165,7 @@ export class MaterialRequisitionFormComponent implements OnInit {
         this.getOrders();
         this.getSpareparts();
         this.materialRequisition = this.mrSrv.materialRequisition;
+        console.log(this.materialRequisition)
     }
 
     formatForm() {

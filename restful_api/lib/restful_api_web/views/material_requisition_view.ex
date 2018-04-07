@@ -20,7 +20,7 @@ defmodule RestfulApiWeb.MaterialRequisitionView do
     %{
       id: material_requisition.id,
       no: material_requisition.no,
-      price: material_requisition.price,
+      picker: material_requisition.picker,
       date: material_requisition.date,
       remark: material_requisition.remark,
       order_id: material_requisition.order_id,

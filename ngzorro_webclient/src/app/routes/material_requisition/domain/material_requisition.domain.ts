@@ -3,7 +3,7 @@ import { Detail } from './detail.domain';
 export class MaterialRequisition {
     id: number;
     no: string;
-    price: number;
+    picker: string;
     date: Date;
     remark: string;
     order: any;
