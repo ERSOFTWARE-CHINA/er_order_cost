@@ -23,5 +23,4 @@ defimpl Poison.Encoder, for: Any do
       |> Enum.filter(fn(e) -> e != nil end)
     Map.drop(map, vl)
   end
-
 end
