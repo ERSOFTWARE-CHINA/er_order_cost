@@ -1,6 +1,7 @@
 defmodule RestfulApiWeb.UserView do
   use RestfulApiWeb, :view
   alias RestfulApiWeb.UserView
+  import RestfulApi.Utils.DropEctoNotLoaded, only: [drop_ecto_not_loaded_in_map: 1]
 
   def render("index.json", %{page: page}) do
     %{
@@ -27,8 +28,8 @@ defmodule RestfulApiWeb.UserView do
       actived: user.actived,
       perms_number: user.perms_number,
       avatar: user.avatar,
-      roles: user.roles,
-      organization: user.organization
+      roles: user.roles
     }
+      |> drop_ecto_not_loaded_in_map
   end
 end

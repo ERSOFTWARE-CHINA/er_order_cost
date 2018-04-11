@@ -1,9 +1,3 @@
-defimpl Poison.Encoder, for: Ecto.Association.NotLoaded do
-  def encode(_, _) do
-    "null"
-  end
-end
-
 defimpl Poison.Encoder, for: Any do
 
   def encode(%{__struct__: _} = struct, options) do
@@ -31,4 +25,3 @@ defimpl Poison.Encoder, for: Any do
   end
 
 end
-  

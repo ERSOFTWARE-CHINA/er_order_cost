@@ -23,7 +23,6 @@ defmodule RestfulApi.Accounts do
     |> query_equal(params, "actived")
     |> query_order_by(params, "name")
     |> query_preload(:roles)
-    |> query_preload(:organization)
     |> get_pagination(params, conn)
   end
 
