@@ -6,15 +6,20 @@ defmodule RestfulApiWeb.Plugs.Auth do
   alias RestfulApi.Repo
   alias RestfulApi.Tenant.Project
 
+  @cannot_find_user "cannot find user."
+  @root_is_needed "root is needed."
+  @admin_is_needed "admin is needed."
+  @project_is_disabled "project is disabled."
+
   # 验证登陆用户是否为根用户(root)
   def auth_root(conn, _) do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
     if is_nil(resource) do
-      conn |> redirect(to: "/cannot_find_user") |> halt()
+      conn |> redirect(to: "/plug_auth_failure/#{@cannot_find_user}") |> halt()
     else
       case resource.is_root do
         true -> conn
-        false -> conn |> redirect(to: "/auth_failure") |> halt()
+        false -> conn |> redirect(to: "/plug_auth_failure/#{@root_is_needed}") |> halt()
       end
     end
     
@@ -24,12 +29,12 @@ defmodule RestfulApiWeb.Plugs.Auth do
   def auth_admin(conn, _) do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
     if is_nil(resource) do
-      conn |> redirect(to: "/cannot_find_user") |> halt()
+      conn |> redirect(to: "/plug_auth_failure/#{@cannot_find_user}") |> halt()
     else
       case resource.is_admin || resource.is_root do
         true -> conn
         false -> 
-          conn |> redirect(to: "/auth_failure") |> halt()
+          conn |> redirect(to: "/plug_auth_failure/#{@admin_is_needed}") |> halt()
       end
     end
   end
@@ -38,14 +43,14 @@ defmodule RestfulApiWeb.Plugs.Auth do
   def project_active(conn, _) do
     resource = RestfulApiWeb.Guardian.Plug.current_resource(conn)
     if is_nil(resource) do
-      conn |> redirect(to: "/cannot_find_user") |> halt()
+      conn |> redirect(to: "/plug_auth_failure/#{@cannot_find_user}") |> halt()
     else
       case resource.is_root do
         false ->
           project = Repo.get(Project, resource.project_id)
           case project.actived do
             true -> conn
-            false -> conn |> redirect(to: "/project_disable") |> halt()
+            false -> conn |> redirect(to: "/plug_auth_failure/#{@project_is_disabled}") |> halt()
           end
         true -> conn
       end

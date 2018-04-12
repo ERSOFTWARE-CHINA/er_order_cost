@@ -21,4 +21,5 @@ defmodule RestfulApiWeb.Gettext do
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
   use Gettext, otp_app: :restful_api
+
 end

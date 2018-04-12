@@ -32,9 +32,7 @@ defmodule RestfulApiWeb.Router do
 
   scope "/", RestfulApiWeb do
     pipe_through :api
-    get "/cannot_find_user", AuthFailureController, :find_user_error
-    get "/auth_failure", AuthFailureController, :auth_error
-    get "/project_disable", AuthFailureController, :project_error
+    get "/plug_auth_failure/:msg", AuthFailureController, :plug_auth_failure
   end
 
   scope "/api/v1", RestfulApiWeb do

@@ -1,9 +1,9 @@
 defmodule RestfulApiWeb.AuthErrorHandler do
   import Plug.Conn
-  # import RestfulApiWeb.TranslateError, only: [translate_msg: 1]
+  import RestfulApiWeb.TranslateMsg
 
   def auth_error(conn, {type, _}, _opts) do
-    body = Poison.encode!(%{error: "未提供有效的身份验证信息!"})
+    body = Poison.encode!(%{error: ~t/invalid token info./})
     send_resp(conn, 401, body)
   end
 end

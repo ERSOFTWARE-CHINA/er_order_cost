@@ -23,7 +23,7 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 
   * 实现Poison.encoder正确处理notloaded的值 2018-04-11
   * 自定义plug验证失败时返回相应的json结果 2018-04-11
-  * 加入文本翻译功能
+  * 加入文本翻译功能 2018-04-12
   * 修改fallback_controller能够正确处理各类异常
   * 完善search_term中的API
   * 处理数据库连接异常
